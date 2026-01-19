@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo.mapper.MaintenancePlanDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demo.entity.MaintenancePlanDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="plan_id" property="planId" jdbcType="BIGINT" />
+    <result column="medicine_id" property="medicineId" jdbcType="BIGINT" />
+    <result column="maintenance_type" property="maintenanceType" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, plan_id, medicine_id, maintenance_type, status, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from maintenance_plan_detail
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from maintenance_plan_detail
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.entity.MaintenancePlanDetail" >
+    insert into maintenance_plan_detail (id, plan_id, medicine_id, 
+      maintenance_type, status, create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{planId,jdbcType=BIGINT}, #{medicineId,jdbcType=BIGINT}, 
+      #{maintenanceType,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.entity.MaintenancePlanDetail" >
+    insert into maintenance_plan_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="planId != null" >
+        plan_id,
+      </if>
+      <if test="medicineId != null" >
+        medicine_id,
+      </if>
+      <if test="maintenanceType != null" >
+        maintenance_type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="planId != null" >
+        #{planId,jdbcType=BIGINT},
+      </if>
+      <if test="medicineId != null" >
+        #{medicineId,jdbcType=BIGINT},
+      </if>
+      <if test="maintenanceType != null" >
+        #{maintenanceType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.entity.MaintenancePlanDetail" >
+    update maintenance_plan_detail
+    <set >
+      <if test="planId != null" >
+        plan_id = #{planId,jdbcType=BIGINT},
+      </if>
+      <if test="medicineId != null" >
+        medicine_id = #{medicineId,jdbcType=BIGINT},
+      </if>
+      <if test="maintenanceType != null" >
+        maintenance_type = #{maintenanceType,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.entity.MaintenancePlanDetail" >
+    update maintenance_plan_detail
+    set plan_id = #{planId,jdbcType=BIGINT},
+      medicine_id = #{medicineId,jdbcType=BIGINT},
+      maintenance_type = #{maintenanceType,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPlanId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from maintenance_plan_detail
+    where plan_id = #{planId,jdbcType=BIGINT}
+  </select>
+  <insert id="batchInsert" parameterType="java.util.List" >
+    insert into maintenance_plan_detail (plan_id, medicine_id, maintenance_type, status, create_time, update_time)
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (#{item.planId,jdbcType=BIGINT}, #{item.medicineId,jdbcType=BIGINT}, #{item.maintenanceType,jdbcType=VARCHAR}, #{item.status,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+</mapper>
