@@ -58,7 +58,7 @@ const firebaseService = {
       async insert(data) {
         try {
           const tableRef = ref(database, table);
-          const newItemRef = push(tableRef, {
+          await push(tableRef, {
             ...data,
             created_at: new Date().toISOString()
           });
@@ -70,19 +70,23 @@ const firebaseService = {
     };
   },
   
-  // 订阅实时更新
+  // 频道订阅
   channel(channelName) {
     return {
-      on(eventType, { table }, callback) {
-        if (eventType === 'postgres_changes') {
-          const tableRef = ref(database, table);
-          onValue(tableRef, (snapshot) => {
-            callback({
-              table,
-              eventType: 'INSERT'
-            });
-          });
-        }
+      on(eventType, { table, schema, event }, callback) {
+        // 这里只处理table参数，忽略其他Supabase特定参数
+        const tableRef = ref(database, table);
+        onValue(tableRef, (snapshot) => {
+          // 构造符合预期的payload
+          const payload = {
+            table,
+            eventType: 'INSERT',
+            schema: schema || 'public'
+          };
+          if (typeof callback === 'function') {
+            callback(payload);
+          }
+        });
         return this;
       },
       
@@ -94,7 +98,7 @@ const firebaseService = {
   
   // 移除频道订阅
   removeChannel(channel) {
-    // Firebase自动管理订阅，这里不需要额外操作
+    // Firebase的onValue订阅会自动管理，这里不需要额外操作
   }
 };
 
