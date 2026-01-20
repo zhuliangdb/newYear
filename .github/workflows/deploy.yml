@@ -31,3 +31,5 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./frontend/dist
         publish_branch: gh-pages
+        force_orphan: false
+        allow_empty_commit: true
