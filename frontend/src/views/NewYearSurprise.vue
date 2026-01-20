@@ -1426,22 +1426,29 @@ body {
   
   .fortune-content {
     padding: 15px;
+    text-align: center;
   }
   
   .fortune-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 5px;
-    text-align: left;
+    display: block;
+    text-align: center;
+    padding: 10px 0;
   }
   
   .fortune-label {
     font-size: 14px;
+    display: block;
+    margin-bottom: 5px;
   }
   
   .fortune-value {
     font-size: 16px;
-    align-self: flex-end;
+    display: block;
+  }
+  
+  .fortune-tip {
+    font-size: 12px;
+    margin-top: 10px;
   }
   
   /* 手写信调整 */
