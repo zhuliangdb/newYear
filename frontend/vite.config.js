@@ -74,7 +74,8 @@ export default defineConfig({
       devOptions: {
         enabled: true,
         type: 'module'
-      }
+      },
+      
     })
   ],
   base: '/newYear/',

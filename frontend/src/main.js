@@ -5,18 +5,7 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import { createPinia } from 'pinia';
 
-// PWA注册 - 仅在生产环境下注册ServiceWorker
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/newYear/service-worker.js')
-      .then(registration => {
-        console.log('SW registered: ', registration);
-      })
-      .catch(registrationError => {
-        console.log('SW registration failed: ', registrationError);
-      });
-  });
-}
+// PWA注册由Vite PWA插件自动处理，无需手动注册
 
 // 创建应用实例
 const app = createApp(App);
