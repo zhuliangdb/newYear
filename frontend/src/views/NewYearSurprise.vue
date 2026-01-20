@@ -1418,6 +1418,44 @@ body {
   .audio-player {
     padding: 15px;
   }
+  
+  /* 新年运势卡片调整 */
+  .fortune-card {
+    padding: 15px;
+  }
+  
+  .fortune-content {
+    padding: 15px;
+  }
+  
+  .fortune-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    text-align: left;
+  }
+  
+  .fortune-label {
+    font-size: 14px;
+  }
+  
+  .fortune-value {
+    font-size: 16px;
+    align-self: flex-end;
+  }
+  
+  /* 手写信调整 */
+  .handwritten {
+    font-size: 16px;
+    padding: 20px;
+    line-height: 1.8;
+    text-align: center;
+  }
+  
+  .signature {
+    font-size: 16px;
+    text-align: center;
+  }
 }
 
 /* 触摸设备优化 */
