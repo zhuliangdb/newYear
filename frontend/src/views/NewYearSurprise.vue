@@ -43,23 +43,8 @@
       </div>
     </div>
     
-    <!-- 飘雪动画 - 基于Vue3响应式数据实现 -->
-    <div class="snow-container">
-      <div 
-        v-for="(snowflake, index) in snowflakes" 
-        :key="index"
-        class="snowflake"
-        :style="{
-          left: snowflake.x + 'px',
-          top: snowflake.y + 'px',
-          width: snowflake.size + 'px',
-          height: snowflake.size + 'px',
-          opacity: snowflake.opacity,
-          transform: `rotate(${snowflake.rotation}deg)`,
-          animation: `sway ${snowflake.swayDuration}s infinite ease-in-out alternate`
-        }"
-      ></div>
-    </div>
+    <!-- 飘雪动画组件 -->
+    <Snowflake :interval="100" :maxCount="80" />
 
     <!-- 新年祝福语 -->
     <div class="greeting-card">
@@ -104,6 +89,11 @@
       <div class="wish-list">
         <div class="wish-item" v-for="wish in wishes" :key="wish.id">
           <div class="wish-content">{{ wish.content }}</div>
+          <div class="wish-actions">
+            <button class="like-btn" @click="likeWish(wish.id)">
+              ❤️ {{ wish.likes || 0 }}
+            </button>
+          </div>
           <div class="wish-icon">✨</div>
         </div>
       </div>
@@ -140,7 +130,7 @@
       <h2 class="section-title">🔊 语音祝福</h2>
       <div class="audio-player">
         <audio controls>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source :src="audioUrl" type="audio/mpeg">
         您的浏览器不支持音频元素。
         </audio>
         <p class="audio-hint">点击播放我的语音祝福（可替换为你自己的录音链接）</p>
@@ -181,12 +171,26 @@
     <div class="share-section">
       <button class="share-btn" @click="sharePage">📤 分享这个惊喜</button>
     </div>
+    
+    <!-- 背景音乐控制按钮 -->
+    <button 
+      class="music-control-btn" 
+      @click="toggleBackgroundMusic"
+      :title="isMusicPlaying ? '关闭背景音乐' : '开启背景音乐'"
+    >
+      {{ isMusicPlaying ? '🔊' : '🔇' }}
+    </button>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import firebase from '../utils/firebase';
+import { Howl } from 'howler';
+import Snowflake from '../components/Snowflake.vue';
+
+// 音频URL
+const audioUrl = new URL('../assets/east-beauty.mp3', import.meta.url).href;
 
 // 响应式数据
 const showSecret = ref(false);
@@ -204,6 +208,37 @@ const wishes = ref([]);
 const newMessage = ref('');
 const messageAuthor = ref('');
 const messages = ref([]);
+
+// 背景音乐相关
+const isMusicPlaying = ref(false);
+
+// 创建Howl实例播放新年音乐
+const backgroundMusic = new Howl({
+  src: [audioUrl], // 本地新年主题音乐
+  loop: true,
+  volume: 0.3,
+  html5: true, // 使用HTML5 Audio模式以获得更好的兼容性
+  onplay: () => {
+    isMusicPlaying.value = true;
+    console.log('背景音乐开始播放');
+  },
+  onpause: () => {
+    isMusicPlaying.value = false;
+    console.log('背景音乐暂停');
+  },
+  onstop: () => {
+    isMusicPlaying.value = false;
+    console.log('背景音乐停止');
+  },
+  onloaderror: (id, error) => {
+    console.error('背景音乐加载错误:', error);
+  },
+  onplayerror: (id, error) => {
+    console.error('背景音乐播放错误:', error);
+    // 尝试恢复播放
+    backgroundMusic.play();
+  }
+});
 
 // 实时订阅引用
 let wishesSubscription = null;
@@ -292,17 +327,6 @@ const fortuneItems = ref([
 const gameResult = ref('');
 let fireworksInterval = null;
 
-// 雪花效果相关响应式数据
-const snowflakes = ref([]);
-// 根据设备性能动态调整雪花数量
-const snowflakeCount = ref(() => {
-  // 检测设备性能
-  const isLowPerformance = !('requestAnimationFrame' in window) || 
-                        navigator.hardwareConcurrency < 4;
-  return isLowPerformance ? 20 : 40; // 低性能设备20个雪花，高性能设备40个
-});
-let animationFrameId = null;
-
 // 固定数据
 const fortuneOptions = {
   '事业运': ['大吉', '中吉', '小吉', '上上签', '吉星高照'],
@@ -327,74 +351,6 @@ const showSecretText = () => {
   showSecret.value = true;
 };
 
-// 初始化雪花
-const initSnow = () => {
-  // 清空现有雪花
-  snowflakes.value = [];
-  
-  // 生成新雪花 - 优化性能
-  for (let i = 0; i < snowflakeCount.value; i++) {
-    snowflakes.value.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      size: Math.random() * 8 + 2, // 2-10px，减小雪花尺寸
-      opacity: Math.random() * 0.3 + 0.1, // 0.1-0.4，降低透明度
-      rotation: Math.random() * 360,
-      speed: Math.random() * 1.5 + 0.5, // 0.5-2px/s，降低下落速度
-      swayDuration: Math.random() * 4 + 3, // 3-7s，增加摇摆周期
-      swayAmount: Math.random() * 6 + 2, // 2-8px，减小摇摆幅度
-      windSpeed: Math.random() * 0.2 - 0.1 // -0.1 to 0.1px/s，减小风力
-    });
-  }
-  
-  // 开始动画循环
-  animateSnow();
-};
-
-// 雪花动画循环 - 优化性能
-let lastTime = 0;
-const animateSnow = (currentTime = 0) => {
-  // 控制动画帧率，每16ms执行一次（约60fps）
-  const deltaTime = currentTime - lastTime;
-  if (deltaTime < 16) {
-    animationFrameId = requestAnimationFrame(animateSnow);
-    return;
-  }
-  lastTime = currentTime;
-  
-  // 使用forEach代替map，减少内存分配
-  snowflakes.value.forEach((snowflake, index) => {
-    // 更新位置
-    let newY = snowflake.y + snowflake.speed;
-    let newX = snowflake.x + snowflake.windSpeed;
-    let newRotation = snowflake.rotation + 0.3; // 减慢旋转速度
-    
-    // 雪花超出屏幕底部，重置到顶部
-    if (newY > window.innerHeight) {
-      newY = -snowflake.size;
-      newX = Math.random() * window.innerWidth;
-    }
-    
-    // 雪花超出屏幕左右，重置位置
-    if (newX > window.innerWidth) {
-      newX = 0;
-    } else if (newX < 0) {
-      newX = window.innerWidth;
-    }
-    
-    // 直接修改数组元素，减少内存分配
-    snowflakes.value[index] = {
-      ...snowflake,
-      y: newY,
-      x: newX,
-      rotation: newRotation
-    };
-  });
-  
-  // 继续动画循环
-  animationFrameId = requestAnimationFrame(animateSnow);
-};
-
 // 使用 fireworks-js 库实现烟花效果
 import { Fireworks } from 'fireworks-js';
 
@@ -409,7 +365,7 @@ const initFireworks = () => {
   
   // 创建烟花实例
     fireworks = new Fireworks(container, {
-      speed: 1.5, // 降低烟花速度
+      speed: 1.2, // 减慢烟花飞行速度
       acceleration: 1.03,
       friction: 0.97,
       gravity: 1.5,
@@ -422,8 +378,8 @@ const initFireworks = () => {
         max: 360
       },
       delay: {
-        min: 30,
-        max: 60
+        min: 100, // 增加烟花发射延迟时间
+        max: 200
       },
       rocketsPoint: { // 火箭发射点范围
         min: 0,
@@ -503,6 +459,7 @@ const addWish = async () => {
         .from('wishes')
         .insert({
           content: newWish.value.trim(),
+          likes: 0,
           created_at: new Date().toISOString()
         });
       
@@ -514,6 +471,24 @@ const addWish = async () => {
       console.error('添加愿望失败:', error);
     }
   }
+};
+
+// 点赞功能
+const likeWish = (id) => {
+  // 在前端更新点赞数（模拟）
+  const updatedWishes = wishes.value.map(wish => {
+    if (wish.id === id) {
+      return {
+        ...wish,
+        likes: (wish.likes || 0) + 1
+      };
+    }
+    return wish;
+  });
+  wishes.value = updatedWishes;
+  
+  // 这里可以添加后端更新逻辑（模拟）
+  console.log(`点赞愿望: ${id}`);
 };
 
 // 订阅愿望实时更新
@@ -558,9 +533,34 @@ const sharePage = () => {
   }
 };
 
+// 背景音乐控制函数
+const toggleBackgroundMusic = () => {
+  console.log('切换背景音乐状态:', isMusicPlaying.value);
+  if (isMusicPlaying.value) {
+    backgroundMusic.pause();
+  } else {
+    // 确保在用户交互时播放，符合浏览器策略
+    const result = backgroundMusic.play();
+    if (result instanceof Promise) {
+      result.then(() => {
+        console.log('播放请求成功');
+      }).catch(error => {
+        console.error('播放请求失败:', error);
+      });
+    }
+  }
+};
+
+// 尝试播放背景音乐
+const tryPlayBackgroundMusic = () => {
+  if (!isMusicPlaying.value) {
+    backgroundMusic.play();
+  }
+};
+
 // 生命周期钩子
 onMounted(async () => {
-  initSnow();
+  // 初始化其他效果
   initFireworks();
   calculateCountdown();
   // 添加页面加载动画
@@ -583,16 +583,17 @@ onMounted(async () => {
   countdownTimer = setInterval(() => {
     calculateCountdown();
   }, 1000);
+  
+  // 尝试自动播放背景音乐
+  tryPlayBackgroundMusic();
+  
+  // 添加点击事件监听器，当用户点击页面时尝试播放音乐
+  document.addEventListener('click', tryPlayBackgroundMusic, { once: true });
+  document.addEventListener('touchstart', tryPlayBackgroundMusic, { once: true });
 });
 
 onBeforeUnmount(() => {
   stopFireworks();
-  // 取消雪花动画
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId);
-    animationFrameId = null;
-  }
-  
   // 清除倒计时定时器
   if (countdownTimer) {
     clearInterval(countdownTimer);
@@ -609,6 +610,9 @@ onBeforeUnmount(() => {
       firebase.removeChannel(wishesSubscription);
       wishesSubscription = null;
     }
+  
+  // 停止背景音乐
+  backgroundMusic.stop();
 });
 </script>
 
@@ -616,7 +620,7 @@ onBeforeUnmount(() => {
 /* 全局样式 */
 body {
   margin: 0;
-  font-family: 'Microsoft YaHei', sans-serif;
+  font-family: '微软雅黑', 'Microsoft YaHei', sans-serif;
   background: linear-gradient(135deg, #f7f9fc 0%, #e8f0fe 100%);
   color: #333;
   overflow-x: hidden;
@@ -810,37 +814,7 @@ body {
   }
 }
 
-/* 飘雪效果 */
-.snow-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1000;
-  overflow: hidden;
-}
 
-.snowflake {
-  position: absolute;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 70%, transparent 100%);
-  border-radius: 50%;
-  opacity: 0.8;
-  pointer-events: none;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.6), inset 0 0 3px rgba(255, 255, 255, 0.8);
-  will-change: transform, opacity;
-}
-
-/* 雪花摇摆动画 */
-@keyframes sway {
-  from {
-    transform: translateX(-10px) rotate(0deg);
-  }
-  to {
-    transform: translateX(10px) rotate(360deg);
-  }
-}
 
 /* 新年祝福语卡片 */
 .greeting-card {
@@ -1145,6 +1119,35 @@ body {
   margin-bottom: 15px;
   flex-grow: 1;
   color: #333;
+}
+
+.wish-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.like-btn {
+  background: linear-gradient(135deg, #ff6b6b, #ffa07a);
+  color: white;
+  border: none;
+  border-radius: 15px;
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.like-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.like-btn:active {
+  transform: scale(0.95);
 }
 
 .wish-icon {
@@ -1793,13 +1796,44 @@ body {
   }
 }
 
+/* 背景音乐控制按钮样式 */
+.music-control-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6e48aa, #9d50bb);
+  color: white;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(110, 72, 170, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.music-control-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(110, 72, 170, 0.4);
+}
+
+.music-control-btn:active {
+  transform: translateY(-1px);
+}
+
 /* 触摸设备优化 */
 @media (hover: none) and (pointer: coarse) {
   /* 增加点击区域 */
   .secret-btn,
   .share-btn,
   .game-card,
-  .fortune-content {
+  .fortune-content,
+  .music-control-btn {
     min-height: 44px;
     min-width: 44px;
     display: flex;
@@ -1811,7 +1845,8 @@ body {
   .secret-btn:active:not(:disabled),
   .share-btn:active,
   .game-card:active,
-  .fortune-content:active {
+  .fortune-content:active,
+  .music-control-btn:active {
     transform: scale(0.95);
     transition: transform 0.1s ease;
   }

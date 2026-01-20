@@ -1,35 +1,19 @@
 <template>
   <div class="home">
-    <!-- 背景装饰 -->
-    <div class="background-decor"></div>
     
     <!-- 简化的新年装饰 -->
     <div class="new-year-decorations">
-      <!-- 福字 -->
-      <div class="fu-character" style="top: 10%; left: 50%; transform: translateX(-50%); animation-delay: 2s;">福</div>
+      <!-- 春联 -->
+      <div class="couplet" style="left: 5%; top: 20%;">一帆风顺年年好</div>
+      <div class="couplet" style="right: 5%; top: 20%;">万事如意步步高</div>
       
       <!-- 鞭炮 -->
       <div class="firecracker" style="left: 8%; top: 30%; animation-delay: 2s;">🧨</div>
       <div class="firecracker" style="right: 8%; top: 30%; animation-delay: 3s;">🧨</div>
     </div>
     
-    <!-- 简化的飘雪动画 - 减少雪花数量 -->
-    <div class="snow-container">
-      <div 
-        v-for="(snowflake, index) in snowflakes" 
-        :key="index"
-        class="snowflake"
-        :style="{
-          left: snowflake.x + 'px',
-          top: snowflake.y + 'px',
-          width: snowflake.size + 'px',
-          height: snowflake.size + 'px',
-          opacity: snowflake.opacity,
-          transform: `rotate(${snowflake.rotation}deg)`,
-          animation: `sway ${snowflake.swayDuration}s infinite ease-in-out alternate`
-        }"
-      </div>
-    </div>
+    <!-- 使用雪花组件 - 减少雪花生成间隔并限制最大数量以优化首页性能 -->
+    <Snowflake :interval="150" :maxCount="80" />
     
     <!-- 页面内容 -->
     <div class="home-content">
@@ -94,6 +78,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import Snowflake from '../components/Snowflake.vue';
 
 // 响应式数据
 const countdown = ref({
@@ -103,17 +88,6 @@ const countdown = ref({
   seconds: 0
 });
 let countdownTimer = null; // 倒计时定时器
-
-// 雪花效果相关响应式数据 - 简化版，减少雪花数量
-const snowflakes = ref([]);
-// 根据设备性能动态调整雪花数量
-const snowflakeCount = ref(() => {
-  // 检测设备性能
-  const isLowPerformance = !('requestAnimationFrame' in window) || 
-                        navigator.hardwareConcurrency < 4;
-  return isLowPerformance ? 20 : 30; // 低性能设备20个雪花，高性能设备30个
-});
-let animationFrameId = null;
 
 // 计算倒计时（天、时、分、秒）
 const calculateCountdown = () => {
@@ -136,78 +110,9 @@ const calculateCountdown = () => {
   };
 };
 
-// 自定义实现简化版飘雪效果
-const initSnow = () => {
-  // 清空现有雪花
-  snowflakes.value = [];
-  
-  // 生成新雪花 - 减少数量
-  for (let i = 0; i < snowflakeCount.value; i++) {
-    snowflakes.value.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      size: Math.random() * 8 + 2, // 2-10px，减小雪花尺寸
-      opacity: Math.random() * 0.3 + 0.1, // 0.1-0.4，降低透明度
-      rotation: Math.random() * 360,
-      speed: Math.random() * 1.5 + 0.5, // 0.5-2px/s，降低下落速度
-      swayDuration: Math.random() * 4 + 3, // 3-7s，增加摇摆周期
-      swayAmount: Math.random() * 6 + 2, // 2-8px，减小摇摆幅度
-      windSpeed: Math.random() * 0.2 - 0.1 // -0.1 to 0.1px/s，减小风力
-    });
-  }
-  
-  // 开始动画循环
-  animateSnow();
-};
-
-// 雪花动画循环 - 优化性能
-let lastTime = 0;
-const animateSnow = (currentTime = 0) => {
-  // 控制动画帧率，每16ms执行一次（约60fps）
-  const deltaTime = currentTime - lastTime;
-  if (deltaTime < 16) {
-    animationFrameId = requestAnimationFrame(animateSnow);
-    return;
-  }
-  lastTime = currentTime;
-  
-  // 使用forEach代替map，减少内存分配
-  snowflakes.value.forEach((snowflake, index) => {
-    // 更新位置
-    let newY = snowflake.y + snowflake.speed;
-    let newX = snowflake.x + snowflake.windSpeed;
-    let newRotation = snowflake.rotation + 0.3; // 减慢旋转速度
-    
-    // 雪花超出屏幕底部，重置到顶部
-    if (newY > window.innerHeight) {
-      newY = -snowflake.size;
-      newX = Math.random() * window.innerWidth;
-    }
-    
-    // 雪花超出屏幕左右，重置位置
-    if (newX > window.innerWidth) {
-      newX = 0;
-    } else if (newX < 0) {
-      newX = window.innerWidth;
-    }
-    
-    // 直接修改数组元素，减少内存分配
-    snowflakes.value[index] = {
-      ...snowflake,
-      y: newY,
-      x: newX,
-      rotation: newRotation
-    };
-  });
-  
-  // 继续动画循环
-  animationFrameId = requestAnimationFrame(animateSnow);
-};
-
 // 生命周期钩子
 onMounted(() => {
   calculateCountdown();
-  initSnow();
   
   // 设置每秒更新一次倒计时
   countdownTimer = setInterval(() => {
@@ -216,12 +121,6 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  // 取消雪花动画
-  if (animationFrameId) {
-    cancelAnimationFrame(animationFrameId);
-    animationFrameId = null;
-  }
-  
   // 清除倒计时定时器
   if (countdownTimer) {
     clearInterval(countdownTimer);
@@ -237,33 +136,27 @@ onBeforeUnmount(() => {
   text-align: center;
   padding: 20px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%);
+  background: linear-gradient(135deg, #f7f9fc 0%, #e8f0fe 100%);
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: '微软雅黑', 'Microsoft YaHei', sans-serif;
 }
 
 .home-content {
-  max-width: 100%;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 20px;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
 }
 
-/* 背景装饰 */
-.background-decor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    radial-gradient(circle at 20% 30%, rgba(157, 80, 187, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(110, 72, 170, 0.1) 0%, transparent 50%);
-  z-index: -1;
-}
+
 
 /* 新年装饰 */
 .new-year-decorations {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -275,36 +168,24 @@ onBeforeUnmount(() => {
 /* 春联 */
 .couplet {
   position: absolute;
-  font-size: 24px;
-  color: #ff0000;
+  font-size: 28px;
+  color: #ffffff;
   font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   animation: coupletFloat 4s ease-in-out infinite;
   writing-mode: vertical-rl;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 5px;
-  height: 250px;
+  padding: 20px 10px;
+  background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
+  border-radius: 8px;
+  height: 300px;
   width: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  line-height: 1.2;
+  line-height: 1.4;
   white-space: nowrap;
   overflow: hidden;
-}
-
-/* 福字 */
-.fu-character {
-  position: absolute;
-  font-size: 64px;
-  color: #ff0000;
-  font-weight: bold;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
-  animation: rotate 6s linear infinite;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 100%);
-  padding: 20px;
-  border-radius: 50%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* 鞭炮 */
@@ -312,23 +193,6 @@ onBeforeUnmount(() => {
   position: absolute;
   font-size: 48px;
   animation: firecrackerSparkle 2s ease-in-out infinite;
-}
-
-/* 窗花 */
-.paper-cut {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(255, 140, 0, 0.6) 100%);
-  border-radius: 50%;
-  animation: paperCutRotate 5s linear infinite;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  font-size: 24px;
-  font-weight: bold;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
 }
 
 /* 动画效果 */
@@ -341,15 +205,6 @@ onBeforeUnmount(() => {
   }
 }
 
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @keyframes firecrackerSparkle {
   0%, 100% {
     transform: scale(1);
@@ -358,15 +213,6 @@ onBeforeUnmount(() => {
   50% {
     transform: scale(1.2);
     opacity: 0.8;
-  }
-}
-
-@keyframes paperCutRotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
 
@@ -382,50 +228,36 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
-/* 飘雪效果 */
-.snow-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1000;
-  overflow: hidden;
-}
 
-.snowflake {
-  position: absolute;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 70%, transparent 100%);
-  border-radius: 50%;
-  opacity: 0.8;
-  pointer-events: none;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.6), inset 0 0 3px rgba(255, 255, 255, 0.8);
-  will-change: transform, opacity;
-}
-
-/* 雪花摇摆动画 */
-@keyframes sway {
-  from {
-    transform: translateX(-10px) rotate(0deg);
-  }
-  to {
-    transform: translateX(10px) rotate(360deg);
-  }
-}
 
 /* 封面样式 */
 .cover {
   text-align: center;
   padding: 60px 20px;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ffa07a 50%, #ffd700 100%);
+  background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 50%, #ff6b6b 100%);
   color: white;
   border-radius: 20px;
   margin-bottom: 30px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   animation: slideInUp 1s ease;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  z-index: 0;
+}
+
+.cover > * {
+  position: relative;
+  z-index: 2;
 }
 
 .cover-title {
@@ -433,6 +265,8 @@ onBeforeUnmount(() => {
   margin-bottom: 15px;
   animation: bounceIn 1s ease;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-weight: bold;
 }
 
 .cover-subtitle {
@@ -440,38 +274,37 @@ onBeforeUnmount(() => {
   opacity: 0.95;
   margin-bottom: 20px;
   animation: fadeInUp 1s ease 0.3s both;
+  color: #fff;
 }
 
 .countdown {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
   margin-top: 20px;
   animation: fadeInUp 1s ease 0.6s both;
 }
 
 .countdown-text {
-  font-size: 20px;
+  font-size: 18px;
   opacity: 0.95;
   color: #fff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   font-weight: bold;
-  letter-spacing: 1px;
 }
 
 .countdown-time {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.2));
-  padding: 25px 40px;
-  border-radius: 50px;
-  backdrop-filter: blur(15px);
-  border: 3px solid rgba(255, 215, 0, 0.4);
-  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3),
-              0 0 30px rgba(255, 215, 0, 0.2) inset;
-  animation: pulse 2s ease-in-out infinite;
+  gap: 0;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 15px 25px;
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .countdown-item {
@@ -480,32 +313,34 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   position: relative;
+  width: 70px;
+  height: 60px;
 }
 
 .countdown-number {
-  font-size: 64px;
+  font-size: 42px;
   font-weight: bold;
   color: #ffd700;
-  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
-               3px 3px 6px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
   font-family: 'Arial', sans-serif;
+  width: 100%;
+  text-align: center;
+  line-height: 60px;
   margin: 0;
   padding: 0;
-  animation: glow 1.5s ease-in-out infinite alternate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .countdown-label {
-  font-size: 18px;
+  font-size: 14px;
   color: #fff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
   font-weight: bold;
-  margin: 10px 0 0 0;
+  margin: 5px 0 0 0;
   padding: 0;
-  letter-spacing: 2px;
-  background: linear-gradient(135deg, #ff6b6b, #ffa07a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  letter-spacing: 1px;
 }
 
 @keyframes fadeInUp {
@@ -546,22 +381,23 @@ onBeforeUnmount(() => {
 
 /* 问候卡片 */
 .greeting-card {
-  background: white;
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
   border-radius: 15px;
   padding: 25px;
   margin-bottom: 30px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   animation: slideInUp 1s ease 0.2s both;
-  border-left: 5px solid #ff6b6b;
 }
 
 .section-title {
-  color: #ff6b6b;
+  color: #6e48aa;
   font-size: 24px;
   margin-bottom: 20px;
   text-align: center;
   position: relative;
   padding-bottom: 10px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .section-title::after {
@@ -572,7 +408,7 @@ onBeforeUnmount(() => {
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, #ff6b6b, #ffa07a);
+  background: linear-gradient(90deg, #6e48aa, #9d50bb);
   border-radius: 2px;
 }
 
@@ -610,13 +446,13 @@ onBeforeUnmount(() => {
 .action-buttons {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
+  gap: 20px;
+  margin-top: 25px;
 }
 
 .action-btn {
   display: inline-block;
-  padding: 12px 24px;
+  padding: 15px 30px;
   background: linear-gradient(135deg, #6e48aa, #9d50bb);
   color: white;
   border-radius: 25px;
@@ -625,21 +461,22 @@ onBeforeUnmount(() => {
   font-weight: bold;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(110, 72, 170, 0.3);
+  border: none;
+  min-width: 200px;
+  text-align: center;
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, #ff6b6b, #ffa07a);
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  background: linear-gradient(135deg, #6e48aa, #9d50bb, #ff6b6b);
+  box-shadow: 0 4px 12px rgba(110, 72, 170, 0.3);
 }
 
 .action-btn.primary:hover {
-  background: linear-gradient(135deg, #ffa07a, #ffb347);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 6px 16px rgba(110, 72, 170, 0.4);
 }
 
 .action-btn:hover {
-  background: linear-gradient(135deg, #9d50bb, #b86bff);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(110, 72, 170, 0.4);
 }
@@ -652,56 +489,60 @@ onBeforeUnmount(() => {
 
 .features-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-top: 25px;
 }
 
 .feature-item {
   display: flex;
   align-items: flex-start;
-  gap: 15px;
-  padding: 20px;
-  background: white;
+  gap: 20px;
+  padding: 25px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   border-radius: 15px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  border-left: 4px solid #ff6b6b;
 }
 
 .feature-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-  background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .feature-icon {
-  font-size: 32px;
+  font-size: 40px;
   margin-top: 5px;
   flex-shrink: 0;
 }
 
 .feature-content h3 {
   margin: 0 0 10px 0;
-  color: #ff6b6b;
-  font-size: 18px;
+  color: #6e48aa;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .feature-content p {
   margin: 0;
-  color: #666;
-  font-size: 14px;
+  color: #555;
+  font-size: 16px;
   line-height: 1.6;
 }
 
 /* 简化问候语样式 */
 .simple-greeting {
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
   color: #533f03;
-  line-height: 1.8;
+  line-height: 1.6;
   margin: 0;
-  padding: 10px 0;
+  padding: 15px 0;
+  font-weight: bold;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* 动画效果 */
@@ -766,10 +607,26 @@ onBeforeUnmount(() => {
     align-items: center;
   }
   
+  /* 调整春联样式适应手机端 */
+  .new-year-decorations {
+    display: block;
+  }
+  
+  .couplet {
+    font-size: 18px;
+    height: 200px;
+    padding: 10px 5px;
+  }
+  
+  .firecracker {
+    font-size: 32px;
+  }
+  
   .features-list {
     grid-template-columns: 1fr;
   }
   
+  /* 保持特色卡片纵向布局 */
   .feature-item {
     flex-direction: column;
     text-align: center;
@@ -796,6 +653,16 @@ onBeforeUnmount(() => {
   
   .countdown-text {
     font-size: 14px;
+  }
+  
+  /* 修复小屏幕特色卡片布局 */
+  .feature-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .feature-icon {
+    margin-bottom: 10px;
   }
 }
 </style>
