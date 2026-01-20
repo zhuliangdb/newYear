@@ -725,30 +725,49 @@ body {
 
 .fortune-item {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 10px;
+  margin: 5px 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  width: 45%;
+  text-align: center;
+  box-sizing: border-box;
 }
 
-.fortune-item:last-child {
-  border-bottom: none;
+.fortune-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background: white;
+  border-radius: 12px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  gap: 10px;
 }
 
 .fortune-label {
   font-weight: bold;
   color: #6e48aa;
-  font-size: 16px;
+  font-size: 14px;
+  width: 100%;
+  margin-bottom: 5px;
+  display: block;
 }
 
 .fortune-value {
   color: #ff6b6b;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
   background: linear-gradient(135deg, #ff6b6b, #ffa07a);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  width: 100%;
+  display: block;
 }
 
 .fortune-tip {
