@@ -41,7 +41,7 @@
           <div class="countdown-time">
             <div class="countdown-item">
               <span class="countdown-number">{{ countdown.days }}</span>
-              <span class="countdown-text">天</span>
+              <span class="countdown-label">天</span>
             </div>
           </div>
         </div>
@@ -222,6 +222,13 @@ onBeforeUnmount(() => {
   min-height: 100vh;
   background: linear-gradient(135deg, #fff8e1 0%, #ffe0b2 100%);
   overflow-x: hidden;
+}
+
+.home-content {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* 背景装饰 */
