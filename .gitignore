@@ -19,6 +19,9 @@ dist-ssr
 target/
 build/
 
+# Vite cache
+.vite/
+
 # IDE files
 .idea
 .vscode
