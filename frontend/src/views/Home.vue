@@ -28,7 +28,7 @@
           transform: `rotate(${snowflake.rotation}deg)`,
           animation: `sway ${snowflake.swayDuration}s infinite ease-in-out alternate`
         }"
-      ></div>
+      </div>
     </div>
     
     <!-- 页面内容 -->
