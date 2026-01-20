@@ -106,7 +106,13 @@ let countdownTimer = null; // 倒计时定时器
 
 // 雪花效果相关响应式数据 - 简化版，减少雪花数量
 const snowflakes = ref([]);
-const snowflakeCount = ref(50); // 减少雪花数量，降低性能消耗
+// 根据设备性能动态调整雪花数量
+const snowflakeCount = ref(() => {
+  // 检测设备性能
+  const isLowPerformance = !('requestAnimationFrame' in window) || 
+                        navigator.hardwareConcurrency < 4;
+  return isLowPerformance ? 20 : 30; // 低性能设备20个雪花，高性能设备30个
+});
 let animationFrameId = null;
 
 // 计算倒计时（天、时、分、秒）
@@ -140,13 +146,13 @@ const initSnow = () => {
     snowflakes.value.push({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      size: Math.random() * 10 + 3, // 3-13px，减小雪花尺寸
-      opacity: Math.random() * 0.4 + 0.1, // 0.1-0.5，降低透明度
+      size: Math.random() * 8 + 2, // 2-10px，减小雪花尺寸
+      opacity: Math.random() * 0.3 + 0.1, // 0.1-0.4，降低透明度
       rotation: Math.random() * 360,
-      speed: Math.random() * 2 + 1, // 1-3px/s，降低下落速度
-      swayDuration: Math.random() * 3 + 2, // 2-5s，增加摇摆周期
-      swayAmount: Math.random() * 8 + 3, // 3-11px，减小摇摆幅度
-      windSpeed: Math.random() * 0.3 - 0.15 // -0.15 to 0.15px/s，减小风力
+      speed: Math.random() * 1.5 + 0.5, // 0.5-2px/s，降低下落速度
+      swayDuration: Math.random() * 4 + 3, // 3-7s，增加摇摆周期
+      swayAmount: Math.random() * 6 + 2, // 2-8px，减小摇摆幅度
+      windSpeed: Math.random() * 0.2 - 0.1 // -0.1 to 0.1px/s，减小风力
     });
   }
   
@@ -154,13 +160,23 @@ const initSnow = () => {
   animateSnow();
 };
 
-// 雪花动画循环
-const animateSnow = () => {
-  snowflakes.value = snowflakes.value.map(snowflake => {
+// 雪花动画循环 - 优化性能
+let lastTime = 0;
+const animateSnow = (currentTime = 0) => {
+  // 控制动画帧率，每16ms执行一次（约60fps）
+  const deltaTime = currentTime - lastTime;
+  if (deltaTime < 16) {
+    animationFrameId = requestAnimationFrame(animateSnow);
+    return;
+  }
+  lastTime = currentTime;
+  
+  // 使用forEach代替map，减少内存分配
+  snowflakes.value.forEach((snowflake, index) => {
     // 更新位置
     let newY = snowflake.y + snowflake.speed;
     let newX = snowflake.x + snowflake.windSpeed;
-    let newRotation = snowflake.rotation + 0.5; // 减慢旋转速度
+    let newRotation = snowflake.rotation + 0.3; // 减慢旋转速度
     
     // 雪花超出屏幕底部，重置到顶部
     if (newY > window.innerHeight) {
@@ -175,7 +191,8 @@ const animateSnow = () => {
       newX = window.innerWidth;
     }
     
-    return {
+    // 直接修改数组元素，减少内存分配
+    snowflakes.value[index] = {
       ...snowflake,
       y: newY,
       x: newX,

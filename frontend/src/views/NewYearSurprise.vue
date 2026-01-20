@@ -102,8 +102,8 @@
         <button class="secret-btn" @click="addWish" :disabled="!newWish.trim()">添加愿望</button>
       </div>
       <div class="wish-list">
-        <div class="wish-item" v-for="(wish, index) in wishes" :key="index">
-          <div class="wish-content">{{ wish }}</div>
+        <div class="wish-item" v-for="wish in wishes" :key="wish.id">
+          <div class="wish-content">{{ wish.content }}</div>
           <div class="wish-icon">✨</div>
         </div>
       </div>
@@ -154,7 +154,26 @@
         虽然没见过面，但谢谢你让我觉得<br>
         这世界还有人愿意认真听我说废话。<br>
         2026，愿你三餐温热，梦里常笑，聊天框永远有人秒回。<br>
-        <div class="signature">—— 你的网友，[你的昵称]</div>
+        <div class="signature">—— 你的网友，[完美谢幕]</div>
+      </div>
+    </div>
+
+    <!-- 留言板 -->
+    <div class="message-board">
+      <h2 class="section-title">💬 留言板</h2>
+      <div class="message-input-area">
+        <textarea v-model="newMessage" placeholder="写下你的留言..." rows="3" class="message-input"></textarea>
+        <input v-model="messageAuthor" placeholder="你的昵称" class="message-author" maxlength="10">
+        <button class="secret-btn" @click="addMessage" :disabled="!newMessage.trim() || !messageAuthor.trim()">发送留言</button>
+      </div>
+      <div class="message-list">
+        <div class="message-item" v-for="message in messages" :key="message.id">
+          <div class="message-header">
+            <span class="message-author">{{ message.author }}</span>
+            <span class="message-time">{{ message.time }}</span>
+          </div>
+          <div class="message-content">{{ message.content }}</div>
+        </div>
       </div>
     </div>
 
@@ -167,6 +186,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+import firebase from '../utils/firebase';
 
 // 响应式数据
 const showSecret = ref(false);
@@ -178,11 +198,77 @@ const countdown = ref({
 });
 let countdownTimer = null; // 倒计时定时器
 const newWish = ref('');
-const wishes = ref([
-  '希望今年能学会一门新技能',
-  '愿家人身体健康，万事如意',
-  '期待一次说走就走的旅行'
-]);
+const wishes = ref([]);
+
+// 留言板数据
+const newMessage = ref('');
+const messageAuthor = ref('');
+const messages = ref([]);
+
+// 实时订阅引用
+let wishesSubscription = null;
+let messagesSubscription = null;
+
+// 从Firebase加载留言
+const loadMessages = async () => {
+  try {
+    const { data, error } = await firebase
+      .from('messages')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    
+    messages.value = data || [];
+  } catch (error) {
+    console.error('加载留言失败:', error);
+  }
+};
+
+// 添加留言到Firebase
+const addMessage = async () => {
+  if (newMessage.value.trim() && messageAuthor.value.trim()) {
+    try {
+      const now = new Date();
+      const timeStr = now.toLocaleString('zh-CN', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      const { error } = await firebase
+        .from('messages')
+        .insert({
+          author: messageAuthor.value.trim(),
+          content: newMessage.value.trim(),
+          time: timeStr,
+          created_at: now.toISOString()
+        });
+      
+      if (error) throw error;
+      
+      // 清空输入
+      newMessage.value = '';
+      messageAuthor.value = '';
+    } catch (error) {
+      console.error('添加留言失败:', error);
+    }
+  }
+};
+
+// 订阅留言实时更新
+const subscribeToMessages = () => {
+  messagesSubscription = firebase
+    .channel('messages-channel')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload) => {
+      console.log('留言更新:', payload);
+      // 重新加载留言以保持最新
+      loadMessages();
+    })
+    .subscribe();
+};
 const timelineItems = ref([
   {
     date: '📅 2025-03-12',
@@ -208,7 +294,13 @@ let fireworksInterval = null;
 
 // 雪花效果相关响应式数据
 const snowflakes = ref([]);
-const snowflakeCount = ref(100); // 雪花数量
+// 根据设备性能动态调整雪花数量
+const snowflakeCount = ref(() => {
+  // 检测设备性能
+  const isLowPerformance = !('requestAnimationFrame' in window) || 
+                        navigator.hardwareConcurrency < 4;
+  return isLowPerformance ? 20 : 40; // 低性能设备20个雪花，高性能设备40个
+});
 let animationFrameId = null;
 
 // 固定数据
@@ -240,18 +332,18 @@ const initSnow = () => {
   // 清空现有雪花
   snowflakes.value = [];
   
-  // 生成新雪花
+  // 生成新雪花 - 优化性能
   for (let i = 0; i < snowflakeCount.value; i++) {
     snowflakes.value.push({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      size: Math.random() * 15 + 5, // 5-20px，增大雪花尺寸
-      opacity: Math.random() * 0.6 + 0.2, // 0.2-0.8
+      size: Math.random() * 8 + 2, // 2-10px，减小雪花尺寸
+      opacity: Math.random() * 0.3 + 0.1, // 0.1-0.4，降低透明度
       rotation: Math.random() * 360,
-      speed: Math.random() * 3 + 2, // 2-5px/s
-      swayDuration: Math.random() * 2 + 1, // 1-3s
-      swayAmount: Math.random() * 10 + 5, // 5-15px
-      windSpeed: Math.random() * 0.5 - 0.25 // -0.25 to 0.25px/s
+      speed: Math.random() * 1.5 + 0.5, // 0.5-2px/s，降低下落速度
+      swayDuration: Math.random() * 4 + 3, // 3-7s，增加摇摆周期
+      swayAmount: Math.random() * 6 + 2, // 2-8px，减小摇摆幅度
+      windSpeed: Math.random() * 0.2 - 0.1 // -0.1 to 0.1px/s，减小风力
     });
   }
   
@@ -259,13 +351,23 @@ const initSnow = () => {
   animateSnow();
 };
 
-// 雪花动画循环
-const animateSnow = () => {
-  snowflakes.value = snowflakes.value.map(snowflake => {
+// 雪花动画循环 - 优化性能
+let lastTime = 0;
+const animateSnow = (currentTime = 0) => {
+  // 控制动画帧率，每16ms执行一次（约60fps）
+  const deltaTime = currentTime - lastTime;
+  if (deltaTime < 16) {
+    animationFrameId = requestAnimationFrame(animateSnow);
+    return;
+  }
+  lastTime = currentTime;
+  
+  // 使用forEach代替map，减少内存分配
+  snowflakes.value.forEach((snowflake, index) => {
     // 更新位置
     let newY = snowflake.y + snowflake.speed;
     let newX = snowflake.x + snowflake.windSpeed;
-    let newRotation = snowflake.rotation + 1;
+    let newRotation = snowflake.rotation + 0.3; // 减慢旋转速度
     
     // 雪花超出屏幕底部，重置到顶部
     if (newY > window.innerHeight) {
@@ -280,7 +382,8 @@ const animateSnow = () => {
       newX = window.innerWidth;
     }
     
-    return {
+    // 直接修改数组元素，减少内存分配
+    snowflakes.value[index] = {
       ...snowflake,
       y: newY,
       x: newX,
@@ -376,11 +479,53 @@ const calculateCountdown = () => {
   };
 };
 
-const addWish = () => {
-  if (newWish.value.trim()) {
-    wishes.value.unshift(newWish.value.trim());
-    newWish.value = '';
+// 从Firebase加载愿望
+const loadWishes = async () => {
+  try {
+    const { data, error } = await firebase
+      .from('wishes')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    
+    wishes.value = data || [];
+  } catch (error) {
+    console.error('加载愿望失败:', error);
   }
+};
+
+// 添加愿望到Firebase
+const addWish = async () => {
+  if (newWish.value.trim()) {
+    try {
+      const { error } = await firebase
+        .from('wishes')
+        .insert({
+          content: newWish.value.trim(),
+          created_at: new Date().toISOString()
+        });
+      
+      if (error) throw error;
+      
+      // 清空输入
+      newWish.value = '';
+    } catch (error) {
+      console.error('添加愿望失败:', error);
+    }
+  }
+};
+
+// 订阅愿望实时更新
+const subscribeToWishes = () => {
+  wishesSubscription = firebase
+    .channel('wishes-channel')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'wishes' }, (payload) => {
+      console.log('愿望更新:', payload);
+      // 重新加载愿望以保持最新
+      loadWishes();
+    })
+    .subscribe();
 };
 
 const generateFortune = () => {
@@ -414,7 +559,7 @@ const sharePage = () => {
 };
 
 // 生命周期钩子
-onMounted(() => {
+onMounted(async () => {
   initSnow();
   initFireworks();
   calculateCountdown();
@@ -423,6 +568,16 @@ onMounted(() => {
   setTimeout(() => {
     document.body.style.opacity = '1';
   }, 100);
+  
+  // 从Firebase加载数据
+  await Promise.all([
+    loadMessages(),
+    loadWishes()
+  ]);
+  
+  // 订阅实时更新
+  subscribeToMessages();
+  subscribeToWishes();
   
   // 设置每秒更新一次倒计时
   countdownTimer = setInterval(() => {
@@ -443,6 +598,17 @@ onBeforeUnmount(() => {
     clearInterval(countdownTimer);
     countdownTimer = null;
   }
+  
+  // 取消实时订阅
+  if (messagesSubscription) {
+      firebase.removeChannel(messagesSubscription);
+      messagesSubscription = null;
+    }
+    
+    if (wishesSubscription) {
+      firebase.removeChannel(wishesSubscription);
+      wishesSubscription = null;
+    }
 });
 </script>
 
@@ -930,54 +1096,197 @@ body {
 
 .wish-input {
   width: 100%;
-  padding: 12px;
+  padding: 15px;
   border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 15px;
   resize: vertical;
   transition: all 0.3s ease;
   font-family: inherit;
+  background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
 }
 
 .wish-input:focus {
   outline: none;
   border-color: #6e48aa;
   box-shadow: 0 0 0 3px rgba(110, 72, 170, 0.1);
+  background: white;
 }
 
 .wish-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 15px;
 }
 
 .wish-item {
   background: linear-gradient(135deg, #f0e6ff 0%, #e6d9ff 100%);
-  padding: 15px;
-  border-radius: 10px;
+  padding: 20px;
+  border-radius: 15px;
   position: relative;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   animation: scaleIn 0.5s ease;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .wish-item:hover {
-  transform: translateY(-3px) rotate(1deg);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px) rotate(1deg);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #e6d9ff 0%, #d8c9ff 100%);
 }
 
 .wish-content {
-  font-size: 14px;
-  line-height: 1.5;
-  margin-bottom: 10px;
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  flex-grow: 1;
+  color: #333;
 }
 
 .wish-icon {
   position: absolute;
   top: 10px;
   right: 10px;
-  font-size: 18px;
-  opacity: 0.7;
+  font-size: 20px;
+  opacity: 0.8;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 留言板样式 */
+.message-board {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: slideInUp 1s ease 0.8s both;
+}
+
+.message-input-area {
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.message-input {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 15px;
+  resize: vertical;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+}
+
+.message-input:focus {
+  outline: none;
+  border-color: #6e48aa;
+  box-shadow: 0 0 0 3px rgba(110, 72, 170, 0.1);
+  background: white;
+}
+
+.message-author {
+  width: 100%;
+  padding: 10px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.message-author:focus {
+  outline: none;
+  border-color: #6e48aa;
+  box-shadow: 0 0 0 3px rgba(110, 72, 170, 0.1);
+}
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.message-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.message-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.message-list::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+.message-item {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.5s ease;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.message-header .message-author {
+  font-weight: bold;
+  color: #6e48aa;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.message-time {
+  color: #666;
+  font-size: 12px;
+}
+
+.message-content {
+  color: #333;
+  line-height: 1.6;
+  font-size: 15px;
 }
 
 /* 彩蛋样式 */

@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 // 导入视图组件
 import Home from '../views/Home.vue';
@@ -8,7 +8,7 @@ const NewYearSurprise = () => import('../views/NewYearSurprise.vue');
 
 // 创建路由实例
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL || '/'),
+  history: createWebHashHistory(import.meta.env.BASE_URL || '/'),
   routes: [
     {
       path: '/',
