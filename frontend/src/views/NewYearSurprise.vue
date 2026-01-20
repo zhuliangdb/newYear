@@ -24,10 +24,21 @@
       <div class="cover-content">
         <h1 class="cover-title">致我的互联网搭子 🌟</h1>
         <p class="cover-subtitle">2026 新年快乐 | 这份惊喜只属于你</p>
-        <div class="countdown" v-if="countdown > 0">
+        <div class="countdown">
           <span class="countdown-text">距离新年还有</span>
-          <span class="countdown-number">{{ countdown }}</span>
-          <span class="countdown-text">天</span>
+          <div class="countdown-time">
+            <div class="countdown-item">
+              <span class="countdown-number">{{ countdown.hours.toString().padStart(2, '0') }}</span>
+            </div>
+            <span class="countdown-separator">:</span>
+            <div class="countdown-item">
+              <span class="countdown-number">{{ countdown.minutes.toString().padStart(2, '0') }}</span>
+            </div>
+            <span class="countdown-separator">:</span>
+            <div class="countdown-item">
+              <span class="countdown-number">{{ countdown.seconds.toString().padStart(2, '0') }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -159,7 +170,13 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 
 // 响应式数据
 const showSecret = ref(false);
-const countdown = ref(0);
+const countdown = ref({
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0
+});
+let countdownTimer = null; // 倒计时定时器
 const newWish = ref('');
 const wishes = ref([
   '希望今年能学会一门新技能',
@@ -340,12 +357,23 @@ const stopFireworks = () => {
 };
 
 const calculateCountdown = () => {
-  // 计算距离2026年春节（2月17日）的天数
+  // 计算距离2026年春节（2月17日）的时间差
   const now = new Date();
   const springFestival = new Date('2026-02-17');
   const diffTime = Math.abs(springFestival - now);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  countdown.value = diffDays;
+  
+  // 计算天、时、分、秒
+  const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+  
+  countdown.value = {
+    days,
+    hours,
+    minutes,
+    seconds
+  };
 };
 
 const addWish = () => {
@@ -395,6 +423,11 @@ onMounted(() => {
   setTimeout(() => {
     document.body.style.opacity = '1';
   }, 100);
+  
+  // 设置每秒更新一次倒计时
+  countdownTimer = setInterval(() => {
+    calculateCountdown();
+  }, 1000);
 });
 
 onBeforeUnmount(() => {
@@ -403,6 +436,12 @@ onBeforeUnmount(() => {
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId);
     animationFrameId = null;
+  }
+  
+  // 清除倒计时定时器
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+    countdownTimer = null;
   }
 });
 </script>
@@ -528,7 +567,8 @@ body {
 }
 
 .countdown {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 10px;
   margin-top: 20px;
@@ -536,15 +576,72 @@ body {
 }
 
 .countdown-text {
-  font-size: 16px;
-  opacity: 0.9;
+  font-size: 18px;
+  opacity: 0.95;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.countdown-time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 15px 25px;
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 60px;
+  position: relative;
 }
 
 .countdown-number {
-  font-size: 32px;
+  font-size: 42px;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  font-family: 'Arial', sans-serif;
+  width: 100%;
+  text-align: center;
+  line-height: 60px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.countdown-separator {
+  font-size: 36px;
   font-weight: bold;
   color: #ffd700;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: blink 1s infinite;
+  line-height: 60px;
+  margin: 0 8px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* 飘雪效果 */
@@ -1080,24 +1177,270 @@ body {
     padding: 15px;
   }
   
+  /* 新年装饰调整 */
+  .lantern {
+    font-size: 32px !important;
+  }
+  
+  .chinese-knot {
+    font-size: 28px !important;
+  }
+  
+  /* 封面样式调整 */
+  .cover {
+    padding: 40px 15px;
+    margin-bottom: 20px;
+  }
+  
   .cover-title {
     font-size: 28px;
   }
   
+  .cover-subtitle {
+    font-size: 16px;
+  }
+  
+  .countdown-number {
+    font-size: 24px;
+    line-height: 40px;
+  }
+  
+  .countdown-separator {
+    font-size: 20px;
+    line-height: 40px;
+  }
+  
+  .countdown-item {
+    height: 40px;
+    width: 50px;
+  }
+  
+  /* 卡片样式调整 */
+  .greeting-card,
+  .fortune-card,
+  .game-section,
+  .timeline-section,
+  .wish-wall,
+  .彩蛋-section,
+  .audio-section,
+  .letter-section {
+    margin-bottom: 25px;
+  }
+  
+  .greeting-card,
+  .fortune-card,
+  .wish-wall {
+    padding: 20px;
+  }
+  
+  /* 标题样式调整 */
+  .section-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  
+  /* 时间轴样式调整 */
   .timeline::before {
     left: 20px;
   }
   
   .timeline-item {
     padding-left: 50px;
+    margin-bottom: 20px;
   }
   
   .timeline-item::before {
     left: 18px;
   }
   
+  .timeline-content {
+    padding: 15px;
+    font-size: 14px;
+  }
+  
+  /* 愿望墙样式调整 */
   .wish-list {
     grid-template-columns: 1fr;
+  }
+  
+  .wish-input-area {
+    margin-bottom: 20px;
+  }
+  
+  /* 游戏卡片调整 */
+  .game-card {
+    padding: 20px;
+  }
+  
+  .game-icon {
+    font-size: 36px;
+  }
+  
+  /* 手写信件调整 */
+  .handwritten {
+    font-size: 16px;
+    padding: 20px;
+    line-height: 2;
+  }
+  
+  /* 按钮样式调整 */
+  .secret-btn,
+  .share-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  /* 音频播放器调整 */
+  .audio-player {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .audio-player audio {
+    max-width: 100%;
+  }
+}
+
+/* 小屏手机适配 (480px以下) */
+@media (max-width: 480px) {
+  /* 容器调整 */
+  .container {
+    padding: 10px;
+  }
+  
+  /* 新年装饰调整 */
+  .new-year-decorations {
+    display: none;
+  }
+  
+  /* 封面样式调整 */
+  .cover {
+    padding: 30px 10px;
+    border-radius: 15px;
+  }
+  
+  .cover-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .cover-subtitle {
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+  
+  .countdown {
+    gap: 8px;
+  }
+  
+  .countdown-number {
+    font-size: 20px;
+  }
+  
+  /* 卡片样式调整 */
+  .greeting-card,
+  .fortune-card,
+  .wish-wall {
+    padding: 15px;
+    border-radius: 12px;
+  }
+  
+  /* 标题样式调整 */
+  .greeting-title,
+  .section-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  
+  /* 文字样式调整 */
+  .greeting-text,
+  .fortune-label,
+  .fortune-value,
+  .game-title,
+  .game-result,
+  .wish-content,
+  .secret-content,
+  .audio-hint {
+    font-size: 14px;
+  }
+  
+  /* 时间轴样式调整 */
+  .timeline-item {
+    padding-left: 45px;
+  }
+  
+  .timeline-date {
+    font-size: 12px;
+  }
+  
+  /* 游戏卡片调整 */
+  .game-card {
+    padding: 15px;
+    border-radius: 12px;
+  }
+  
+  .game-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+  }
+  
+  /* 手写信件调整 */
+  .handwritten {
+    font-size: 14px;
+    padding: 15px;
+    line-height: 1.8;
+  }
+  
+  /* 按钮样式调整 */
+  .secret-btn,
+  .share-btn {
+    padding: 12px 24px;
+    font-size: 15px;
+    border-radius: 20px;
+    width: 100%;
+    margin: 5px 0;
+  }
+  
+  /* 输入框调整 */
+  .wish-input {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  /* 彩蛋内容调整 */
+  .secret-content {
+    padding: 15px;
+    font-size: 13px;
+  }
+  
+  /* 音频播放器调整 */
+  .audio-player {
+    padding: 15px;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  /* 增加点击区域 */
+  .secret-btn,
+  .share-btn,
+  .game-card,
+  .fortune-content {
+    min-height: 44px;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* 移除悬停效果，添加点击效果 */
+  .secret-btn:active:not(:disabled),
+  .share-btn:active,
+  .game-card:active,
+  .fortune-content:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
   }
 }
 </style>

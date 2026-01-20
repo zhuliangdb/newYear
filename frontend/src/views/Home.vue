@@ -3,28 +3,17 @@
     <!-- 背景装饰 -->
     <div class="background-decor"></div>
     
-    <!-- 新年装饰 -->
+    <!-- 简化的新年装饰 -->
     <div class="new-year-decorations">
-      <!-- 春联 -->
-      <div class="couplet" style="left: 5%; top: 15%; animation-delay: 0s;">一帆风顺吉星到</div>
-      <div class="couplet" style="right: 5%; top: 15%; animation-delay: 1s;">万事如意福临门</div>
-      
       <!-- 福字 -->
       <div class="fu-character" style="top: 10%; left: 50%; transform: translateX(-50%); animation-delay: 2s;">福</div>
       
       <!-- 鞭炮 -->
       <div class="firecracker" style="left: 8%; top: 30%; animation-delay: 2s;">🧨</div>
       <div class="firecracker" style="right: 8%; top: 30%; animation-delay: 3s;">🧨</div>
-      
-      <!-- 窗花 -->
-      <div class="paper-cut" style="left: 12%; top: 50%; animation-delay: 1.5s;">春</div>
-      <div class="paper-cut" style="right: 12%; top: 50%; animation-delay: 2.5s;">喜</div>
     </div>
     
-    <!-- 烟花效果 -->
-    <div class="fireworks-container"></div>
-    
-    <!-- 飘雪动画 - 基于Vue3响应式数据实现 -->
+    <!-- 简化的飘雪动画 - 减少雪花数量 -->
     <div class="snow-container">
       <div 
         v-for="(snowflake, index) in snowflakes" 
@@ -45,37 +34,60 @@
     <!-- 页面内容 -->
     <div class="home-content">
       <div class="cover">
-        <h1 class="cover-title">🎉 新年快乐 🎉</h1>
-        <p class="cover-subtitle">愿新的一年万事如意，心想事成</p>
+        <h1 class="cover-title">🎉 新年到来 🎉</h1>
+        <p class="cover-subtitle">欢迎来到2026新年主题页面</p>
         <div class="countdown">
-          <span class="countdown-text">距离新年还有</span>
-          <span class="countdown-number">{{ countdown }}</span>
-          <span class="countdown-text">天</span>
+          <span class="countdown-text">距离春节还有</span>
+          <div class="countdown-time">
+            <div class="countdown-item">
+              <span class="countdown-number">{{ countdown.days }}</span>
+              <span class="countdown-text">天</span>
+            </div>
+          </div>
         </div>
       </div>
       
       <div class="greeting-card">
-        <h2 class="section-title">🎊 新年祝福</h2>
-        <p>在这新年到来之际，愿你：</p>
-        <div class="wishes-list">
-          <div class="wish-item">✨ 身体健康，万事如意</div>
-          <div class="wish-item">✨ 事业有成，步步高升</div>
-          <div class="wish-item">✨ 家庭幸福，阖家欢乐</div>
-          <div class="wish-item">✨ 财源广进，心想事成</div>
-        </div>
+        <h2 class="section-title">🎊 新年问候</h2>
+        <p class="simple-greeting">愿你在新的一年里，所有美好都如期而至！</p>
       </div>
       
       <div class="action-section">
-        <h2 class="section-title">✨ 快速开始</h2>
+        <h2 class="section-title">✨ 探索更多</h2>
         <div class="action-buttons">
-          <router-link to="/new-year-surprise" class="action-btn">
-            🎁 查看新年惊喜
+          <router-link to="/new-year-surprise" class="action-btn primary">
+            🎁 查看完整新年惊喜
           </router-link>
         </div>
       </div>
       
-      
-      
+      <!-- 新增：新年主题特色介绍 -->
+      <div class="features-section">
+        <h2 class="section-title">🎯 主题特色</h2>
+        <div class="features-list">
+          <div class="feature-item">
+            <div class="feature-icon">🎨</div>
+            <div class="feature-content">
+              <h3>精美装饰</h3>
+              <p>丰富的新年元素，营造浓厚节日氛围</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎮</div>
+            <div class="feature-content">
+              <h3>互动体验</h3>
+              <p>多种互动小游戏，增添节日乐趣</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💌</div>
+            <div class="feature-content">
+              <h3>温馨祝福</h3>
+              <p>个性化祝福语，传递新年心意</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -84,41 +96,57 @@
 import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 
 // 响应式数据
-const countdown = ref(0);
-let fireworksInterval = null;
+const countdown = ref({
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0
+});
+let countdownTimer = null; // 倒计时定时器
 
-// 雪花效果相关响应式数据
+// 雪花效果相关响应式数据 - 简化版，减少雪花数量
 const snowflakes = ref([]);
-const snowflakeCount = ref(100); // 雪花数量
+const snowflakeCount = ref(50); // 减少雪花数量，降低性能消耗
 let animationFrameId = null;
 
-// 计算倒计时
+// 计算倒计时（天、时、分、秒）
 const calculateCountdown = () => {
-  // 计算距离2026年春节（2月17日）的天数
+  // 计算距离2026年春节（2月17日）的时间差
   const now = new Date();
   const springFestival = new Date('2026-02-17');
   const diffTime = Math.abs(springFestival - now);
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  countdown.value = diffDays;
+  
+  // 计算天、时、分、秒
+  const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
+  
+  countdown.value = {
+    days,
+    hours,
+    minutes,
+    seconds
+  };
 };
 
-// 自定义实现飘雪效果
+// 自定义实现简化版飘雪效果
 const initSnow = () => {
   // 清空现有雪花
   snowflakes.value = [];
   
-  // 生成新雪花
+  // 生成新雪花 - 减少数量
   for (let i = 0; i < snowflakeCount.value; i++) {
     snowflakes.value.push({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      size: Math.random() * 15 + 5, // 5-20px，增大雪花尺寸
-      opacity: Math.random() * 0.6 + 0.2, // 0.2-0.8
+      size: Math.random() * 10 + 3, // 3-13px，减小雪花尺寸
+      opacity: Math.random() * 0.4 + 0.1, // 0.1-0.5，降低透明度
       rotation: Math.random() * 360,
-      speed: Math.random() * 3 + 2, // 2-5px/s
-      swayDuration: Math.random() * 2 + 1, // 1-3s
-      swayAmount: Math.random() * 10 + 5, // 5-15px
-      windSpeed: Math.random() * 0.5 - 0.25 // -0.25 to 0.25px/s
+      speed: Math.random() * 2 + 1, // 1-3px/s，降低下落速度
+      swayDuration: Math.random() * 3 + 2, // 2-5s，增加摇摆周期
+      swayAmount: Math.random() * 8 + 3, // 3-11px，减小摇摆幅度
+      windSpeed: Math.random() * 0.3 - 0.15 // -0.15 to 0.15px/s，减小风力
     });
   }
   
@@ -132,7 +160,7 @@ const animateSnow = () => {
     // 更新位置
     let newY = snowflake.y + snowflake.speed;
     let newX = snowflake.x + snowflake.windSpeed;
-    let newRotation = snowflake.rotation + 1;
+    let newRotation = snowflake.rotation + 0.5; // 减慢旋转速度
     
     // 雪花超出屏幕底部，重置到顶部
     if (newY > window.innerHeight) {
@@ -159,86 +187,28 @@ const animateSnow = () => {
   animationFrameId = requestAnimationFrame(animateSnow);
 };
 
-// 使用 fireworks-js 库实现烟花效果
-import { Fireworks } from 'fireworks-js';
-
-let fireworks = null;
-
-// 初始化烟花效果
-const initFireworks = () => {
-  console.log('Initializing fireworks-js fireworks...');
-  
-  // 获取烟花容器元素
-  const container = document.querySelector('.fireworks-container');
-  
-  // 创建烟花实例
-    fireworks = new Fireworks(container, {
-      speed: 1.5, // 降低烟花速度
-      acceleration: 1.03,
-      friction: 0.97,
-      gravity: 1.5,
-      particles: 300,
-      traceLength: 7,
-      explosion: 5,
-      colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'],
-      hue: {
-        min: 0,
-        max: 360
-      },
-      delay: {
-        min: 30,
-        max: 60
-      },
-      rocketsPoint: { // 火箭发射点范围
-        min: 0,
-        max: container.clientWidth
-      },
-      lineWidth: {
-        explosion: {
-          min: 1,
-          max: 3
-        },
-        trace: {
-          min: 1,
-          max: 2
-        }
-      },
-      brightness: {
-        min: 50,
-        max: 80
-      }
-    });
-  
-  // 开始烟花效果
-  fireworks.start();
-  console.log('fireworks-js fireworks started!');
-};
-
-// 停止烟花效果
-const stopFireworks = () => {
-  if (fireworks) {
-    fireworks.stop();
-    fireworks = null;
-  }
-  console.log('fireworks-js fireworks stopped!');
-};
-
 // 生命周期钩子
 onMounted(() => {
   calculateCountdown();
   initSnow();
-  // 使用 nextTick 确保 DOM 完全渲染后再初始化烟花
-  nextTick(() => {
-    initFireworks();
-  });
+  
+  // 设置每秒更新一次倒计时
+  countdownTimer = setInterval(() => {
+    calculateCountdown();
+  }, 1000);
 });
 
 onBeforeUnmount(() => {
-  stopFireworks();
   // 取消雪花动画
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId);
     animationFrameId = null;
+  }
+  
+  // 清除倒计时定时器
+  if (countdownTimer) {
+    clearInterval(countdownTimer);
+    countdownTimer = null;
   }
 });
 </script>
@@ -449,23 +419,105 @@ onBeforeUnmount(() => {
 }
 
 .countdown {
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   margin-top: 20px;
   animation: fadeInUp 1s ease 0.6s both;
 }
 
 .countdown-text {
-  font-size: 16px;
-  opacity: 0.9;
+  font-size: 20px;
+  opacity: 0.95;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.countdown-time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.2));
+  padding: 25px 40px;
+  border-radius: 50px;
+  backdrop-filter: blur(15px);
+  border: 3px solid rgba(255, 215, 0, 0.4);
+  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3),
+              0 0 30px rgba(255, 215, 0, 0.2) inset;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.countdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .countdown-number {
-  font-size: 32px;
+  font-size: 64px;
   font-weight: bold;
   color: #ffd700;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
+               3px 3px 6px rgba(0, 0, 0, 0.5);
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+.countdown-label {
+  font-size: 18px;
+  color: #fff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+  margin: 10px 0 0 0;
+  padding: 0;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #ff6b6b, #ffa07a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3),
+                0 0 30px rgba(255, 215, 0, 0.2) inset;
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4),
+                0 0 40px rgba(255, 215, 0, 0.3) inset;
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
+                 3px 3px 6px rgba(0, 0, 0, 0.5);
+  }
+  to {
+    text-shadow: 0 0 30px rgba(255, 215, 0, 1),
+                 0 0 40px rgba(255, 215, 0, 0.8),
+                 3px 3px 6px rgba(0, 0, 0, 0.5);
+  }
 }
 
 /* 问候卡片 */
@@ -551,13 +603,82 @@ onBeforeUnmount(() => {
   box-shadow: 0 4px 12px rgba(110, 72, 170, 0.3);
 }
 
+.action-btn.primary {
+  background: linear-gradient(135deg, #ff6b6b, #ffa07a);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.action-btn.primary:hover {
+  background: linear-gradient(135deg, #ffa07a, #ffb347);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.4);
+}
+
 .action-btn:hover {
   background: linear-gradient(135deg, #9d50bb, #b86bff);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(110, 72, 170, 0.4);
 }
 
+/* 新年主题特色介绍 */
+.features-section {
+  margin-bottom: 30px;
+  animation: slideInUp 1s ease 0.6s both;
+}
 
+.features-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border-left: 4px solid #ff6b6b;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
+}
+
+.feature-icon {
+  font-size: 32px;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.feature-content h3 {
+  margin: 0 0 10px 0;
+  color: #ff6b6b;
+  font-size: 18px;
+}
+
+.feature-content p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* 简化问候语样式 */
+.simple-greeting {
+  text-align: center;
+  font-size: 18px;
+  color: #533f03;
+  line-height: 1.8;
+  margin: 0;
+  padding: 10px 0;
+}
 
 /* 动画效果 */
 @keyframes fadeInUp {
@@ -600,14 +721,57 @@ onBeforeUnmount(() => {
     font-size: 28px;
   }
   
-  .tech-item {
-    flex-direction: column;
-    text-align: center;
+  .countdown-text {
+    font-size: 16px;
+  }
+  
+  .countdown-number {
+    font-size: 48px;
+  }
+  
+  .countdown-label {
+    font-size: 14px;
+  }
+  
+  .countdown-time {
+    padding: 20px 30px;
   }
   
   .action-buttons {
     flex-direction: column;
     align-items: center;
+  }
+  
+  .features-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .feature-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .feature-icon {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .countdown-number {
+    font-size: 36px;
+  }
+  
+  .countdown-label {
+    font-size: 12px;
+  }
+  
+  .countdown-time {
+    padding: 15px 25px;
+    border-radius: 30px;
+  }
+  
+  .countdown-text {
+    font-size: 14px;
   }
 }
 </style>
