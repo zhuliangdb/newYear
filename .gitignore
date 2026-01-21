@@ -41,3 +41,11 @@ Thumbs.db
 
 # Spring Boot
 HELP.md
+
+# OpenSkills
+.claude/
+.trae/
+AGENTS.md
+
+# Build analysis
+stats.html
