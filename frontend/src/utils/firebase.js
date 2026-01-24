@@ -1,24 +1,24 @@
 // Firebase配置文件
-import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, push, onValue, off, remove } from 'firebase/database';
+import { initializeApp } from 'firebase/app'
+import { getDatabase, ref, push, onValue } from 'firebase/database'
 
 // Firebase配置信息
 // 从环境变量中获取配置
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
-  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || ""
-};
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || '',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || '',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || ''
+}
 
 // 初始化Firebase应用
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig)
 
 // 获取实时数据库引用
-const database = getDatabase(app);
+const database = getDatabase(app)
 
 // 模拟Supabase API的Firebase封装
 const firebaseService = {
@@ -28,78 +28,84 @@ const firebaseService = {
       select() {
         return {
           async order(orderBy, { ascending }) {
-            const tableRef = ref(database, table);
-            return new Promise((resolve) => {
-              onValue(tableRef, (snapshot) => {
-                const data = snapshot.val();
-                const result = data ? Object.entries(data).map(([id, value]) => ({ id, ...value })) : [];
-                
-                // 排序
-                if (orderBy && result.length > 0) {
-                  result.sort((a, b) => {
-                    const aVal = a[orderBy];
-                    const bVal = b[orderBy];
-                    if (ascending) {
-                      return aVal > bVal ? 1 : -1;
-                    } else {
-                      return aVal < bVal ? 1 : -1;
-                    }
-                  });
-                }
-                
-                resolve({ data: result, error: null });
-              }, { onlyOnce: true });
-            });
+            const tableRef = ref(database, table)
+            return new Promise(resolve => {
+              onValue(
+                tableRef,
+                snapshot => {
+                  const data = snapshot.val()
+                  const result = data
+                    ? Object.entries(data).map(([id, value]) => ({ id, ...value }))
+                    : []
+
+                  // 排序
+                  if (orderBy && result.length > 0) {
+                    result.sort((a, b) => {
+                      const aVal = a[orderBy]
+                      const bVal = b[orderBy]
+                      if (ascending) {
+                        return aVal > bVal ? 1 : -1
+                      } else {
+                        return aVal < bVal ? 1 : -1
+                      }
+                    })
+                  }
+
+                  resolve({ data: result, error: null })
+                },
+                { onlyOnce: true }
+              )
+            })
           }
-        };
+        }
       },
-      
+
       // 插入数据
       async insert(data) {
         try {
-          const tableRef = ref(database, table);
+          const tableRef = ref(database, table)
           await push(tableRef, {
             ...data,
             created_at: new Date().toISOString()
-          });
-          return { error: null };
+          })
+          return { error: null }
         } catch (error) {
-          return { error };
+          return { error }
         }
       }
-    };
+    }
   },
-  
+
   // 频道订阅
-  channel(channelName) {
+  channel(_channelName) {
     return {
-      on(eventType, { table, schema, event }, callback) {
+      on(eventType, { table, schema, event: _event }, callback) {
         // 这里只处理table参数，忽略其他Supabase特定参数
-        const tableRef = ref(database, table);
-        onValue(tableRef, (snapshot) => {
+        const tableRef = ref(database, table)
+        onValue(tableRef, _snapshot => {
           // 构造符合预期的payload
           const payload = {
             table,
             eventType: 'INSERT',
             schema: schema || 'public'
-          };
-          if (typeof callback === 'function') {
-            callback(payload);
           }
-        });
-        return this;
+          if (typeof callback === 'function') {
+            callback(payload)
+          }
+        })
+        return this
       },
-      
+
       subscribe() {
-        return this;
+        return this
       }
-    };
+    }
   },
-  
+
   // 移除频道订阅
-  removeChannel(channel) {
+  removeChannel(_channel) {
     // Firebase的onValue订阅会自动管理，这里不需要额外操作
   }
-};
+}
 
-export default firebaseService;
+export default firebaseService

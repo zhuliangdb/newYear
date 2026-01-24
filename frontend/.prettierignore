@@ -1,0 +1,12 @@
+dist
+dist-ssr
+node_modules
+coverage
+*.local
+.DS_Store
+*.log
+.vscode
+.idea
+*.min.js
+*.min.css
+public

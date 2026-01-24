@@ -1,0 +1,1052 @@
+/* 新年主题样式增强 */
+.home,
+.container {
+  background: linear-gradient(
+    135deg,
+    #fef2f2 0%,
+    #ffe4e6 25%,
+    #fff9c4 50%,
+    #fff3cd 75%,
+    #fef2f2 100%
+  ) !important;
+  background-size: 400% 400% !important;
+  animation: gradientShift 15s ease infinite !important;
+  position: relative;
+}
+
+/* 添加背景纹理 */
+.home::before,
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* 渐变背景动画 */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 春节元素 - 顶部装饰条已移除 */
+/* .new-year-decorations::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background-image: repeating-linear-gradient(90deg, 
+    #ff6b6b 0px, #ff6b6b 20px, 
+    #fff 20px, #fff 40px, 
+    #ffd700 40px, #ffd700 60px, 
+    #fff 60px, #fff 80px
+  );
+  opacity: 0.3;
+  animation: scrollBackground 20s linear infinite;
+}
+
+@keyframes scrollBackground {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-80px); }
+} */
+
+/* 添加灯笼装饰 */
+.new-year-decorations .lantern {
+  position: absolute;
+  font-size: 48px;
+  animation: lanternSwing 4s ease-in-out infinite;
+}
+
+.new-year-decorations .lantern:nth-child(3) {
+  left: 20%;
+  top: 25%;
+  animation-delay: 0s;
+}
+
+.new-year-decorations .lantern:nth-child(4) {
+  right: 20%;
+  top: 30%;
+  animation-delay: 1s;
+}
+
+@keyframes lanternSwing {
+  0%,
+  100% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+}
+
+/* 春联 - 改进样式 */
+.couplet {
+  font-size: 32px !important;
+  padding: 30px 15px !important;
+  height: 350px !important;
+  border: 3px solid #ffd700 !important;
+  animation: coupletFloat 6s ease-in-out infinite !important;
+}
+
+/* 春联装饰 */
+.couplet::before {
+  content: '🎀';
+  position: absolute;
+  top: 10px;
+  font-size: 24px;
+  animation: rotate 4s linear infinite;
+}
+
+.couplet::after {
+  content: '🎀';
+  position: absolute;
+  bottom: 10px;
+  font-size: 24px;
+  animation: rotate 4s linear infinite reverse;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes coupletFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotate(1deg);
+  }
+  75% {
+    transform: translateY(-10px) rotate(-1deg);
+  }
+}
+
+/* 鞭炮 - 增强动画 */
+.firecracker {
+  font-size: 64px !important;
+  animation:
+    firecrackerSparkle 2s ease-in-out infinite,
+    firecrackerFloat 3s ease-in-out infinite !important;
+  filter: drop-shadow(0 0 10px #ffd700);
+}
+
+@keyframes firecrackerSparkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 10px #ffd700);
+  }
+  50% {
+    transform: scale(1.3) rotate(10deg);
+    opacity: 0.9;
+    filter: drop-shadow(0 0 20px #ff6b6b);
+  }
+}
+
+@keyframes firecrackerFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+/* 封面样式 - 新年红金配色 */
+.cover {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #ff6b6b 100%) !important;
+  border: 3px solid #ffd700 !important;
+  padding: 80px 20px !important;
+  margin-bottom: 40px !important;
+  box-shadow: 0 15px 40px rgba(231, 76, 60, 0.4) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 封面装饰 */
+.cover::before {
+  content: '🎉🎉🎉';
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  font-size: 80px;
+  opacity: 0.1;
+  transform: rotate(-15deg);
+  animation: float 6s ease-in-out infinite;
+}
+
+.cover::after {
+  content: '🎊🎊🎊';
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  font-size: 80px;
+  opacity: 0.1;
+  transform: rotate(15deg);
+  animation: float 6s ease-in-out infinite reverse;
+}
+
+/* 添加封面光效 */
+.cover::before,
+.cover::after {
+  filter: blur(1px);
+}
+
+.cover-title {
+  font-size: 48px !important;
+  color: #ffd700 !important;
+  animation:
+    bounceIn 1s ease,
+    glow 2s ease-in-out infinite alternate,
+    float 4s ease-in-out infinite !important;
+  text-shadow:
+    3px 3px 6px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(255, 215, 0, 0.8),
+    0 0 60px rgba(255, 215, 0, 0.4) !important;
+  font-family: 'STZhongsong', 'SimSun', serif !important;
+  letter-spacing: 2px;
+  margin-bottom: 20px !important;
+}
+
+.cover-subtitle {
+  font-size: 24px !important;
+  opacity: 1 !important;
+  margin-bottom: 30px !important;
+  color: #fff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+  animation:
+    fadeInUp 1s ease 0.3s both,
+    float 5s ease-in-out infinite !important;
+  animation-delay: 0.5s;
+}
+
+/* 封面内容容器 */
+.cover-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* 添加封面内部发光效果 */
+.cover {
+  box-shadow:
+    0 15px 40px rgba(231, 76, 60, 0.4),
+    0 0 80px rgba(255, 215, 0, 0.3) !important;
+  border-radius: 20px !important;
+}
+
+/* 浮动动画 */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+}
+
+/* 淡入上移动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 倒计时样式增强 */
+.countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 25px;
+  animation: fadeInUp 1s ease 0.8s both;
+}
+
+.countdown-text {
+  font-size: 22px !important;
+  color: #ffd700 !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  padding: 10px 20px !important;
+  border-radius: 25px !important;
+  border: 2px solid #ffd700 !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+  font-weight: bold !important;
+  animation: pulse 2s ease-in-out infinite !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.countdown-time {
+  gap: 20px !important;
+  padding: 25px 35px !important;
+  border: 3px solid #ffd700 !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.2),
+    0 0 40px rgba(255, 215, 0, 0.3) inset,
+    0 0 60px rgba(255, 215, 0, 0.2) !important;
+  animation: pulse 2s ease-in-out infinite !important;
+  border-radius: 30px !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.countdown-item {
+  background: linear-gradient(135deg, #ffd700 0%, #f39c12 100%) !important;
+  border-radius: 15px !important;
+  width: 90px !important;
+  height: 80px !important;
+  box-shadow:
+    0 6px 18px rgba(243, 156, 18, 0.4),
+    0 0 20px rgba(255, 255, 255, 0.3) inset !important;
+  position: relative;
+  overflow: hidden;
+  animation: bounceIn 0.8s ease forwards !important;
+}
+
+/* 倒计时数字装饰 */
+.countdown-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: countdownShine 2s linear infinite;
+}
+
+.countdown-number {
+  font-size: 48px !important;
+  color: #c0392b !important;
+  text-shadow:
+    2px 2px 4px rgba(255, 255, 255, 0.8),
+    0 0 10px rgba(255, 255, 255, 0.5) !important;
+  font-family: 'Arial Black', sans-serif !important;
+  position: relative;
+  z-index: 1;
+}
+
+.countdown-label {
+  font-size: 14px !important;
+  color: #c0392b !important;
+  font-weight: bold !important;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8) !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* 倒计时闪光动画 */
+@keyframes countdownShine {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* 倒计时分隔符样式 */
+.countdown-separator {
+  font-size: 36px !important;
+  font-weight: bold !important;
+  color: #ffd700 !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+  animation: blink 1s infinite !important;
+  line-height: 60px;
+  margin: 0 8px;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+/* 问候卡片 - 新年主题样式 */
+.greeting-card {
+  border: 3px solid #e74c3c !important;
+  padding: 35px !important;
+  margin-bottom: 40px !important;
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.15),
+    0 0 60px rgba(231, 76, 60, 0.2) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%) !important;
+  border-radius: 20px !important;
+  animation: slideInUp 1s ease 0.5s both !important;
+}
+
+/* 问候卡片装饰 */
+.greeting-card::before {
+  content: '✨';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 24px;
+  animation: sparkle 2s ease-in-out infinite;
+  z-index: 1;
+}
+
+.greeting-card::after {
+  content: '✨';
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 24px;
+  animation: sparkle 2s ease-in-out infinite reverse;
+  z-index: 1;
+}
+
+/* 添加更多装饰星星 */
+.greeting-card::nth-child(3)::before {
+  content: '⭐';
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  font-size: 16px;
+  animation: sparkle 2.5s ease-in-out infinite 0.5s;
+  z-index: 1;
+}
+
+.greeting-card::nth-child(3)::after {
+  content: '⭐';
+  position: absolute;
+  top: 30%;
+  right: 8%;
+  font-size: 16px;
+  animation: sparkle 3s ease-in-out infinite 1s;
+  z-index: 1;
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
+  }
+  50% {
+    transform: scale(1.5) rotate(180deg);
+    opacity: 0.8;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1));
+  }
+}
+
+.section-title {
+  color: #e74c3c !important;
+  font-size: 28px !important;
+  margin-bottom: 25px !important;
+  padding-bottom: 15px !important;
+  font-family: 'STZhongsong', 'SimSun', serif !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1) !important;
+  position: relative;
+  display: inline-block;
+  animation: bounceIn 1s ease !important;
+}
+
+.section-title::after {
+  content: '' !important;
+  width: 80px !important;
+  height: 3px !important;
+  background: linear-gradient(90deg, #e74c3c, #ffd700, #e74c3c) !important;
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  border-radius: 2px !important;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3) !important;
+}
+
+/* 简化问候语样式 - 增强视觉效果 */
+.simple-greeting {
+  font-size: 24px !important;
+  line-height: 2 !important;
+  padding: 20px 0 !important;
+  font-family: 'STKaiti', 'KaiTi', serif !important;
+  color: #ffd700 !important;
+  text-shadow:
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 15px rgba(255, 215, 0, 0.8) !important;
+  position: relative;
+  z-index: 2;
+  text-align: center !important;
+  font-weight: bold !important;
+}
+
+/* 按钮样式增强 */
+.action-btn {
+  padding: 20px 40px !important;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important;
+  border-radius: 50px !important;
+  font-size: 18px !important;
+  border: 3px solid transparent !important;
+  position: relative !important;
+  overflow: hidden !important;
+  color: white !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  font-weight: bold !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4) !important;
+  animation: bounceIn 1s ease 0.8s both !important;
+}
+
+/* 按钮装饰 */
+.action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: all 0.5s ease;
+  z-index: 1;
+}
+
+.action-btn:hover::before {
+  left: 100%;
+}
+
+.action-btn span {
+  position: relative;
+  z-index: 2;
+}
+
+.action-btn.primary {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 50%, #ff6b6b 100%) !important;
+  box-shadow:
+    0 8px 20px rgba(231, 76, 60, 0.4),
+    0 0 40px rgba(255, 215, 0, 0.3) !important;
+}
+
+.action-btn.primary:hover,
+.action-btn:hover {
+  transform: translateY(-5px) scale(1.05) !important;
+  box-shadow:
+    0 12px 30px rgba(231, 76, 60, 0.6),
+    0 0 60px rgba(255, 215, 0, 0.4) !important;
+  border-color: #ffd700 !important;
+  background: linear-gradient(135deg, #c0392b 0%, #e74c3c 50%, #ff6b6b 100%) !important;
+}
+
+.action-btn:active {
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+/* 操作区域 */
+.action-section {
+  margin-bottom: 40px !important;
+  animation: slideInUp 1s ease 0.6s both !important;
+}
+
+.action-buttons {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 20px !important;
+  margin-top: 25px !important;
+}
+
+/* 新年主题特色介绍 */
+.features-section {
+  margin-bottom: 40px !important;
+  animation: slideInUp 1s ease 0.7s both !important;
+}
+
+.features-list {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  gap: 30px !important;
+  margin-top: 35px !important;
+}
+
+.feature-item {
+  padding: 35px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #fef9f3 100%) !important;
+  border-radius: 20px !important;
+  transition: all 0.4s ease !important;
+  border: 3px solid transparent !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1) !important;
+  animation: slideInUp 1s ease !important;
+}
+
+/* 特色卡片装饰 */
+.feature-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #e74c3c, #ffd700, #2ecc71);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.feature-item:hover::before {
+  transform: scaleX(1);
+}
+
+.feature-item:hover {
+  transform: translateY(-8px) rotate(1deg) !important;
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.15),
+    0 0 40px rgba(231, 76, 60, 0.2) !important;
+  border-color: #e74c3c !important;
+  background: linear-gradient(135deg, #fef9f3 0%, #fff3cd 100%) !important;
+}
+
+.feature-icon {
+  font-size: 56px !important;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) !important;
+  margin-bottom: 20px !important;
+  animation: bounceIn 1s ease infinite alternate !important;
+}
+
+.feature-content h3 {
+  color: #e74c3c !important;
+  font-size: 24px !important;
+  font-family: 'STZhongsong', 'SimSun', serif !important;
+  margin-bottom: 15px !important;
+}
+
+.feature-content p {
+  font-size: 18px !important;
+  line-height: 1.8 !important;
+  color: #555 !important;
+}
+
+/* 新年主题特色介绍 */
+.features-section {
+  margin-bottom: 40px !important;
+}
+
+.features-list {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+  gap: 30px !important;
+  margin-top: 35px !important;
+}
+
+.feature-item {
+  padding: 35px !important;
+  background: linear-gradient(135deg, #ffffff 0%, #fef9f3 100%) !important;
+  border-radius: 20px !important;
+  transition: all 0.4s ease !important;
+  border: 2px solid transparent !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* 特色卡片装饰 */
+.feature-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #e74c3c, #ffd700, #2ecc71);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.feature-item:hover::before {
+  transform: scaleX(1);
+}
+
+.feature-item:hover {
+  transform: translateY(-8px) rotate(1deg) !important;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15) !important;
+  border-color: #e74c3c !important;
+}
+
+.feature-icon {
+  font-size: 56px !important;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) !important;
+}
+
+.feature-content h3 {
+  color: #e74c3c !important;
+  font-size: 24px !important;
+  font-family: 'STZhongsong', 'SimSun', serif !important;
+}
+
+.feature-content p {
+  font-size: 18px !important;
+  line-height: 1.8 !important;
+}
+
+/* 动画效果 */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow:
+      0 8px 25px rgba(0, 0, 0, 0.2),
+      0 0 40px rgba(255, 215, 0, 0.2) inset;
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow:
+      0 12px 35px rgba(0, 0, 0, 0.3),
+      0 0 60px rgba(255, 215, 0, 0.3) inset;
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow:
+      0 0 30px rgba(255, 215, 0, 0.8),
+      3px 3px 6px rgba(0, 0, 0, 0.5);
+  }
+  to {
+    text-shadow:
+      0 0 50px rgba(255, 215, 0, 1),
+      0 0 70px rgba(255, 215, 0, 0.8),
+      3px 3px 6px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* 添加页面加载动画 */
+body {
+  animation: pageLoad 1s ease !important;
+  opacity: 1 !important;
+}
+
+@keyframes pageLoad {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 添加滚动触发的淡入动画 */
+.home-content > div,
+.container > div {
+  animation: fadeInUp 1s ease forwards;
+}
+
+/* 雪花组件样式增强 */
+.snowflake {
+  animation: snowfall linear infinite !important;
+  opacity: 0.8 !important;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)) !important;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* 新年装饰元素增强 */
+.new-year-decorations {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1100;
+  overflow: hidden;
+}
+
+/* 春联增强效果 */
+.couplet {
+  writing-mode: vertical-rl !important;
+  text-orientation: upright !important;
+  animation: coupletFloat 6s ease-in-out infinite !important;
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.2),
+    0 0 30px rgba(231, 76, 60, 0.3) !important;
+}
+
+@keyframes coupletFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-15px) rotate(1deg);
+  }
+  75% {
+    transform: translateY(-5px) rotate(-1deg);
+  }
+}
+
+/* 灯笼增强效果 */
+.lantern {
+  animation: lanternSwing 4s ease-in-out infinite !important;
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)) !important;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 1) !important;
+}
+
+@keyframes lanternSwing {
+  0%,
+  100% {
+    transform: rotate(-10deg) translateX(0);
+  }
+  25% {
+    transform: rotate(10deg) translateX(10px);
+  }
+  50% {
+    transform: rotate(-5deg) translateX(5px);
+  }
+  75% {
+    transform: rotate(5deg) translateX(-5px);
+  }
+}
+
+/* 鞭炮增强效果 */
+.firecracker {
+  animation:
+    firecrackerSparkle 2s ease-in-out infinite,
+    firecrackerFloat 3s ease-in-out infinite !important;
+  filter: drop-shadow(0 0 15px rgba(255, 107, 107, 0.8)) !important;
+}
+
+@keyframes firecrackerSparkle {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.8));
+  }
+  50% {
+    transform: scale(1.3) rotate(10deg);
+    opacity: 0.9;
+    filter: drop-shadow(0 0 25px rgba(255, 107, 107, 1));
+  }
+}
+
+@keyframes firecrackerFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+/* 中国结增强效果 */
+.chinese-knot {
+  animation: chineseKnotRotate 4s linear infinite !important;
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8)) !important;
+}
+
+@keyframes chineseKnotRotate {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+/* 添加页面滚动效果 */
+html {
+  scroll-behavior: smooth !important;
+}
+
+/* 添加滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #e74c3c, #ffd700);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #c0392b, #f39c12);
+}
+
+/* 鼠标悬停在卡片上的效果 */
+.greeting-card:hover,
+.fortune-card:hover,
+.wish-wall:hover,
+.message-board:hover {
+  transform: translateY(-5px) !important;
+  box-shadow:
+    0 15px 30px rgba(0, 0, 0, 0.2),
+    0 0 60px rgba(231, 76, 60, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+/* 按钮点击动画 */
+.action-btn:active,
+.secret-btn:active,
+.share-btn:active {
+  animation: buttonClick 0.2s ease !important;
+}
+
+@keyframes buttonClick {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 响应式设计调整 */
+@media (max-width: 768px) {
+  .cover-title {
+    font-size: 36px !important;
+  }
+
+  .cover-subtitle {
+    font-size: 18px !important;
+  }
+
+  .countdown-number {
+    font-size: 36px !important;
+  }
+
+  .countdown-item {
+    width: 70px !important;
+    height: 60px !important;
+  }
+
+  .countdown-time {
+    gap: 15px !important;
+    padding: 20px 25px !important;
+  }
+
+  /* 添加灯笼 */
+  .new-year-decorations .lantern {
+    position: absolute;
+    font-size: 48px;
+    animation: lanternSwing 4s ease-in-out infinite;
+  }
+
+  .new-year-decorations .lantern:nth-child(3) {
+    left: 10%;
+    top: 30%;
+    animation-delay: 0s;
+  }
+
+  .new-year-decorations .lantern:nth-child(4) {
+    right: 10%;
+    top: 35%;
+    animation-delay: 1s;
+  }
+
+  /* 调整装饰元素大小 */
+  .couplet {
+    font-size: 24px !important;
+    height: 250px !important;
+  }
+
+  .firecracker {
+    font-size: 48px !important;
+  }
+
+  .chinese-knot {
+    font-size: 36px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .cover-title {
+    font-size: 28px !important;
+  }
+
+  .countdown-number {
+    font-size: 28px !important;
+  }
+
+  .countdown-item {
+    width: 60px !important;
+    height: 50px !important;
+  }
+
+  .countdown-time {
+    gap: 10px !important;
+    padding: 15px 20px !important;
+  }
+
+  /* 调整装饰元素大小 */
+  .couplet {
+    font-size: 18px !important;
+    height: 200px !important;
+  }
+
+  .firecracker {
+    font-size: 32px !important;
+  }
+
+  .chinese-knot {
+    font-size: 28px !important;
+  }
+
+  .lantern {
+    font-size: 32px !important;
+  }
+}

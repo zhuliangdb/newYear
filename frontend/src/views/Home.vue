@@ -1,575 +1,1162 @@
 <template>
-  <div class="home">
-    
-    <!-- 简化的新年装饰 -->
-    <div class="new-year-decorations">
-      <!-- 春联 -->
-      <div class="couplet" style="left: 5%; top: 20%;">一帆风顺年年好</div>
-      <div class="couplet" style="right: 5%; top: 20%;">万事如意步步高</div>
-      
-      <!-- 鞭炮 -->
-      <div class="firecracker" style="left: 8%; top: 30%; animation-delay: 2s;">🧨</div>
-      <div class="firecracker" style="right: 8%; top: 30%; animation-delay: 3s;">🧨</div>
-    </div>
-    
-    <!-- 使用雪花组件 - 减少雪花生成间隔并限制最大数量以优化首页性能 -->
-    <Snowflake :interval="150" :maxCount="80" />
-    
-    <!-- 页面内容 -->
-    <div class="home-content">
-      <div class="cover">
-        <h1 class="cover-title">🎉 新年到来 🎉</h1>
-        <p class="cover-subtitle">欢迎来到2026新年主题页面</p>
-        <div class="countdown">
-          <span class="countdown-text">距离春节还有</span>
-          <div class="countdown-time">
-            <div class="countdown-item">
-              <span class="countdown-number">{{ countdown.days }}</span>
-              <span class="countdown-label">天</span>
-            </div>
+  <div class="home-container">
+    <!-- 英雄区域 -->
+    <section class="hero">
+      <div class="hero-gradient" />
+      <div class="hero-content">
+        <div class="hero-badge">2026 新年特别版</div>
+        <h1 class="hero-title">安徽·河南<br>新年文化盛宴</h1>
+        <p class="hero-subtitle">
+          融合安徽、河南地域文化特色的新年祝福与惊喜体验，<br>让传统与现代碰撞出不一样的火花
+        </p>
+        <div class="hero-buttons">
+          <button class="primary-btn large" @click="navigateToNewYear">开始探索</button>
+          <button class="secondary-btn large" @click="navigateToCulturalFeatures">文化之旅</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">1000+</span>
+            <span class="stat-label">用户参与</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">50+</span>
+            <span class="stat-label">文化活动</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">10000+</span>
+            <span class="stat-label">新年愿望</span>
           </div>
         </div>
       </div>
-      
-      <div class="greeting-card">
-        <h2 class="section-title">🎊 新年问候</h2>
-        <p class="simple-greeting">愿你在新的一年里，所有美好都如期而至！</p>
-      </div>
-      
-      <div class="action-section">
-        <h2 class="section-title">✨ 探索更多</h2>
-        <div class="action-buttons">
-          <router-link to="/new-year-surprise" class="action-btn primary">
-            🎁 查看完整新年惊喜
-          </router-link>
+      <div class="hero-visuals">
+        <!-- 动态装饰元素 -->
+        <div class="hero-decorations">
+          <div class="lantern lantern-1">
+            <div class="lantern-string" />
+            <div class="lantern-body">🏮</div>
+          </div>
+          <div class="lantern lantern-2">
+            <div class="lantern-string" />
+            <div class="lantern-body">🏮</div>
+          </div>
+          <div class="paper-cut paper-cut-1" />
+          <div class="paper-cut paper-cut-2" />
+          <div class="mask mask-1" />
+          <div class="mask mask-2" />
+        </div>
+        <!-- 背景图片 -->
+        <div class="hero-background">
+          <img
+            src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20new%20year%20festival%20with%20anhui%20paper%20cutting%20and%20henan%20opera%20masks%2C%20festive%20atmosphere%2C%20vibrant%20colors%2C%20modern%20digital%20art&image_size=landscape_16_9"
+            alt="新年文化背景"
+          >
         </div>
       </div>
-      
-      <!-- 新增：新年主题特色介绍 -->
-      <div class="features-section">
-        <h2 class="section-title">🎯 主题特色</h2>
-        <div class="features-list">
-          <div class="feature-item">
-            <div class="feature-icon">🎨</div>
-            <div class="feature-content">
-              <h3>精美装饰</h3>
-              <p>丰富的新年元素，营造浓厚节日氛围</p>
-            </div>
+    </section>
+
+    <!-- 文化特色预览 -->
+    <section class="cultural-preview">
+      <div class="cultural-preview-content">
+        <h2 class="section-title">地域文化特色</h2>
+        <p class="section-description">
+          深入了解安徽、河南地区的传统新年文化，感受不一样的地域风情
+        </p>
+        <div class="cultural-grid">
+          <div class="cultural-card anhui">
+            <div class="cultural-icon">🎭</div>
+            <h3 class="cultural-title">安徽黄梅戏</h3>
+            <p class="cultural-description">体验黄梅戏角色换装，感受传统戏曲的魅力</p>
+            <div class="cultural-bg" />
           </div>
-          <div class="feature-item">
+          <div class="cultural-card henan">
+            <div class="cultural-icon">🎨</div>
+            <h3 class="cultural-title">河南豫剧脸谱</h3>
+            <p class="cultural-description">DIY属于你的豫剧脸谱，体验传统工艺</p>
+            <div class="cultural-bg" />
+          </div>
+          <div class="cultural-card anhui">
+            <div class="cultural-icon">✂️</div>
+            <h3 class="cultural-title">徽州剪纸</h3>
+            <p class="cultural-description">欣赏精美的徽州剪纸艺术，感受传统文化的精髓</p>
+            <div class="cultural-bg" />
+          </div>
+          <div class="cultural-card henan">
+            <div class="cultural-icon">🖼️</div>
+            <h3 class="cultural-title">朱仙镇年画</h3>
+            <p class="cultural-description">了解朱仙镇年画的历史，欣赏传统年画的魅力</p>
+            <div class="cultural-bg" />
+          </div>
+        </div>
+        <button class="primary-btn" @click="navigateToCulturalFeatures">探索更多文化特色</button>
+      </div>
+    </section>
+
+    <!-- 特色功能 -->
+    <section class="features">
+      <div class="features-content">
+        <h2 class="section-title">核心功能</h2>
+        <p class="section-description">我们为您打造了一系列精彩的功能，让您的新年更加难忘</p>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">⏰</div>
+            <h3 class="feature-title">新年倒计时</h3>
+            <p class="feature-description">实时倒计时，迎接新年的到来，不错过每一刻的惊喜</p>
+            <div class="feature-glow" />
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔮</div>
+            <h3 class="feature-title">新年运势</h3>
+            <p class="feature-description">智能生成个性化新年运势，为新的一年带来好运</p>
+            <div class="feature-glow" />
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title">愿望墙</h3>
+            <p class="feature-description">写下你的新年愿望，与朋友分享，一起实现梦想</p>
+            <div class="feature-glow" />
+          </div>
+          <div class="feature-card">
             <div class="feature-icon">🎮</div>
-            <div class="feature-content">
-              <h3>互动体验</h3>
-              <p>多种互动小游戏，增添节日乐趣</p>
+            <h3 class="feature-title">互动游戏</h3>
+            <p class="feature-description">有趣的新年主题小游戏，增添节日氛围</p>
+            <div class="feature-glow" />
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💬</div>
+            <h3 class="feature-title">留言板</h3>
+            <p class="feature-description">与朋友交流，分享新年的喜悦和祝福</p>
+            <div class="feature-glow" />
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📤</div>
+            <h3 class="feature-title">分享功能</h3>
+            <p class="feature-description">一键分享你的新年惊喜，传递快乐给更多人</p>
+            <div class="feature-glow" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 活动预览 -->
+    <section class="activities-preview">
+      <div class="activities-preview-content">
+        <h2 class="section-title">新年活动</h2>
+        <p class="section-description">参与丰富多彩的新年活动，感受浓厚的节日氛围</p>
+        <div class="activities-grid">
+          <div class="activity-card">
+            <div class="activity-image">
+              <img
+                src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20new%20year%20activity%20with%20dragon%20dance%2C%20festive%20atmosphere%2C%20vibrant%20colors&image_size=landscape_4_3"
+                alt="舞龙表演"
+              >
+            </div>
+            <div class="activity-info">
+              <div class="activity-date">2026.01.20</div>
+              <h3 class="activity-title">传统舞龙表演</h3>
+              <p class="activity-description">欣赏精彩的传统舞龙表演，感受浓厚的节日氛围</p>
+              <div class="activity-location">📍 安徽合肥</div>
             </div>
           </div>
-          <div class="feature-item">
-            <div class="feature-icon">💌</div>
-            <div class="feature-content">
-              <h3>温馨祝福</h3>
-              <p>个性化祝福语，传递新年心意</p>
+          <div class="activity-card">
+            <div class="activity-image">
+              <img
+                src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chinese%20opera%20performance%20with%20traditional%20costumes%2C%20festive%20atmosphere%2C%20vibrant%20colors&image_size=landscape_4_3"
+                alt="戏曲表演"
+              >
+            </div>
+            <div class="activity-info">
+              <div class="activity-date">2026.01.25</div>
+              <h3 class="activity-title">黄梅戏专场演出</h3>
+              <p class="activity-description">欣赏正宗的黄梅戏表演，感受传统戏曲的魅力</p>
+              <div class="activity-location">📍 安徽安庆</div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <div class="activity-image">
+              <img
+                src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chinese%20paper%20cutting%20workshop%2C%20traditional%20craft%2C%20festive%20atmosphere&image_size=landscape_4_3"
+                alt="剪纸 workshop"
+              >
+            </div>
+            <div class="activity-info">
+              <div class="activity-date">2026.02.01</div>
+              <h3 class="activity-title">
+剪纸艺术 workshop</h3>
+              <p class="activity-description">学习传统剪纸技艺，制作属于自己的新年装饰品</p>
+              <div class="activity-location">📍 河南郑州</div>
+            </div>
+          </div>
+        </div>
+        <button class="primary-btn" @click="navigateToActivities">查看全部活动</button>
+      </div>
+    </section>
+
+    <!-- 用户评价 -->
+    <section class="testimonials">
+      <div class="testimonials-content">
+        <h2 class="section-title">用户评价</h2>
+        <p class="section-description">听听我们的用户怎么说</p>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-avatar">
+              <img
+                src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=friendly%20asian%20woman%20portrait%2C%20natural%20smile%2C%20professional%20photo&image_size=square"
+                alt="用户头像"
+              >
+            </div>
+            <div class="testimonial-content">
+              <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+              <p class="testimonial-text">
+                "这个新年惊喜平台真的很棒！不仅界面设计美观，还融入了很多安徽、河南的文化元素，让我感受到了不一样的新年氛围。特别是黄梅戏角色换装功能，非常有趣！"
+              </p>
+              <div class="testimonial-author">
+                <span class="author-name">张小姐</span>
+                <span class="author-location">安徽合肥</span>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-avatar">
+              <img
+                src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=friendly%20asian%20man%20portrait%2C%20natural%20smile%2C%20professional%20photo&image_size=square"
+                alt="用户头像"
+              >
+            </div>
+            <div class="testimonial-content">
+              <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+              <p class="testimonial-text">
+                "我很喜欢豫剧脸谱DIY功能，可以根据自己的喜好创建独特的脸谱。平台的整体设计很现代化，同时又保留了传统文化的精髓，给人一种很舒服的感觉。"
+              </p>
+              <div class="testimonial-author">
+                <span class="author-name">李先生</span>
+                <span class="author-location">河南郑州</span>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="testimonial-avatar">
+              <img
+                src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=friendly%20asian%20young%20woman%20portrait%2C%20natural%20smile%2C%20professional%20photo&image_size=square"
+                alt="用户头像"
+              >
+            </div>
+            <div class="testimonial-content">
+              <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+              <p class="testimonial-text">
+                "愿望墙功能很温馨，可以看到全国各地用户的新年愿望，感觉很有意义。平台的动效设计也很流畅，给人一种很高级的感觉。强烈推荐给大家！"
+              </p>
+              <div class="testimonial-author">
+                <span class="author-name">王女士</span>
+                <span class="author-location">江苏南京</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- 音乐播放器 -->
+    <div class="music-player">
+      <!-- 使用APlayer直接配置本地音乐 -->
+      <div id="local-player" />
     </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-section">
+          <div class="footer-logo">
+            <span class="logo-icon">🎊</span>
+            <span class="logo-text">新年惊喜</span>
+          </div>
+          <p class="footer-description">
+            为您带来最美好的新年体验，让科技为传统节日增添光彩。融合安徽、河南地域文化特色，打造独特的新年盛宴。
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-link">微信</a>
+            <a href="#" class="social-link">微博</a>
+            <a href="#" class="social-link">QQ</a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h4 class="footer-title">快速链接</h4>
+          <ul class="footer-links">
+            <li>
+              <router-link to="/"> 首页 </router-link>
+            </li>
+            <li>
+              <router-link to="/cultural-features"> 文化特色 </router-link>
+            </li>
+            <li>
+              <router-link to="/activities"> 活动 </router-link>
+            </li>
+            <li>
+              <router-link to="/new-year-surprise"> 新年惊喜 </router-link>
+            </li>
+            <li>
+              <router-link to="/about"> 关于我们 </router-link>
+            </li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4 class="footer-title">联系我们</h4>
+          <ul class="footer-links">
+            <li class="footer-link-item">
+              <span class="link-icon">📧</span>
+              <span class="link-text">contact@newyearsurprise.com</span>
+            </li>
+            <li class="footer-link-item">
+              <span class="link-icon">📱</span>
+              <span class="link-text">+86 123 4567 8910</span>
+            </li>
+            <li class="footer-link-item">
+              <span class="link-icon">📍</span>
+              <span class="link-text">安徽省合肥市蜀山区</span>
+            </li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4 class="footer-title">法律信息</h4>
+          <ul class="footer-links">
+            <li><a href="#">隐私政策</a></li>
+            <li><a href="#">服务条款</a></li>
+            <li><a href="#">Cookie政策</a></li>
+            <li><a href="#">免责声明</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p class="copyright">© 2026 新年惊喜. 保留所有权利. 融合安徽、河南地域文化特色</p>
+      </div>
+    </footer>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
-import Snowflake from '../components/Snowflake.vue';
+import { onMounted } from 'vue'
+import { useRouter, RouterLink } from 'vue-router'
 
-// 响应式数据
-const countdown = ref({
-  days: 0,
-  hours: 0,
-  minutes: 0,
-  seconds: 0
-});
-let countdownTimer = null; // 倒计时定时器
+// 引入APlayer
+import APlayer from 'aplayer'
+import 'aplayer/dist/APlayer.min.css'
 
-// 计算倒计时（天、时、分、秒）
-const calculateCountdown = () => {
-  // 计算距离2026年春节（2月17日）的时间差
-  const now = new Date();
-  const springFestival = new Date('2026-02-17');
-  const diffTime = Math.abs(springFestival - now);
-  
-  // 计算天、时、分、秒
-  const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
-  
-  countdown.value = {
-    days,
-    hours,
-    minutes,
-    seconds
-  };
-};
+const router = useRouter()
 
-// 生命周期钩子
+// 导航方法
+const navigateToNewYear = () => {
+  router.push('/new-year-surprise')
+}
+
+const navigateToCulturalFeatures = () => {
+  router.push('/cultural-features')
+}
+
+const navigateToActivities = () => {
+  router.push('/activities')
+}
+
+// 页面加载动画
 onMounted(() => {
-  calculateCountdown();
+  // 添加页面加载动画
+  document.body.classList.add('loaded')
   
-  // 设置每秒更新一次倒计时
-  countdownTimer = setInterval(() => {
-    calculateCountdown();
-  }, 1000);
-});
-
-onBeforeUnmount(() => {
-  // 清除倒计时定时器
-  if (countdownTimer) {
-    clearInterval(countdownTimer);
-    countdownTimer = null;
+  // 初始化本地音乐播放器
+  const playerContainer = document.getElementById('local-player')
+  if (playerContainer) {
+    new APlayer({
+      container: playerContainer,
+      fixed: true,
+      mini: true,
+      autoplay: false,
+      theme: '#c91f37',
+      loop: 'all',
+      order: 'random',
+      preload: 'auto',
+      volume: 0.5,
+      mutex: true,
+      listFolded: true,
+      listMaxHeight: 340,
+      lrcType: 0,
+      audio: [
+        {
+          name: '大城小爱',
+          artist: '王力宏',
+          url: new URL('../assets/music/dachengxiaoai.mflac', import.meta.url).href,
+          cover: '',
+          lrc: ''
+        }
+      ]
+    })
   }
-});
+})
 </script>
 
 <style scoped>
-/* 全局样式 */
-.home {
-  position: relative;
-  text-align: center;
-  padding: 20px;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f7f9fc 0%, #e8f0fe 100%);
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  font-family: '微软雅黑', 'Microsoft YaHei', sans-serif;
-}
-
-.home-content {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+/* 基础样式 */
+* {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+}
+
+.home-container {
+  font-family: 'Inter', '思源黑体', 'Source Han Sans', sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+/* 英雄区域 */
+.hero {
   position: relative;
-  z-index: 1;
-}
-
-
-
-/* 新年装饰 */
-.new-year-decorations {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1100;
-}
-
-/* 春联 */
-.couplet {
-  position: absolute;
-  font-size: 28px;
-  color: #ffffff;
-  font-weight: bold;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  animation: coupletFloat 4s ease-in-out infinite;
-  writing-mode: vertical-rl;
-  padding: 20px 10px;
-  background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
-  border-radius: 8px;
-  height: 300px;
-  width: auto;
+  min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-  line-height: 1.4;
-  white-space: nowrap;
   overflow: hidden;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background: var(--new-year-gradient);
 }
 
-/* 鞭炮 */
-.firecracker {
-  position: absolute;
-  font-size: 48px;
-  animation: firecrackerSparkle 2s ease-in-out infinite;
-}
-
-/* 动画效果 */
-@keyframes coupletFloat {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-}
-
-@keyframes firecrackerSparkle {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.8;
-  }
-}
-
-/* 烟花效果容器 */
-.fireworks-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 999;
-  overflow: hidden;
-}
-
-
-
-/* 封面样式 */
-.cover {
-  text-align: center;
-  padding: 60px 20px;
-  background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 50%, #ff6b6b 100%);
-  color: white;
-  border-radius: 20px;
-  margin-bottom: 30px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: slideInUp 1s ease;
-}
-
-.cover::before {
-  content: '';
+.hero-gradient {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  z-index: 0;
+  background: linear-gradient(135deg, rgba(201, 31, 55, 0.8), rgba(230, 57, 70, 0.8));
+  z-index: 1;
 }
 
-.cover > * {
+.hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 600px;
+  padding: 0 24px;
+  margin-left: 10%;
+  color: var(--huizhou-white);
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 1s ease;
+}
+
+.hero-title {
+  font-size: 64px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  line-height: 1.1;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: bounceIn 1s ease 0.3s both;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  margin-bottom: 32px;
+  opacity: 0.95;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 1s ease 0.6s both;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 48px;
+  animation: fadeInUp 1s ease 0.9s both;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fadeInUp 1s ease 1.2s both;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--nianhua-yellow);
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.hero-visuals {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  z-index: 2;
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.hero-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.05);
+  transition: transform 0.5s ease;
+}
+
+.hero-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.lantern {
+  position: absolute;
+  animation: lanternSwing 4s ease-in-out infinite;
+}
+
+.lantern-1 {
+  top: 20%;
+  right: 10%;
+  animation-delay: 0s;
+}
+
+.lantern-2 {
+  top: 30%;
+  right: 20%;
+  animation-delay: 1s;
+}
+
+.lantern-string {
+  width: 2px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.5);
+  margin: 0 auto 8px;
+}
+
+.lantern-body {
+  font-size: 48px;
+  animation: lanternGlow 2s ease-in-out infinite;
+}
+
+.paper-cut {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.paper-cut-1 {
+  top: 40%;
+  right: 15%;
+  animation-delay: 0s;
+  transform: rotate(45deg);
+}
+
+.paper-cut-2 {
+  top: 60%;
+  right: 10%;
+  animation-delay: 2s;
+  transform: rotate(90deg);
+}
+
+.mask {
+  position: absolute;
+  width: 80px;
+  height: 100px;
+  background: var(--peony-purple);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  animation: float 8s ease-in-out infinite;
+}
+
+.mask-1 {
+  top: 50%;
+  right: 25%;
+  animation-delay: 1s;
+}
+
+.mask-2 {
+  top: 70%;
+  right: 15%;
+  animation-delay: 3s;
+  background: var(--ceramic-cyan);
+}
+
+/* 文化特色预览 */
+.cultural-preview {
+  padding: 120px 0;
+  background: var(--xuan-paper-yellow);
+  position: relative;
+}
+
+.cultural-preview-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.cultural-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  margin: 48px 0;
+}
+
+.cultural-card {
+  position: relative;
+  background: var(--huizhou-white);
+  border-radius: var(--border-radius-lg);
+  padding: 40px 32px;
+  box-shadow: var(--box-shadow-md);
+  transition: var(--transition);
+  overflow: hidden;
+  text-align: center;
+}
+
+.cultural-card:hover {
+  transform: translateY(-12px);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.cultural-card.anhui {
+  border-top: 4px solid var(--huizhou-red);
+}
+
+.cultural-card.henan {
+  border-top: 4px solid var(--nianhua-red);
+}
+
+.cultural-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.cultural-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--huizhou-red);
+}
+
+.cultural-description {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.6;
   position: relative;
   z-index: 2;
 }
 
-.cover-title {
-  font-size: 36px;
-  margin-bottom: 15px;
-  animation: bounceIn 1s ease;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  color: #fff;
-  font-weight: bold;
+.cultural-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 200px;
+  opacity: 0.05;
+  z-index: 1;
 }
 
-.cover-subtitle {
-  font-size: 18px;
-  opacity: 0.95;
-  margin-bottom: 20px;
-  animation: fadeInUp 1s ease 0.3s both;
-  color: #fff;
+.cultural-card.anhui .cultural-bg {
+  background: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anhui%20huangmei%20opera%20pattern%2C%20traditional%20chinese%20design%2C%20red%20and%20gold%20colors&image_size=square')
+    no-repeat center center;
+  background-size: cover;
 }
 
-.countdown {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
-  animation: fadeInUp 1s ease 0.6s both;
+.cultural-card.henan .cultural-bg {
+  background: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=henan%20yu%20opera%20mask%20pattern%2C%20traditional%20chinese%20design%2C%20red%20and%20gold%20colors&image_size=square')
+    no-repeat center center;
+  background-size: cover;
 }
 
-.countdown-text {
-  font-size: 18px;
-  opacity: 0.95;
-  color: #fff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  font-weight: bold;
+/* 特色功能 */
+.features {
+  padding: 120px 0;
+  background: var(--huizhou-white);
 }
 
-.countdown-time {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 15px 25px;
-  border-radius: 30px;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+.features-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
-.countdown-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  margin: 48px 0;
+}
+
+.feature-card {
   position: relative;
-  width: 70px;
-  height: 60px;
-}
-
-.countdown-number {
-  font-size: 42px;
-  font-weight: bold;
-  color: #ffd700;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-  font-family: 'Arial', sans-serif;
-  width: 100%;
+  background: var(--huizhou-white);
+  border-radius: var(--border-radius-lg);
+  padding: 40px 32px;
+  box-shadow: var(--box-shadow-md);
+  transition: var(--transition);
   text-align: center;
-  line-height: 60px;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: hidden;
 }
 
-.countdown-label {
-  font-size: 14px;
-  color: #fff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  font-weight: bold;
-  margin: 5px 0 0 0;
-  padding: 0;
-  letter-spacing: 1px;
+.feature-card:hover {
+  transform: translateY(-12px);
+  box-shadow: var(--box-shadow-lg);
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.feature-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  animation: bounce 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3),
-                0 0 30px rgba(255, 215, 0, 0.2) inset;
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4),
-                0 0 40px rgba(255, 215, 0, 0.3) inset;
-  }
-}
-
-@keyframes glow {
-  from {
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
-                 3px 3px 6px rgba(0, 0, 0, 0.5);
-  }
-  to {
-    text-shadow: 0 0 30px rgba(255, 215, 0, 1),
-                 0 0 40px rgba(255, 215, 0, 0.8),
-                 3px 3px 6px rgba(0, 0, 0, 0.5);
-  }
-}
-
-/* 问候卡片 */
-.greeting-card {
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  animation: slideInUp 1s ease 0.2s both;
-}
-
-.section-title {
-  color: #6e48aa;
+.feature-title {
   font-size: 24px;
-  margin-bottom: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--huizhou-red);
+}
+
+.feature-description {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.6;
+  position: relative;
+  z-index: 2;
+}
+
+.feature-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(201, 31, 55, 0.05), transparent);
+  z-index: 1;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.feature-card:hover .feature-glow {
+  opacity: 1;
+}
+
+/* 活动预览 */
+.activities-preview {
+  padding: 120px 0;
+  background: var(--xuan-paper-yellow);
+}
+
+.activities-preview-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 32px;
+  margin: 48px 0;
+}
+
+.activity-card {
+  background: var(--huizhou-white);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--box-shadow-md);
+  transition: var(--transition);
+}
+
+.activity-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.activity-image {
+  height: 200px;
+  overflow: hidden;
+}
+
+.activity-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.activity-card:hover .activity-image img {
+  transform: scale(1.05);
+}
+
+.activity-info {
+  padding: 24px;
+}
+
+.activity-date {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--huizhou-red);
+  color: var(--huizhou-white);
+  border-radius: var(--border-radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.activity-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--huizhou-red);
+}
+
+.activity-description {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.activity-location {
+  font-size: 14px;
+  color: var(--huizhou-gray);
+}
+
+/* 用户评价 */
+.testimonials {
+  padding: 120px 0;
+  background: var(--huizhou-white);
+}
+
+.testimonials-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+  margin: 48px 0;
+}
+
+.testimonial-card {
+  background: var(--huizhou-white);
+  border-radius: var(--border-radius-lg);
+  padding: 32px;
+  box-shadow: var(--box-shadow-md);
+  transition: var(--transition);
   text-align: center;
   position: relative;
-  padding-bottom: 10px;
-  font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.testimonial-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 24px;
+  border: 4px solid var(--xuan-paper-yellow);
+}
+
+.testimonial-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.testimonial-rating {
+  font-size: 18px;
+  color: var(--nianhua-yellow);
+  margin-bottom: 16px;
+}
+
+.testimonial-text {
+  font-size: 16px;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  font-style: italic;
+}
+
+.testimonial-author {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.author-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--huizhou-red);
+}
+
+.author-location {
+  font-size: 14px;
+  color: #999;
+}
+
+/* 页脚 */
+.footer {
+  background: var(--huizhou-gradient);
+  color: var(--huizhou-white);
+  padding: 80px 0 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--nianhua-yellow);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 48px;
+  margin-bottom: 48px;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--nianhua-yellow);
+}
+
+.footer-description {
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.social-links {
+  display: flex;
+  gap: 16px;
+}
+
+.social-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-md);
+  color: var(--huizhou-white);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: var(--transition);
+  backdrop-filter: blur(10px);
+}
+
+.social-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  color: var(--nianhua-yellow);
+}
+
+.footer-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: var(--nianhua-yellow);
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links li a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 14px;
+  transition: var(--transition);
+  padding: 4px 0;
+}
+
+.footer-links li a:hover {
+  color: var(--nianhua-yellow);
+  transform: translateX(4px);
+}
+
+.footer-link-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.link-icon {
+  font-size: 16px;
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.copyright {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* 通用组件样式 */
+.section-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--huizhou-red);
+  text-align: center;
+  margin-bottom: 16px;
+  position: relative;
 }
 
 .section-title::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: -12px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(90deg, #6e48aa, #9d50bb);
+  width: 80px;
+  height: 4px;
+  background: var(--huizhou-gradient);
   border-radius: 2px;
 }
 
-/* 新年祝福列表 */
-.wishes-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.wish-item {
-  padding: 15px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
-  font-size: 16px;
-  color: #333;
+.section-description {
+  font-size: 18px;
+  color: #666;
   text-align: center;
-  transition: all 0.3s ease;
+  max-width: 800px;
+  margin: 0 auto 48px;
+  line-height: 1.6;
 }
 
-.wish-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-  background: linear-gradient(135deg, #f0e6ff 0%, #e6d9ff 100%);
-}
-
-/* 操作区域 */
-.action-section {
-  margin-bottom: 30px;
-  animation: slideInUp 1s ease 0.4s both;
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 25px;
-}
-
-.action-btn {
+/* 按钮样式 */
+.primary-btn {
   display: inline-block;
-  padding: 15px 30px;
-  background: linear-gradient(135deg, #6e48aa, #9d50bb);
-  color: white;
-  border-radius: 25px;
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(110, 72, 170, 0.3);
+  padding: 14px 32px;
+  background: var(--huizhou-gradient);
+  color: var(--huizhou-white);
   border: none;
-  min-width: 200px;
+  border-radius: var(--border-radius-xl);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px rgba(201, 31, 55, 0.3);
+  text-decoration: none;
   text-align: center;
 }
 
-.action-btn.primary {
-  background: linear-gradient(135deg, #6e48aa, #9d50bb, #ff6b6b);
-  box-shadow: 0 4px 12px rgba(110, 72, 170, 0.3);
-}
-
-.action-btn.primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(110, 72, 170, 0.4);
-}
-
-.action-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(110, 72, 170, 0.4);
-}
-
-/* 新年主题特色介绍 */
-.features-section {
-  margin-bottom: 30px;
-  animation: slideInUp 1s ease 0.6s both;
-}
-
-.features-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
-  margin-top: 25px;
-}
-
-.feature-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 20px;
-  padding: 25px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.feature-item:hover {
+.primary-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 20px rgba(201, 31, 55, 0.4);
+  background: linear-gradient(135deg, #8a0707, #c91f37);
 }
 
-.feature-icon {
-  font-size: 40px;
-  margin-top: 5px;
-  flex-shrink: 0;
+.primary-btn:active {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(201, 31, 55, 0.3);
 }
 
-.feature-content h3 {
-  margin: 0 0 10px 0;
-  color: #6e48aa;
-  font-size: 20px;
-  font-weight: bold;
+.primary-btn.large {
+  padding: 16px 40px;
+  font-size: 18px;
+  border-radius: var(--border-radius-xl);
 }
 
-.feature-content p {
-  margin: 0;
-  color: #555;
+.primary-btn.small {
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: var(--border-radius-md);
+}
+
+.secondary-btn {
+  display: inline-block;
+  padding: 14px 32px;
+  background: transparent;
+  border: 2px solid var(--huizhou-white);
+  color: var(--huizhou-white);
+  border-radius: var(--border-radius-xl);
   font-size: 16px;
-  line-height: 1.6;
-}
-
-/* 简化问候语样式 */
-.simple-greeting {
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
   text-align: center;
-  font-size: 16px;
-  color: #533f03;
-  line-height: 1.6;
-  margin: 0;
-  padding: 15px 0;
-  font-weight: bold;
-  background: linear-gradient(135deg, #ffd700, #ffed4e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.secondary-btn.large {
+  padding: 16px 40px;
+  font-size: 18px;
+  border-radius: var(--border-radius-xl);
 }
 
 /* 动画效果 */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes bounceIn {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes slideInUp {
   from {
     opacity: 0;
     transform: translateY(30px);
@@ -580,89 +1167,234 @@ onBeforeUnmount(() => {
   }
 }
 
+@keyframes bounceIn {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+@keyframes lanternSwing {
+  0%,
+  100% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes lanternGlow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.2);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    width: 0;
+    left: 50%;
+  }
+  to {
+    width: 100%;
+    left: 0;
+  }
+}
+
+/* 音乐播放器样式 */
+.music-player {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999; /* 提高层级，确保不被遮挡 */
+  width: 90%;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+
+/* 确保播放器容器可见 */
+.music-player :deep(.aplayer) {
+  opacity: 1 !important;
+  visibility: visible !important;
+  border-radius: 8px;
+}
+
+/* 调整APlayer样式以匹配主题 */
+:deep(.aplayer) {
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+:deep(.aplayer-lrc-contents p.aplayer-lrc-current) {
+  color: var(--primary-color);
+}
+
+:deep(.aplayer .aplayer-list ol li.aplayer-list-light) {
+  color: var(--primary-color);
+}
+
+:deep(.aplayer .aplayer-button.aplayer-play .aplayer-icon) {
+  color: var(--primary-color);
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .cover-title {
-    font-size: 28px;
+  .hero-content {
+    margin-left: 5%;
   }
-  
-  .countdown-text {
-    font-size: 16px;
-  }
-  
-  .countdown-number {
+
+  .hero-title {
     font-size: 48px;
   }
-  
-  .countdown-label {
-    font-size: 14px;
-  }
-  
-  .countdown-time {
-    padding: 20px 30px;
-  }
-  
-  .action-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  /* 调整春联样式适应手机端 */
-  .new-year-decorations {
-    display: block;
-  }
-  
-  .couplet {
-    font-size: 18px;
-    height: 200px;
-    padding: 10px 5px;
-  }
-  
-  .firecracker {
-    font-size: 32px;
-  }
-  
-  .features-list {
-    grid-template-columns: 1fr;
-  }
-  
-  /* 保持特色卡片纵向布局 */
-  .feature-item {
+}
+
+@media (max-width: 992px) {
+  .hero {
     flex-direction: column;
     text-align: center;
   }
-  
-  .feature-icon {
-    margin-bottom: 10px;
+
+  .hero-content {
+    margin: 0 auto;
+    padding: 0 24px;
+    max-width: 80%;
+  }
+
+  .hero-visuals {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .hero-stats {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 36px;
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .primary-btn.large,
+  .secondary-btn.large {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+
+  .section-description {
+    font-size: 16px;
+  }
+
+  .cultural-grid,
+  .features-grid,
+  .activities-grid,
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cultural-preview,
+  .features,
+  .activities-preview,
+  .testimonials {
+    padding: 80px 0;
   }
 }
 
 @media (max-width: 480px) {
-  .countdown-number {
-    font-size: 36px;
+  .hero-title {
+    font-size: 28px;
   }
-  
-  .countdown-label {
-    font-size: 12px;
+
+  .hero-subtitle {
+    font-size: 16px;
   }
-  
-  .countdown-time {
-    padding: 15px 25px;
-    border-radius: 30px;
+
+  .hero-stats {
+    flex-direction: column;
+    gap: 16px;
   }
-  
-  .countdown-text {
+
+  .footer-content {
+    gap: 32px;
+  }
+
+  .primary-btn {
+    padding: 12px 24px;
     font-size: 14px;
   }
-  
-  /* 修复小屏幕特色卡片布局 */
-  .feature-item {
-    flex-direction: column;
-    text-align: center;
+}
+
+/* 页面加载动画 */
+@keyframes pageLoad {
+  from {
+    opacity: 0;
   }
-  
-  .feature-icon {
-    margin-bottom: 10px;
+  to {
+    opacity: 1;
   }
+}
+
+.home-container {
+  animation: pageLoad 0.8s ease-out;
 }
 </style>

@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
-import { viteSingleFile } from 'vite-plugin-singlefile';
 import viteCompression from 'vite-plugin-compression';
 import { visualizer } from 'rollup-plugin-visualizer';
 import path from 'path';
@@ -10,7 +9,14 @@ import { copyFileSync } from 'fs';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          // 配置自定义元素，解决meting-js标签警告
+          isCustomElement: (tag) => tag === 'meting-js'
+        }
+      }
+    }),
     {
       name: 'copy-404-html',
       writeBundle() {
@@ -32,6 +38,7 @@ export default defineConfig({
       gzipSize: true,
       brotliSize: true
     }),
+    // 只在生产环境启用PWA
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
@@ -78,12 +85,12 @@ export default defineConfig({
               }
             }
           }
-        ]
+        ],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
       },
-      // 开发模式下启用PWA功能
+      // 只在生产环境启用PWA功能
       devOptions: {
-        enabled: true,
-        type: 'module'
+        enabled: false
       }
     })
   ],
@@ -117,7 +124,9 @@ export default defineConfig({
       output: {
         manualChunks: {
           'vendor': ['vue', 'vue-router'],
-          'howler': ['howler']
+          'pinia': ['pinia'],
+          'element-plus': ['element-plus'],
+          'fireworks': ['fireworks-js']
         }
       }
     },

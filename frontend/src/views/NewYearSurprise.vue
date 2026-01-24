@@ -1,24 +1,24 @@
 <template>
   <div class="container">
     <!-- 背景装饰 -->
-    <div class="background-decor"></div>
-    
+    <div class="background-decor" aria-hidden="true" />
+
     <!-- 新年装饰 -->
     <div class="new-year-decorations">
       <!-- 灯笼 -->
-      <div class="lantern" style="left: 10%; top: 10%; animation-delay: 0s;">🏮</div>
-      <div class="lantern" style="right: 10%; top: 15%; animation-delay: 1s;">🏮</div>
-      <div class="lantern" style="left: 15%; top: 40%; animation-delay: 2s;">🏮</div>
-      <div class="lantern" style="right: 15%; top: 45%; animation-delay: 3s;">🏮</div>
-      
+      <div class="lantern lantern-1" aria-label="灯笼装饰">🏮</div>
+      <div class="lantern lantern-2" aria-label="灯笼装饰">🏮</div>
+      <div class="lantern lantern-3" aria-label="灯笼装饰">🏮</div>
+      <div class="lantern lantern-4" aria-label="灯笼装饰">🏮</div>
+
       <!-- 中国结 -->
-      <div class="chinese-knot" style="left: 5%; top: 20%;">🧧</div>
-      <div class="chinese-knot" style="right: 5%; top: 25%;">🧧</div>
+      <div class="chinese-knot chinese-knot-1" aria-label="中国结装饰">🧧</div>
+      <div class="chinese-knot chinese-knot-2" aria-label="中国结装饰">🧧</div>
     </div>
-    
+
     <!-- 烟花效果 -->
-    <div class="fireworks-container"></div>
-    
+    <div class="fireworks-container" aria-hidden="true" />
+
     <!-- 封面 -->
     <div class="cover">
       <div class="cover-content">
@@ -28,29 +28,37 @@
           <span class="countdown-text">距离新年还有</span>
           <div class="countdown-time">
             <div class="countdown-item">
-              <span class="countdown-number">{{ countdown.hours.toString().padStart(2, '0') }}</span>
+              <span class="countdown-number">{{
+                String(counterStore.countdown.hours).padStart(2, '0')
+              }}</span>
+              <span class="countdown-label">时</span>
             </div>
             <span class="countdown-separator">:</span>
             <div class="countdown-item">
-              <span class="countdown-number">{{ countdown.minutes.toString().padStart(2, '0') }}</span>
+              <span class="countdown-number">{{
+                String(counterStore.countdown.minutes).padStart(2, '0')
+              }}</span>
+              <span class="countdown-label">分</span>
             </div>
             <span class="countdown-separator">:</span>
             <div class="countdown-item">
-              <span class="countdown-number">{{ countdown.seconds.toString().padStart(2, '0') }}</span>
+              <span class="countdown-number">{{
+                String(counterStore.countdown.seconds).padStart(2, '0')
+              }}</span>
+              <span class="countdown-label">秒</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- 飘雪动画组件 -->
-    <Snowflake :interval="100" :maxCount="80" />
 
     <!-- 新年祝福语 -->
     <div class="greeting-card">
       <div class="greeting-content">
         <h2 class="greeting-title">🎉 新年祝福 🎉</h2>
-        <p class="greeting-text">愿你在新的一年里，所有的期待都能出现，所有的梦想都能实现，所有的希望都能如愿，所有的努力都能成功！</p>
+        <p class="greeting-text">
+          愿你在新的一年里，所有的期待都能出现，所有的梦想都能实现，所有的希望都能如愿，所有的努力都能成功！
+        </p>
       </div>
     </div>
 
@@ -58,8 +66,12 @@
     <div class="timeline-section">
       <h2 class="section-title">📝 我们的回忆</h2>
       <div class="timeline">
-        <div class="timeline-item" v-for="(item, index) in timelineItems" :key="index" :style="{ animationDelay: `${index * 0.3}s` }">
-          <div class="timeline-date">{{ item.date }}</div>
+        <div
+          v-for="(item, index) in timelineItems"
+          :key="index"
+          class="timeline-item"
+          :class="`timeline-item-${index}`"
+        >
           <div class="timeline-content">
             {{ item.content }}
           </div>
@@ -70,10 +82,16 @@
     <!-- 新年运势卡片 -->
     <div class="fortune-card">
       <h2 class="section-title">🔮 你的新年运势</h2>
-      <div class="fortune-content" @click="generateFortune">
-        <div class="fortune-item" v-for="(item, index) in fortuneItems" :key="index">
-          <div class="fortune-label">{{ item.label }}：</div>
-          <div class="fortune-value">{{ item.value }}</div>
+      <div class="fortune-content" @click="fortuneStore.generateFortune">
+        <div class="fortune-grid">
+          <div v-for="(item, index) in fortuneStore.fortuneItems" :key="index" class="fortune-item">
+            <div class="fortune-label">
+              {{ item.label }}
+            </div>
+            <div class="fortune-value">
+              {{ item.value }}
+            </div>
+          </div>
         </div>
         <div class="fortune-tip">点击刷新运势</div>
       </div>
@@ -83,14 +101,29 @@
     <div class="wish-wall">
       <h2 class="section-title">🎯 新年愿望墙</h2>
       <div class="wish-input-area">
-        <textarea v-model="newWish" placeholder="写下你的新年愿望..." rows="3" class="wish-input"></textarea>
-        <button class="secret-btn" @click="addWish" :disabled="!newWish.trim()">添加愿望</button>
+        <textarea
+          v-model="wishesStore.newWish"
+          placeholder="写下你的新年愿望..."
+          rows="3"
+          class="wish-input"
+        />
+        <button
+          class="primary-btn"
+          :disabled="!wishesStore.newWish.trim()"
+          aria-label="添加愿望"
+          tabindex="0"
+          @click="wishesStore.addWish"
+        >
+          添加愿望
+        </button>
       </div>
       <div class="wish-list">
-        <div class="wish-item" v-for="wish in wishes" :key="wish.id">
-          <div class="wish-content">{{ wish.content }}</div>
+        <div v-for="wish in wishesStore.wishes" :key="wish.id" class="wish-item">
+          <div class="wish-content">
+            {{ wish.content }}
+          </div>
           <div class="wish-actions">
-            <button class="like-btn" @click="likeWish(wish.id)">
+            <button class="like-btn" @click="wishesStore.likeWish(wish.id)">
               ❤️ {{ wish.likes || 0 }}
             </button>
           </div>
@@ -102,38 +135,28 @@
     <!-- 互动小游戏 -->
     <div class="game-section">
       <h2 class="section-title">🎮 新年小游戏</h2>
-      <div class="game-card" @click="playGame">
+      <div class="game-card" @click="gameStore.playGame">
         <div class="game-content">
-          <div class="game-icon">🎲</div>
+          <div class="game-icon" aria-label="骰子图标">🎲</div>
           <div class="game-title">点击抽取新年签</div>
-          <div class="game-result" v-if="gameResult">{{ gameResult }}</div>
+          <div v-if="gameStore.gameResult" class="game-result">
+            {{ gameStore.gameResult }}
+          </div>
         </div>
       </div>
     </div>
 
     <!-- 彩蛋互动 -->
-    <div class="彩蛋-section">
+    <div class="surprise-section">
       <h2 class="section-title">🎁 新年彩蛋</h2>
-      <button class="secret-btn" @click="showSecretText" :class="{ active: showSecret }">
+      <button class="primary-btn" :class="{ active: showSecret }" @click="showSecretText">
         {{ showSecret ? '彩蛋已解锁' : '点击解锁新年彩蛋' }}
       </button>
-      <div id="secret-text" v-show="showSecret" class="secret-content">
-        <strong>程序员专属彩蛋：</strong><br>
-        我用 Java 和一点点前端，写了这个页面给你。<br>
-        2026 年，我们要各自完成一件“有点怕但想试试”的事！<br>
+      <div v-show="showSecret" id="secret-text" class="secret-content">
+        <strong>程序员专属彩蛋：</strong><br />
+        我用 Java 和一点点前端，写了这个页面给你。<br />
+        2026 年，我们要各自完成一件"有点怕但想试试"的事！<br />
         （你先说，我听着呢～）
-      </div>
-    </div>
-
-    <!-- 语音祝福 -->
-    <div class="audio-section">
-      <h2 class="section-title">🔊 语音祝福</h2>
-      <div class="audio-player">
-        <audio controls>
-        <source :src="audioUrl" type="audio/mpeg">
-        您的浏览器不支持音频元素。
-        </audio>
-        <p class="audio-hint">点击播放我的语音祝福（可替换为你自己的录音链接）</p>
       </div>
     </div>
 
@@ -141,10 +164,10 @@
     <div class="letter-section">
       <h2 class="section-title">💌 给你的信</h2>
       <div class="handwritten">
-        虽然没见过面，但谢谢你让我觉得<br>
-        这世界还有人愿意认真听我说废话。<br>
-        2026，愿你三餐温热，梦里常笑，聊天框永远有人秒回。<br>
-        <div class="signature">—— 你的网友，[完美谢幕]</div>
+        虽然没见过面，但谢谢你让我觉得<br />
+        这世界还有人愿意认真听我说废话。<br />
+        2026，愿你三餐温热，梦里常笑，聊天框永远有人秒回。<br />
+        <div class="signature">—— 你的网友弟弟，[完美谢幕]</div>
       </div>
     </div>
 
@@ -152,236 +175,162 @@
     <div class="message-board">
       <h2 class="section-title">💬 留言板</h2>
       <div class="message-input-area">
-        <textarea v-model="newMessage" placeholder="写下你的留言..." rows="3" class="message-input"></textarea>
-        <input v-model="messageAuthor" placeholder="你的昵称" class="message-author" maxlength="10">
-        <button class="secret-btn" @click="addMessage" :disabled="!newMessage.trim() || !messageAuthor.trim()">发送留言</button>
+        <textarea
+          v-model="messagesStore.newMessage"
+          placeholder="写下你的留言..."
+          rows="4"
+          class="message-input"
+        />
+        <button
+          class="primary-btn"
+          :disabled="!messagesStore.newMessage.trim()"
+          aria-label="发送留言"
+          tabindex="0"
+          @click="messagesStore.addMessage"
+        >
+          发送留言
+        </button>
       </div>
       <div class="message-list">
-        <div class="message-item" v-for="message in messages" :key="message.id">
+        <div v-for="message in messagesStore.messages" :key="message.id" class="message-item">
           <div class="message-header">
-            <span class="message-author">{{ message.author }}</span>
             <span class="message-time">{{ message.time }}</span>
           </div>
-          <div class="message-content">{{ message.content }}</div>
+          <div class="message-content">
+            {{ message.content }}
+          </div>
+        </div>
+        <div v-if="messagesStore.messages.length === 0" class="message-item empty-message">
+          <div class="empty-message-content">
+            <div class="empty-icon" aria-label="留言图标">💭</div>
+            <p class="empty-text">还没有留言，快来写下第一条留言吧！</p>
+            <p class="empty-subtext">分享你的新年祝福或感想</p>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- 分享按钮 -->
-    <div class="share-section">
-      <button class="share-btn" @click="sharePage">📤 分享这个惊喜</button>
+    <!-- 地域特色内容展示区 -->
+    <RegionalContentDisplay />
+
+    <!-- 地域祝福弹窗 -->
+    <RegionalBlessingPopup />
+
+    <!-- 音乐播放器 -->
+    <div class="music-player">
+      <meting-js
+        server="tencent"
+        type="playlist"
+        id="8205467723"
+        fixed="true"
+        mini="true"
+        autoplay="false"
+        theme="#c91f37"
+        loop="all"
+        order="random"
+        preload="auto"
+        volume="0.3"
+        mutex="true"
+        listFolded="true"
+        listMaxHeight="340"
+        lrcType="1"
+      />
     </div>
-    
-    <!-- 背景音乐控制按钮 -->
-    <button 
-      class="music-control-btn" 
-      @click="toggleBackgroundMusic"
-      :title="isMusicPlaying ? '关闭背景音乐' : '开启背景音乐'"
-    >
-      {{ isMusicPlaying ? '🔊' : '🔇' }}
-    </button>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-import firebase from '../utils/firebase';
-import { Howl } from 'howler';
-import Snowflake from '../components/Snowflake.vue';
+// Vue 内置 API
+import { ref, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
 
-// 音频URL
-const audioUrl = new URL('../assets/east-beauty.mp3', import.meta.url).href;
+// 第三方库
+import { Fireworks } from 'fireworks-js'
+
+// 本地组件（懒加载）
+import { defineAsyncComponent } from 'vue'
+const RegionalContentDisplay = defineAsyncComponent(
+  () => import('../components/new-year/RegionalContentDisplay.vue')
+)
+const RegionalBlessingPopup = defineAsyncComponent(
+  () => import('../components/new-year/RegionalBlessingPopup.vue')
+)
+
+// Pinia stores
+import { useCounterStore } from '../stores/counter'
+import { useWishesStore } from '../stores/wishes'
+import { useMessagesStore } from '../stores/messages'
+import { useFortuneStore } from '../stores/fortune'
+import { useGameStore } from '../stores/game'
+
+// 初始化stores
+const counterStore = useCounterStore()
+const wishesStore = useWishesStore()
+const messagesStore = useMessagesStore()
+const fortuneStore = useFortuneStore()
+const gameStore = useGameStore()
 
 // 响应式数据
-const showSecret = ref(false);
-const countdown = ref({
-  days: 0,
-  hours: 0,
-  minutes: 0,
-  seconds: 0
-});
-let countdownTimer = null; // 倒计时定时器
-const newWish = ref('');
-const wishes = ref([]);
+const showSecret = ref(false)
+const windowWidth = ref(window.innerWidth)
 
-// 留言板数据
-const newMessage = ref('');
-const messageAuthor = ref('');
-const messages = ref([]);
-
-// 背景音乐相关
-const isMusicPlaying = ref(false);
-
-// 创建Howl实例播放新年音乐
-const backgroundMusic = new Howl({
-  src: [audioUrl], // 本地新年主题音乐
-  loop: true,
-  volume: 0.3,
-  html5: true, // 使用HTML5 Audio模式以获得更好的兼容性
-  onplay: () => {
-    isMusicPlaying.value = true;
-    console.log('背景音乐开始播放');
-  },
-  onpause: () => {
-    isMusicPlaying.value = false;
-    console.log('背景音乐暂停');
-  },
-  onstop: () => {
-    isMusicPlaying.value = false;
-    console.log('背景音乐停止');
-  },
-  onloaderror: (id, error) => {
-    console.error('背景音乐加载错误:', error);
-  },
-  onplayerror: (id, error) => {
-    console.error('背景音乐播放错误:', error);
-    // 尝试恢复播放
-    backgroundMusic.play();
-  }
-});
-
-// 实时订阅引用
-let wishesSubscription = null;
-let messagesSubscription = null;
-
-// 从Firebase加载留言
-const loadMessages = async () => {
-  try {
-    const { data, error } = await firebase
-      .from('messages')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    
-    messages.value = data || [];
-  } catch (error) {
-    console.error('加载留言失败:', error);
-  }
-};
-
-// 添加留言到Firebase
-const addMessage = async () => {
-  if (newMessage.value.trim() && messageAuthor.value.trim()) {
-    try {
-      const now = new Date();
-      const timeStr = now.toLocaleString('zh-CN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      
-      const { error } = await firebase
-        .from('messages')
-        .insert({
-          author: messageAuthor.value.trim(),
-          content: newMessage.value.trim(),
-          time: timeStr,
-          created_at: now.toISOString()
-        });
-      
-      if (error) throw error;
-      
-      // 清空输入
-      newMessage.value = '';
-      messageAuthor.value = '';
-    } catch (error) {
-      console.error('添加留言失败:', error);
-    }
-  }
-};
-
-// 订阅留言实时更新
-const subscribeToMessages = () => {
-  messagesSubscription = firebase
-    .channel('messages-channel')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload) => {
-      console.log('留言更新:', payload);
-      // 重新加载留言以保持最新
-      loadMessages();
-    })
-    .subscribe();
-};
+// 时间轴回忆数据
 const timelineItems = ref([
   {
-    date: '📅 2025-03-12',
-    content: '那天你说“加班到凌晨，但喝到了超甜的奶茶”，我偷偷记下了——原来幸福可以这么小。'
+    content:
+      '我们一起讨论着窗外的雪，你说喜欢雪的纯粹，我说喜欢和你聊天时的温暖——原来简单的话题也能成为最珍贵的记忆。'
   },
   {
-    date: '📅 2025-07-05',
-    content: '亳州下雨没完没了，你回我“雨停那天，好运就来”。谢谢你总给我正能量。'
+    content:
+      '我减肥成功的那天，我们说好要一起吃顿好的，再配上一杯甜甜的奶茶——这份共同庆祝的喜悦，我想永远珍藏。'
   },
   {
-    date: '📅 2025-12-24',
-    content: '平安夜我们聊了小时候的压岁钱怎么花——我想说，今年想和你一起规划“互联网新年愿望清单”。'
+    content: '那些日常的闲聊，从鸡毛蒜皮到人生理想，每一次对话都让我觉得，有你这样的朋友真好。'
   }
-]);
-const fortuneItems = ref([
-  { label: '事业运', value: '大吉' },
-  { label: '财运', value: '中吉' },
-  { label: '桃花运', value: '大吉' },
-  { label: '健康运', value: '上上签' }
-]);
-const gameResult = ref('');
-let fireworksInterval = null;
+])
 
-// 固定数据
-const fortuneOptions = {
-  '事业运': ['大吉', '中吉', '小吉', '上上签', '吉星高照'],
-  '财运': ['大吉', '中吉', '小吉', '财运亨通', '财源广进'],
-  '桃花运': ['大吉', '中吉', '小吉', '桃花运旺', '缘分到来'],
-  '健康运': ['大吉', '中吉', '小吉', '身体健康', '平安如意']
-};
+// 烟花实例
+let fireworksInstance = null
 
-const gameOptions = [
-  '🎊 恭喜发财，万事如意！',
-  '🎉 新年快乐，心想事成！',
-  '💰 财运亨通，财源广进！',
-  '💝 爱情甜蜜，幸福美满！',
-  '🏆 事业有成，步步高升！',
-  '🍀 好运连连，一帆风顺！',
-  '🎁 惊喜不断，快乐常在！',
-  '🌟 星光璀璨，前程似锦！'
-];
+// 监听窗口大小变化
+const handleResize = () => {
+  windowWidth.value = window.innerWidth
+}
 
-// 方法定义
+// 显示彩蛋内容
 const showSecretText = () => {
-  showSecret.value = true;
-};
-
-// 使用 fireworks-js 库实现烟花效果
-import { Fireworks } from 'fireworks-js';
-
-let fireworks = null;
+  showSecret.value = true
+}
 
 // 初始化烟花效果
 const initFireworks = () => {
-  console.log('Initializing fireworks-js fireworks in NewYearSurprise...');
-  
-  // 获取烟花容器元素
-  const container = document.querySelector('.fireworks-container');
-  
-  // 创建烟花实例
-    fireworks = new Fireworks(container, {
-      speed: 1.2, // 减慢烟花飞行速度
+  try {
+    console.log('Initializing fireworks-js fireworks in NewYearSurprise...')
+
+    const container = document.querySelector('.fireworks-container')
+
+    if (!container) {
+      console.error('Fireworks container not found')
+      return
+    }
+
+    fireworksInstance = new Fireworks(container, {
+      speed: 1.2,
       acceleration: 1.03,
       friction: 0.97,
       gravity: 1.5,
       particles: 300,
       traceLength: 7,
       explosion: 5,
-      colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'],
+      colors: ['#C91F37', '#E63946', '#FFD700', '#4A90A4', '#9B5DE5', '#666666'],
       hue: {
         min: 0,
         max: 360
       },
       delay: {
-        min: 100, // 增加烟花发射延迟时间
+        min: 100,
         max: 200
       },
-      rocketsPoint: { // 火箭发射点范围
+      rocketsPoint: {
         min: 0,
         max: container.clientWidth
       },
@@ -399,234 +348,102 @@ const initFireworks = () => {
         min: 50,
         max: 80
       }
-    });
-  
-  // 开始烟花效果
-  fireworks.start();
-  console.log('fireworks-js fireworks started in NewYearSurprise!');
-};
+    })
+
+    fireworksInstance.start()
+    console.log('fireworks-js fireworks started in NewYearSurprise!')
+  } catch (error) {
+    console.error('Failed to initialize fireworks:', error)
+  }
+}
 
 // 停止烟花效果
 const stopFireworks = () => {
-  if (fireworks) {
-    fireworks.stop();
-    fireworks = null;
-  }
-  console.log('fireworks-js fireworks stopped in NewYearSurprise!');
-};
-
-const calculateCountdown = () => {
-  // 计算距离2026年春节（2月17日）的时间差
-  const now = new Date();
-  const springFestival = new Date('2026-02-17');
-  const diffTime = Math.abs(springFestival - now);
-  
-  // 计算天、时、分、秒
-  const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
-  
-  countdown.value = {
-    days,
-    hours,
-    minutes,
-    seconds
-  };
-};
-
-// 从Firebase加载愿望
-const loadWishes = async () => {
   try {
-    const { data, error } = await firebase
-      .from('wishes')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    
-    wishes.value = data || [];
+    if (fireworksInstance) {
+      fireworksInstance.stop()
+      fireworksInstance = null
+    }
+    console.log('fireworks-js fireworks stopped in NewYearSurprise!')
   } catch (error) {
-    console.error('加载愿望失败:', error);
+    console.error('Failed to stop fireworks:', error)
   }
-};
+}
 
-// 添加愿望到Firebase
-const addWish = async () => {
-  if (newWish.value.trim()) {
-    try {
-      const { error } = await firebase
-        .from('wishes')
-        .insert({
-          content: newWish.value.trim(),
-          likes: 0,
-          created_at: new Date().toISOString()
-        });
-      
-      if (error) throw error;
-      
-      // 清空输入
-      newWish.value = '';
-    } catch (error) {
-      console.error('添加愿望失败:', error);
-    }
+// 从Firebase加载数据
+const loadFirebaseData = async () => {
+  try {
+    await Promise.all([messagesStore.loadMessages(), wishesStore.loadWishes()])
+  } catch (error) {
+    console.error('Failed to load Firebase data:', error)
   }
-};
+}
 
-// 点赞功能
-const likeWish = (id) => {
-  // 在前端更新点赞数（模拟）
-  const updatedWishes = wishes.value.map(wish => {
-    if (wish.id === id) {
-      return {
-        ...wish,
-        likes: (wish.likes || 0) + 1
-      };
-    }
-    return wish;
-  });
-  wishes.value = updatedWishes;
-  
-  // 这里可以添加后端更新逻辑（模拟）
-  console.log(`点赞愿望: ${id}`);
-};
-
-// 订阅愿望实时更新
-const subscribeToWishes = () => {
-  wishesSubscription = firebase
-    .channel('wishes-channel')
-    .on('postgres_changes', { event: '*', schema: 'public', table: 'wishes' }, (payload) => {
-      console.log('愿望更新:', payload);
-      // 重新加载愿望以保持最新
-      loadWishes();
-    })
-    .subscribe();
-};
-
-const generateFortune = () => {
-  // 随机生成运势
-  fortuneItems.value = fortuneItems.value.map(item => {
-    const options = fortuneOptions[item.label];
-    const randomValue = options[Math.floor(Math.random() * options.length)];
-    return { ...item, value: randomValue };
-  });
-};
-
-const playGame = () => {
-  // 随机抽取新年签
-  const randomIndex = Math.floor(Math.random() * gameOptions.length);
-  gameResult.value = gameOptions[randomIndex];
-};
-
-const sharePage = () => {
-  if (navigator.share) {
-    navigator.share({
-      title: '致我的互联网搭子 | 2026新年惊喜',
-      text: '快来看看我收到的新年惊喜！',
-      url: window.location.href
-    });
-  } else {
-    // 复制链接到剪贴板
-    navigator.clipboard.writeText(window.location.href).then(() => {
-      alert('链接已复制到剪贴板，可以分享给朋友啦！');
-    });
+// 订阅实时更新
+const subscribeToRealtimeUpdates = () => {
+  try {
+    messagesStore.subscribeToMessages()
+    wishesStore.subscribeToWishes()
+  } catch (error) {
+    console.error('Failed to subscribe to realtime updates:', error)
   }
-};
+}
 
-// 背景音乐控制函数
-const toggleBackgroundMusic = () => {
-  console.log('切换背景音乐状态:', isMusicPlaying.value);
-  if (isMusicPlaying.value) {
-    backgroundMusic.pause();
-  } else {
-    // 确保在用户交互时播放，符合浏览器策略
-    const result = backgroundMusic.play();
-    if (result instanceof Promise) {
-      result.then(() => {
-        console.log('播放请求成功');
-      }).catch(error => {
-        console.error('播放请求失败:', error);
-      });
-    }
+// 取消实时订阅
+const unsubscribeFromRealtimeUpdates = () => {
+  try {
+    messagesStore.unsubscribeFromMessages()
+    wishesStore.unsubscribeFromWishes()
+  } catch (error) {
+    console.error('Failed to unsubscribe from realtime updates:', error)
   }
-};
+}
 
-// 尝试播放背景音乐
-const tryPlayBackgroundMusic = () => {
-  if (!isMusicPlaying.value) {
-    backgroundMusic.play();
+// 添加页面加载动画
+const addPageLoadAnimation = () => {
+  try {
+    document.body.style.opacity = '0'
+    setTimeout(() => {
+      document.body.style.opacity = '1'
+    }, 100)
+  } catch (error) {
+    console.error('Failed to add page load animation:', error)
   }
-};
+}
 
 // 生命周期钩子
 onMounted(async () => {
-  // 初始化其他效果
-  initFireworks();
-  calculateCountdown();
-  // 添加页面加载动画
-  document.body.style.opacity = '0';
-  setTimeout(() => {
-    document.body.style.opacity = '1';
-  }, 100);
-  
-  // 从Firebase加载数据
-  await Promise.all([
-    loadMessages(),
-    loadWishes()
-  ]);
-  
-  // 订阅实时更新
-  subscribeToMessages();
-  subscribeToWishes();
-  
-  // 设置每秒更新一次倒计时
-  countdownTimer = setInterval(() => {
-    calculateCountdown();
-  }, 1000);
-  
-  // 尝试自动播放背景音乐
-  tryPlayBackgroundMusic();
-  
-  // 添加点击事件监听器，当用户点击页面时尝试播放音乐
-  document.addEventListener('click', tryPlayBackgroundMusic, { once: true });
-  document.addEventListener('touchstart', tryPlayBackgroundMusic, { once: true });
-});
+  try {
+    initFireworks()
+    counterStore.initialize()
+    addPageLoadAnimation()
+    await loadFirebaseData()
+    subscribeToRealtimeUpdates()
+    window.addEventListener('resize', handleResize)
+  } catch (error) {
+    console.error('Error during component mount:', error)
+  }
+})
+
+onUnmounted(() => {
+  try {
+    window.removeEventListener('resize', handleResize)
+  } catch (error) {
+    console.error('Error during component unmount:', error)
+  }
+})
 
 onBeforeUnmount(() => {
-  stopFireworks();
-  // 清除倒计时定时器
-  if (countdownTimer) {
-    clearInterval(countdownTimer);
-    countdownTimer = null;
+  try {
+    stopFireworks()
+    unsubscribeFromRealtimeUpdates()
+  } catch (error) {
+    console.error('Error during component before unmount:', error)
   }
-  
-  // 取消实时订阅
-  if (messagesSubscription) {
-      firebase.removeChannel(messagesSubscription);
-      messagesSubscription = null;
-    }
-    
-    if (wishesSubscription) {
-      firebase.removeChannel(wishesSubscription);
-      wishesSubscription = null;
-    }
-  
-  // 停止背景音乐
-  backgroundMusic.stop();
-});
+})
 </script>
 
 <style scoped>
-/* 全局样式 */
-body {
-  margin: 0;
-  font-family: '微软雅黑', 'Microsoft YaHei', sans-serif;
-  background: linear-gradient(135deg, #f7f9fc 0%, #e8f0fe 100%);
-  color: #333;
-  overflow-x: hidden;
-  transition: opacity 0.5s ease;
-}
-
 /* 新年装饰 */
 .new-year-decorations {
   position: fixed;
@@ -636,18 +453,20 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 1100;
+  overflow: hidden;
 }
 
 /* 灯笼 */
 .lantern {
   position: absolute;
-  font-size: 48px;
-  animation: lanternSwing 3s ease-in-out infinite;
+  font-size: clamp(24px, 4vw, 48px);
+  animation: lanternSwing 4s ease-in-out infinite;
   transform-origin: center top;
 }
 
 @keyframes lanternSwing {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(-5deg);
   }
   50% {
@@ -658,12 +477,49 @@ body {
 /* 中国结 */
 .chinese-knot {
   position: absolute;
-  font-size: 36px;
+  font-size: clamp(18px, 3vw, 36px);
   animation: float 4s ease-in-out infinite;
 }
 
+/* 灯笼位置和动画延迟 */
+.lantern-1 {
+  left: 10%;
+  top: 10%;
+  animation-delay: 0s;
+}
+
+.lantern-2 {
+  right: 10%;
+  top: 15%;
+  animation-delay: 1s;
+}
+
+.lantern-3 {
+  left: 15%;
+  top: 40%;
+  animation-delay: 2s;
+}
+
+.lantern-4 {
+  right: 15%;
+  top: 45%;
+  animation-delay: 3s;
+}
+
+/* 中国结位置 */
+.chinese-knot-1 {
+  left: 5%;
+  top: 20%;
+}
+
+.chinese-knot-2 {
+  right: 5%;
+  top: 25%;
+}
+
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -686,9 +542,12 @@ body {
 .container {
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--spacing-md);
   position: relative;
   z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: calc(100vw - 30px);
 }
 
 /* 背景装饰 */
@@ -698,23 +557,24 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
-    radial-gradient(circle at 20% 30%, rgba(157, 80, 187, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(110, 72, 170, 0.1) 0%, transparent 50%);
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(201, 31, 55, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
   z-index: -1;
+  opacity: 0.4;
 }
 
 /* 封面样式 */
 .cover {
   text-align: center;
   padding: 60px 20px;
-  background: linear-gradient(135deg, #6e48aa 0%, #9d50bb 50%, #ff6b6b 100%);
+  background: var(--gradient-primary);
   color: white;
-  border-radius: 20px;
-  margin-bottom: 30px;
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--spacing-lg);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow-lg);
 }
 
 .cover-content {
@@ -723,16 +583,17 @@ body {
 }
 
 .cover-title {
-  font-size: 36px;
-  margin-bottom: 15px;
+  font-size: clamp(28px, 5vw, 36px);
+  margin-bottom: var(--spacing-sm);
   animation: bounceIn 1s ease;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: var(--shadow-md);
+  font-family: var(--font-title);
 }
 
 .cover-subtitle {
-  font-size: 18px;
+  font-size: clamp(14px, 2.5vw, 18px);
   opacity: 0.95;
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-md);
   animation: fadeInUp 1s ease 0.3s both;
 }
 
@@ -740,16 +601,16 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  margin-top: 20px;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
   animation: fadeInUp 1s ease 0.6s both;
 }
 
 .countdown-text {
-  font-size: 18px;
+  font-size: clamp(14px, 2.5vw, 18px);
   opacity: 0.95;
-  color: #fff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: var(--text-light);
+  text-shadow: var(--shadow-md);
 }
 
 .countdown-time {
@@ -758,11 +619,11 @@ body {
   justify-content: center;
   gap: 0;
   background: rgba(255, 255, 255, 0.15);
-  padding: 15px 25px;
-  border-radius: 30px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-full);
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow-md);
 }
 
 .countdown-item {
@@ -776,11 +637,11 @@ body {
 }
 
 .countdown-number {
-  font-size: 42px;
+  font-size: clamp(24px, 4vw, 42px);
   font-weight: bold;
-  color: #ffd700;
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-  font-family: 'Arial', sans-serif;
+  color: var(--gold-color);
+  text-shadow: var(--shadow-md);
+  font-family: 'Inter', sans-serif;
   width: 100%;
   text-align: center;
   line-height: 60px;
@@ -791,11 +652,19 @@ body {
   justify-content: center;
 }
 
+.countdown-label {
+  font-size: clamp(12px, 2vw, 14px);
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: var(--shadow-sm);
+  margin-top: 2px;
+  font-weight: 500;
+}
+
 .countdown-separator {
-  font-size: 36px;
+  font-size: clamp(24px, 4vw, 36px);
   font-weight: bold;
-  color: #ffd700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  color: var(--gold-color);
+  text-shadow: var(--shadow-sm);
   animation: blink 1s infinite;
   line-height: 60px;
   margin: 0 8px;
@@ -806,7 +675,8 @@ body {
 }
 
 @keyframes blink {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -814,53 +684,94 @@ body {
   }
 }
 
-
-
-/* 新年祝福语卡片 */
-.greeting-card {
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+/* 统一卡片基础样式 */
+.card-base {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--box-shadow-md);
+  transition: all var(--transition-normal);
   animation: slideInUp 1s ease;
 }
 
+.card-base:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--box-shadow-lg);
+}
+
+/* 新年祝福语卡片 */
+.greeting-card {
+  background: var(--card-bg);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--box-shadow-md);
+  animation: slideInUp 1s ease;
+  transition: all var(--transition-normal);
+}
+
 .greeting-title {
-  color: #856404;
-  margin-bottom: 15px;
-  font-size: 24px;
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+  font-size: clamp(20px, 4vw, 24px);
   text-align: center;
+  padding-bottom: var(--spacing-sm);
+  position: relative;
+  font-family: var(--font-title);
+}
+
+.greeting-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
 }
 
 .greeting-text {
-  color: #533f03;
-  font-size: 16px;
+  color: var(--text-color);
+  font-size: clamp(14px, 2.5vw, 16px);
   line-height: 1.6;
   text-align: center;
 }
 
 /* 新年运势卡片 */
 .fortune-card {
-  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg);
+  border-top: 4px solid #4a90a4;
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--box-shadow-md);
   animation: slideInUp 1s ease 0.2s both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  transition: all var(--transition-normal);
 }
 
 .fortune-content {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
-  padding: 20px;
+  padding: var(--spacing-md);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: var(--box-shadow-md);
 }
 
 .fortune-content:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--box-shadow-md);
 }
 
 .fortune-item {
@@ -868,41 +779,36 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: var(--spacing-sm);
   margin: 5px 0;
   background: rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
+  border-radius: var(--border-radius-sm);
   width: 45%;
   text-align: center;
   box-sizing: border-box;
 }
 
-.fortune-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  background: white;
-  border-radius: 12px;
-  padding: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  gap: 10px;
+.fortune-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--spacing-md);
+  width: 100%;
 }
 
 .fortune-label {
   font-weight: bold;
-  color: #6e48aa;
-  font-size: 14px;
+  color: var(--primary-color);
+  font-size: clamp(12px, 2vw, 14px);
   width: 100%;
   margin-bottom: 5px;
   display: block;
 }
 
 .fortune-value {
-  color: #ff6b6b;
+  color: var(--accent-color);
   font-weight: bold;
-  font-size: 16px;
-  background: linear-gradient(135deg, #ff6b6b, #ffa07a);
+  font-size: clamp(14px, 2.5vw, 16px);
+  background: var(--gradient-nianhua);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -912,70 +818,123 @@ body {
 
 .fortune-tip {
   text-align: center;
-  margin-top: 15px;
-  color: #666;
-  font-size: 14px;
+  margin-top: var(--spacing-sm);
+  color: var(--text-muted);
+  font-size: clamp(12px, 2vw, 14px);
   font-style: italic;
+}
+
+/* 主要按钮样式 */
+.primary-btn {
+  display: block;
+  margin-top: var(--spacing-md);
+  padding: 14px 32px;
+  background: var(--primary-color);
+  color: var(--text-light);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: clamp(14px, 2.5vw, 16px);
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  border: none;
+  box-shadow: var(--box-shadow-sm);
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 250px;
+  align-self: center;
+}
+
+.primary-btn:hover:not(:disabled) {
+  background: var(--secondary-color);
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-md);
+}
+
+.primary-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.primary-btn:disabled {
+  background: var(--text-muted);
+  cursor: not-allowed;
+  box-shadow: none;
 }
 
 /* 互动小游戏 */
 .game-section {
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-lg);
   animation: slideInUp 1s ease 0.3s both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .game-card {
-  background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
-  border-radius: 15px;
-  padding: 30px;
+  background: var(--gradient-huangmei);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all var(--transition-normal);
+  box-shadow: var(--box-shadow-md);
+  width: 100%;
+  max-width: 600px;
 }
 
 .game-card:hover {
   transform: translateY(-5px) rotate(1deg);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--box-shadow-lg);
 }
 
 .game-icon {
-  font-size: 48px;
-  margin-bottom: 15px;
+  font-size: clamp(36px, 6vw, 48px);
+  margin-bottom: var(--spacing-sm);
   animation: bounceIn 1s ease infinite alternate;
 }
 
 .game-title {
-  font-size: 20px;
-  color: #6e48aa;
-  margin-bottom: 15px;
+  font-size: clamp(16px, 3vw, 20px);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-sm);
   font-weight: bold;
+  font-family: var(--font-title);
 }
 
 .game-result {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 20px;
-  font-size: 18px;
+  background: var(--card-bg);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  margin-top: var(--spacing-md);
+  font-size: clamp(16px, 3vw, 18px);
   font-weight: bold;
-  color: #ff6b6b;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  color: var(--accent-color);
+  box-shadow: var(--box-shadow-md);
   animation: scaleIn 0.5s ease;
+  transition: all var(--transition-normal);
 }
 
 /* 时间轴样式 */
 .timeline-section {
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .section-title {
-  color: #6e48aa;
-  font-size: 24px;
-  margin-bottom: 20px;
+  color: var(--primary-color);
+  font-size: clamp(20px, 4vw, 24px);
+  margin-bottom: var(--spacing-md);
   text-align: center;
   position: relative;
-  padding-bottom: 10px;
+  padding-bottom: var(--spacing-sm);
+  width: 100%;
+  max-width: 800px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: var(--font-title);
 }
 
 .section-title::after {
@@ -986,23 +945,26 @@ body {
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, #6e48aa, #9d50bb);
+  background: var(--gradient-primary);
   border-radius: 2px;
 }
 
 .timeline {
   position: relative;
-  padding: 20px 0;
+  padding: var(--spacing-md) 0;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .timeline::before {
   content: '';
   position: absolute;
-  left: 30px;
+  left: 50px;
   top: 0;
   bottom: 0;
   width: 3px;
-  background: linear-gradient(to bottom, #6e48aa, #9d50bb, #ff6b6b);
+  background: var(--gradient-primary);
   border-radius: 2px;
 }
 
@@ -1023,83 +985,100 @@ body {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: white;
-  border: 3px solid #6e48aa;
-  box-shadow: 0 0 0 3px rgba(110, 72, 170, 0.2);
+  background: var(--card-bg);
+  border: 3px solid var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(201, 31, 55, 0.2);
   z-index: 2;
 }
 
 .timeline-date {
-  color: #9d50bb;
+  color: var(--secondary-color);
   font-weight: bold;
   margin-bottom: 8px;
-  font-size: 14px;
+  font-size: clamp(12px, 2vw, 14px);
 }
 
 .timeline-content {
-  background: white;
-  padding: 18px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  font-size: 15px;
+  background: var(--card-bg);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--box-shadow-sm);
+  font-size: clamp(14px, 2.5vw, 15px);
   line-height: 1.6;
-  border-left: 4px solid #6e48aa;
-  transition: all 0.3s ease;
+  border-left: 4px solid var(--primary-color);
+  transition: all var(--transition-normal);
 }
 
 .timeline-content:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  box-shadow: var(--box-shadow-md);
+}
+
+/* 时间轴项目动画延迟 */
+.timeline-item-0 {
+  animation-delay: 0s;
+}
+
+.timeline-item-1 {
+  animation-delay: 0.3s;
+}
+
+.timeline-item-2 {
+  animation-delay: 0.6s;
 }
 
 /* 愿望墙样式 */
 .wish-wall {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--box-shadow-md);
+  transition: all var(--transition-normal);
 }
 
 .wish-input-area {
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: var(--spacing-sm);
+  align-items: center;
 }
 
 .wish-input {
   width: 100%;
-  padding: 15px;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  font-size: 15px;
+  max-width: 600px;
+  padding: var(--spacing-sm);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: clamp(14px, 2.5vw, 15px);
   resize: vertical;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   font-family: inherit;
-  background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+  background: var(--gradient-light);
+  box-sizing: border-box;
 }
 
 .wish-input:focus {
   outline: none;
-  border-color: #6e48aa;
-  box-shadow: 0 0 0 3px rgba(110, 72, 170, 0.1);
-  background: white;
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-focus);
+  background: var(--card-bg);
 }
 
 .wish-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 15px;
+  gap: var(--spacing-sm);
 }
 
 .wish-item {
-  background: linear-gradient(135deg, #f0e6ff 0%, #e6d9ff 100%);
-  padding: 20px;
-  border-radius: 15px;
+  background: var(--gradient-huizhou);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
   position: relative;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  box-shadow: var(--box-shadow-md);
+  transition: all var(--transition-normal);
   animation: scaleIn 0.5s ease;
   min-height: 80px;
   display: flex;
@@ -1109,33 +1088,32 @@ body {
 
 .wish-item:hover {
   transform: translateY(-5px) rotate(1deg);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  background: linear-gradient(135deg, #e6d9ff 0%, #d8c9ff 100%);
+  box-shadow: var(--box-shadow-lg);
 }
 
 .wish-content {
-  font-size: 15px;
+  font-size: clamp(14px, 2.5vw, 15px);
   line-height: 1.6;
-  margin-bottom: 15px;
+  margin-bottom: var(--spacing-sm);
   flex-grow: 1;
-  color: #333;
+  color: var(--text-color);
 }
 
 .wish-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px;
+  margin-top: var(--spacing-xs);
 }
 
 .like-btn {
-  background: linear-gradient(135deg, #ff6b6b, #ffa07a);
+  background: var(--gradient-nianhua);
   color: white;
   border: none;
-  border-radius: 15px;
+  border-radius: var(--border-radius-full);
   padding: 6px 12px;
-  font-size: 14px;
+  font-size: clamp(12px, 2vw, 14px);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   display: flex;
   align-items: center;
   gap: 5px;
@@ -1143,7 +1121,7 @@ body {
 
 .like-btn:hover {
   transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+  box-shadow: var(--box-shadow-sm);
 }
 
 .like-btn:active {
@@ -1152,15 +1130,16 @@ body {
 
 .wish-icon {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: var(--spacing-xs);
+  right: var(--spacing-xs);
   font-size: 20px;
   opacity: 0.8;
   animation: bounce 2s ease-in-out infinite;
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -1181,59 +1160,68 @@ body {
 
 /* 留言板样式 */
 .message-board {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 40px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--box-shadow-md);
   animation: slideInUp 1s ease 0.8s both;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .message-input-area {
-  margin-bottom: 25px;
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: var(--spacing-sm);
+  align-items: center;
 }
 
 .message-input {
   width: 100%;
-  padding: 15px;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  font-size: 15px;
+  max-width: 600px;
+  padding: var(--spacing-sm);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: clamp(14px, 2.5vw, 15px);
   resize: vertical;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   font-family: inherit;
-  background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+  background: var(--gradient-light);
+  box-sizing: border-box;
 }
 
 .message-input:focus {
   outline: none;
-  border-color: #6e48aa;
-  box-shadow: 0 0 0 3px rgba(110, 72, 170, 0.1);
-  background: white;
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-focus);
+  background: var(--card-bg);
 }
 
 .message-author {
   width: 100%;
-  padding: 10px 15px;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  font-size: 14px;
-  transition: all 0.3s ease;
+  max-width: 300px;
+  padding: 10px var(--spacing-sm);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: clamp(12px, 2vw, 14px);
+  transition: all var(--transition-normal);
+  box-sizing: border-box;
 }
 
 .message-author:focus {
   outline: none;
-  border-color: #6e48aa;
-  box-shadow: 0 0 0 3px rgba(110, 72, 170, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-focus);
 }
 
 .message-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: var(--spacing-sm);
   max-height: 400px;
   overflow-y: auto;
   padding-right: 5px;
@@ -1244,78 +1232,125 @@ body {
 }
 
 .message-list::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--bg-color);
   border-radius: 3px;
 }
 
 .message-list::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
+  background: var(--primary-color);
   border-radius: 3px;
 }
 
 .message-list::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1;
+  background: var(--secondary-color);
 }
 
 .message-item {
-  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  background: var(--gradient-success);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-md);
   animation: fadeInUp 0.5s ease;
+  transition: all var(--transition-normal);
 }
 
 .message-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
-  font-size: 14px;
+  margin-bottom: var(--spacing-sm);
+  font-size: clamp(12px, 2vw, 14px);
 }
 
 .message-header .message-author {
   font-weight: bold;
-  color: #6e48aa;
+  color: var(--primary-color);
   background: none;
   border: none;
   padding: 0;
 }
 
 .message-time {
-  color: #666;
-  font-size: 12px;
+  color: var(--text-muted);
+  font-size: clamp(11px, 2vw, 12px);
 }
 
 .message-content {
-  color: #333;
+  color: var(--text-color);
   line-height: 1.6;
-  font-size: 15px;
+  font-size: clamp(14px, 2.5vw, 15px);
+}
+
+/* 空留言状态样式 */
+.empty-message {
+  background: var(--gradient-light);
+  border: 2px dashed var(--border-color);
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: var(--spacing-md);
+}
+
+.empty-message-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.empty-icon {
+  font-size: 48px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.empty-text {
+  font-size: clamp(16px, 3vw, 18px);
+  font-weight: bold;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.empty-subtext {
+  font-size: clamp(12px, 2vw, 14px);
+  color: var(--text-muted);
+  margin: 0;
 }
 
 /* 彩蛋样式 */
-.彩蛋-section {
-  margin-bottom: 40px;
+.surprise-section {
+  margin: var(--spacing-lg) 0;
   text-align: center;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  clear: both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .secret-btn {
-  display: inline-block;
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: linear-gradient(135deg, #6e48aa, #9d50bb);
+  display: block;
+  margin-top: var(--spacing-md);
+  padding: 12px 30px;
+  background: var(--gradient-primary);
   color: white;
-  border-radius: 25px;
+  border-radius: var(--border-radius-full);
   cursor: pointer;
-  font-size: 15px;
-  transition: all 0.3s ease;
+  font-size: clamp(14px, 2.5vw, 16px);
+  transition: all var(--transition-normal);
   border: none;
-  box-shadow: 0 4px 12px rgba(110, 72, 170, 0.3);
+  box-shadow: var(--box-shadow-sm);
+  position: relative;
+  z-index: 3;
+  width: auto;
+  max-width: 250px;
 }
 
 .secret-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #9d50bb, #b86bff);
+  background: var(--gradient-primary-light);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(110, 72, 170, 0.4);
+  box-shadow: var(--box-shadow-md);
 }
 
 .secret-btn:active:not(:disabled) {
@@ -1323,74 +1358,59 @@ body {
 }
 
 .secret-btn:disabled {
-  background: #ccc;
+  background: var(--text-muted);
   cursor: not-allowed;
   box-shadow: none;
 }
 
 .secret-btn.active {
-  background: linear-gradient(135deg, #28a745, #20c997);
-  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  background: var(--gradient-success);
+  box-shadow: var(--box-shadow-sm);
 }
 
 .secret-content {
-  margin-top: 20px;
-  padding: 20px;
-  background: linear-gradient(135deg, #f0e6ff 0%, #e6d9ff 100%);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  font-size: 16px;
-  line-height: 1.6;
+  margin: var(--spacing-lg) auto;
+  padding: var(--spacing-lg);
+  background: var(--gradient-huizhou);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-md);
+  font-size: clamp(14px, 2.5vw, 16px);
+  line-height: 1.8;
   animation: fadeIn 0.5s ease;
   text-align: left;
-}
-
-/* 音频播放器样式 */
-.audio-section {
-  margin-bottom: 40px;
-  text-align: center;
-}
-
-.audio-player {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  display: inline-block;
-}
-
-.audio-player audio {
-  width: 100%;
-  max-width: 400px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.audio-hint {
-  color: #666;
-  font-size: 14px;
-  margin: 0;
+  position: relative;
+  z-index: 3;
+  max-width: 70%;
+  clear: both;
+  display: block;
+  transition: all var(--transition-normal);
 }
 
 /* 手写信件样式 */
 .letter-section {
-  margin-bottom: 40px;
+  margin-bottom: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .handwritten {
-  font-family: 'KaiTi', '华文行楷', sans-serif;
-  font-size: 19px;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(16px, 3vw, 19px);
   line-height: 2.2;
-  color: #555;
-  background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%);
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  text-align: right;
+  color: var(--text-color);
+  background: var(--gradient-warm);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-md);
+  text-align: center;
   font-weight: bold;
   position: relative;
   overflow: hidden;
+  transition: all var(--transition-normal);
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .handwritten::before {
@@ -1415,36 +1435,11 @@ body {
 }
 
 .signature {
-  text-align: right;
-  margin-top: 20px;
-  color: #9d50bb;
-  font-style: italic;
-  font-size: 18px;
-}
-
-/* 分享按钮 */
-.share-section {
   text-align: center;
-  margin-top: 40px;
-  margin-bottom: 20px;
-}
-
-.share-btn {
-  padding: 12px 24px;
-  background: linear-gradient(135deg, #1da1f2, #0d95e8);
-  color: white;
-  border: none;
-  border-radius: 25px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(29, 161, 242, 0.3);
-}
-
-.share-btn:hover {
-  background: linear-gradient(135deg, #0d95e8, #0a85d4);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(29, 161, 242, 0.4);
+  margin-top: var(--spacing-md);
+  color: var(--secondary-color);
+  font-style: italic;
+  font-size: clamp(16px, 3vw, 18px);
 }
 
 /* 动画效果 */
@@ -1469,7 +1464,11 @@ body {
 }
 
 @keyframes bounceIn {
-  0%, 20%, 50%, 80%, 100% {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   40% {
@@ -1502,133 +1501,236 @@ body {
   }
 }
 
+/* 音乐播放器样式 */
+.music-player {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 90%;
+  max-width: 600px;
+}
+
+/* 调整APlayer样式以匹配主题 */
+:deep(.aplayer) {
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+:deep(.aplayer-lrc-contents p.aplayer-lrc-current) {
+  color: var(--primary-color);
+}
+
+:deep(.aplayer .aplayer-list ol li.aplayer-list-light) {
+  color: var(--primary-color);
+}
+
+:deep(.aplayer .aplayer-button.aplayer-play .aplayer-icon) {
+  color: var(--primary-color);
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .container {
-    padding: 15px;
+    padding: var(--spacing-md);
+    max-width: calc(100vw - 20px);
+    box-sizing: border-box;
+    margin: 0 auto;
   }
-  
+
   /* 新年装饰调整 */
+  .new-year-decorations {
+    position: relative;
+    height: auto;
+    overflow: hidden;
+  }
+
   .lantern {
-    font-size: 32px !important;
-  }
-  
-  .chinese-knot {
     font-size: 28px !important;
+    position: absolute;
+    top: auto;
+    bottom: 10px;
   }
-  
+
+  .chinese-knot {
+    font-size: 24px !important;
+    position: absolute;
+    top: auto;
+    bottom: 20px;
+  }
+
   /* 封面样式调整 */
   .cover {
-    padding: 40px 15px;
-    margin-bottom: 20px;
+    padding: 30px var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+    border-radius: var(--border-radius-md);
   }
-  
+
   .cover-title {
-    font-size: 28px;
+    font-size: clamp(20px, 5vw, 26px);
+    line-height: 1.3;
   }
-  
+
   .cover-subtitle {
-    font-size: 16px;
+    font-size: clamp(12px, 2.5vw, 15px);
   }
-  
+
   .countdown-number {
-    font-size: 24px;
-    line-height: 40px;
+    font-size: clamp(16px, 3vw, 20px) !important;
+    line-height: 35px !important;
+    min-width: 30px !important;
+    display: inline-block !important;
+    text-align: center !important;
+    color: var(--gold-color) !important;
+    font-family: 'Inter', sans-serif !important;
+    text-shadow: var(--shadow-md) !important;
+    white-space: nowrap !important;
   }
-  
+
   .countdown-separator {
-    font-size: 20px;
-    line-height: 40px;
+    font-size: clamp(14px, 3vw, 18px) !important;
+    line-height: 35px !important;
+    margin: 0 3px !important;
+    color: var(--gold-color) !important;
   }
-  
+
   .countdown-item {
-    height: 40px;
-    width: 50px;
+    height: 35px !important;
+    width: 45px !important;
+    min-width: 45px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
-  
+
   /* 卡片样式调整 */
   .greeting-card,
   .fortune-card,
   .game-section,
   .timeline-section,
   .wish-wall,
-  .彩蛋-section,
-  .audio-section,
   .letter-section {
-    margin-bottom: 25px;
+    margin-bottom: var(--spacing-lg);
+    margin-top: 0;
   }
-  
+
   .greeting-card,
   .fortune-card,
-  .wish-wall {
-    padding: 20px;
+  .wish-wall,
+  .message-board,
+  .handwritten {
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
   }
-  
+
   /* 标题样式调整 */
   .section-title {
-    font-size: 20px;
-    margin-bottom: 15px;
+    font-size: clamp(16px, 3vw, 20px);
+    margin-bottom: var(--spacing-md);
+    text-align: center;
   }
-  
+
   /* 时间轴样式调整 */
   .timeline::before {
     left: 20px;
   }
-  
+
   .timeline-item {
     padding-left: 50px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
-  
+
   .timeline-item::before {
     left: 18px;
   }
-  
+
   .timeline-content {
-    padding: 15px;
-    font-size: 14px;
+    padding: var(--spacing-md);
+    font-size: clamp(12px, 2.5vw, 14px);
+    line-height: 1.6;
   }
-  
+
   /* 愿望墙样式调整 */
   .wish-list {
     grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
   }
-  
+
   .wish-input-area {
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: center;
   }
-  
+
   /* 游戏卡片调整 */
   .game-card {
-    padding: 20px;
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-lg);
   }
-  
+
   .game-icon {
-    font-size: 36px;
+    font-size: clamp(28px, 5vw, 36px);
   }
-  
+
   /* 手写信件调整 */
   .handwritten {
-    font-size: 16px;
-    padding: 20px;
-    line-height: 2;
+    font-size: clamp(12px, 2.5vw, 14px);
+    padding: var(--spacing-md);
+    line-height: 1.8;
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: var(--border-radius-md);
   }
-  
+
   /* 按钮样式调整 */
   .secret-btn,
-  .share-btn {
-    padding: 10px 20px;
-    font-size: 14px;
+  .primary-btn {
+    padding: 14px 30px;
+    font-size: clamp(14px, 2.5vw, 16px);
+    width: 100%;
+    margin: 8px 0;
+    border-radius: var(--border-radius-full);
+    min-height: 48px;
   }
-  
-  /* 音频播放器调整 */
-  .audio-player {
-    padding: 20px;
+
+  /* 输入框调整 */
+  .wish-input,
+  .message-input,
+  .message-author {
     width: 100%;
     box-sizing: border-box;
+    padding: 12px var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
   }
-  
-  .audio-player audio {
+
+  /* 卡片式布局优化 */
+  .fortune-content,
+  .game-content {
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+  }
+
+  /* 输入区域对齐 */
+  .wish-input-area,
+  .message-input-area {
+    align-items: center;
+  }
+
+  /* 输入框宽度调整 */
+  .wish-input,
+  .message-input {
+    max-width: 100%;
+  }
+
+  .message-author {
     max-width: 100%;
   }
 }
@@ -1637,53 +1739,146 @@ body {
 @media (max-width: 480px) {
   /* 容器调整 */
   .container {
-    padding: 10px;
+    padding: 15px;
+    max-width: calc(100vw - 30px);
+    box-sizing: border-box;
+    margin: 0 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /* 隐藏滚动条但保持滚动功能 */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
-  
+
+  /* 确保整个页面不会水平溢出 */
+  body,
+  html {
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    /* 隐藏滚动条但保持滚动功能 */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* 隐藏Chrome/Safari滚动条 */
+  body::-webkit-scrollbar,
+  html::-webkit-scrollbar,
+  .container::-webkit-scrollbar {
+    display: none;
+  }
+
   /* 新年装饰调整 */
   .new-year-decorations {
     display: none;
   }
-  
+
   /* 封面样式调整 */
   .cover {
-    padding: 30px 10px;
-    border-radius: 15px;
+    padding: 35px 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
-  
+
   .cover-title {
     font-size: 24px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    line-height: 1.3;
   }
-  
+
   .cover-subtitle {
     font-size: 14px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    opacity: 0.95;
   }
-  
+
   .countdown {
-    gap: 8px;
+    gap: 10px;
   }
-  
+
   .countdown-number {
-    font-size: 20px;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    min-width: 35px !important;
+    display: inline-block !important;
+    text-align: center !important;
+    color: var(--gold-color) !important;
+    font-family: 'Inter', sans-serif !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4) !important;
+    white-space: nowrap !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
   }
-  
+
+  .countdown-time {
+    gap: 5px !important;
+    padding: 10px 15px !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px) !important;
+    justify-content: center !important;
+    flex-wrap: nowrap !important;
+    width: auto !important;
+    min-width: auto !important;
+    max-width: 200px !important;
+    margin: 0 auto !important;
+    border-radius: 25px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .countdown-separator {
+    margin: 0 8px;
+    font-size: 20px;
+    line-height: 45px;
+  }
+
+  .countdown-item {
+    width: 60px;
+    height: 50px;
+    min-width: 60px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   /* 卡片样式调整 */
   .greeting-card,
   .fortune-card,
   .wish-wall {
-    padding: 15px;
-    border-radius: 12px;
+    padding: 20px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   }
-  
-  /* 标题样式调整 */
+
+  /* 统一标题样式 */
   .greeting-title,
   .section-title {
-    font-size: 18px;
-    margin-bottom: 12px;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 10px;
+    position: relative;
   }
-  
+
+  .greeting-title::after,
+  .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #c91f37, #e63946);
+    border-radius: 2px;
+  }
+
   /* 文字样式调整 */
   .greeting-text,
   .fortune-label,
@@ -1691,162 +1886,260 @@ body {
   .game-title,
   .game-result,
   .wish-content,
-  .secret-content,
-  .audio-hint {
+  .secret-content {
     font-size: 14px;
+    line-height: 1.7;
   }
-  
+
   /* 时间轴样式调整 */
-  .timeline-item {
-    padding-left: 45px;
+  .timeline::before {
+    left: 20px;
   }
-  
+
+  .timeline-item {
+    padding-left: 50px;
+    margin-bottom: 25px;
+  }
+
+  .timeline-item::before {
+    left: 18px;
+  }
+
   .timeline-date {
     font-size: 12px;
+    font-weight: bold;
   }
-  
+
   /* 游戏卡片调整 */
   .game-card {
-    padding: 15px;
-    border-radius: 12px;
+    padding: 25px;
+    border-radius: 18px;
+    margin: 0 auto;
+    max-width: 90%;
   }
-  
+
   .game-icon {
-    font-size: 32px;
-    margin-bottom: 10px;
+    font-size: 40px;
+    margin-bottom: 15px;
   }
-  
+
   /* 手写信件调整 */
   .handwritten {
-    font-size: 14px;
-    padding: 15px;
-    line-height: 1.8;
+    font-size: 17px;
+    padding: 25px;
+    line-height: 2;
+    text-align: center;
+    border-radius: 18px;
   }
-  
+
   /* 按钮样式调整 */
-  .secret-btn,
-  .share-btn {
-    padding: 12px 24px;
-    font-size: 15px;
-    border-radius: 20px;
+  .secret-btn {
+    padding: 16px 35px;
+    font-size: 16px;
+    border-radius: 30px;
     width: 100%;
-    margin: 5px 0;
+    margin: 10px 0;
+    box-shadow: 0 6px 15px rgba(110, 72, 170, 0.3);
+    min-height: 50px;
+    font-weight: bold;
   }
-  
+
   /* 输入框调整 */
-  .wish-input {
-    padding: 10px;
-    font-size: 14px;
+  .wish-input,
+  .message-input,
+  .message-author {
+    padding: 14px 18px;
+    font-size: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 15px;
+    border: 2px solid #f5efe0;
+    transition: all 0.3s ease;
   }
-  
+
+  .wish-input:focus,
+  .message-input:focus,
+  .message-author:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(110, 72, 170, 0.1);
+  }
+
   /* 彩蛋内容调整 */
   .secret-content {
-    padding: 15px;
-    font-size: 13px;
+    padding: 25px;
+    font-size: 15px;
+    max-width: 100%;
+    margin: 25px auto;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #f5efe0 0%, #ffffff 100%);
   }
-  
-  /* 音频播放器调整 */
-  .audio-player {
-    padding: 15px;
-  }
-  
+
   /* 新年运势卡片调整 */
   .fortune-card {
-    padding: 15px;
+    padding: 25px;
+    background: linear-gradient(135deg, #4a90a4 0%, #f5efe0 100%);
   }
-  
+
   .fortune-content {
-    padding: 15px;
+    padding: 25px;
     text-align: center;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
-  
+
   .fortune-item {
     display: block;
     text-align: center;
-    padding: 10px 0;
+    padding: 15px 0;
+    margin: 8px 0;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
   }
-  
+
   .fortune-label {
-    font-size: 14px;
+    font-size: 15px;
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--primary-color);
   }
-  
+
   .fortune-value {
-    font-size: 16px;
+    font-size: 18px;
     display: block;
+    font-weight: bold;
+    background: linear-gradient(135deg, #c91f37, #e63946);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  
+
   .fortune-tip {
-    font-size: 12px;
-    margin-top: 10px;
+    font-size: 14px;
+    margin-top: 15px;
+    color: var(--text-muted);
+    font-style: italic;
   }
-  
-  /* 手写信调整 */
-  .handwritten {
-    font-size: 16px;
-    padding: 20px;
-    line-height: 1.8;
-    text-align: center;
-  }
-  
+
   .signature {
-    font-size: 16px;
+    font-size: 18px;
     text-align: center;
+    margin-top: 30px;
+    font-weight: bold;
+    color: var(--secondary-color);
+  }
+
+  /* 留言板调整 */
+  .message-input-area {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* 愿望墙调整 */
+  .wish-list {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .wish-item {
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 分享按钮调整 */
+  .share-section {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  /* 新年愿望墙优化 */
+  .wish-input-area {
+    margin-bottom: 25px;
+  }
+
+  /* 新年装饰元素移动端优化 */
+  .new-year-decorations .lantern:nth-child(1),
+  .new-year-decorations .lantern:nth-child(2) {
+    top: 5%;
+  }
+
+  .new-year-decorations .lantern:nth-child(3),
+  .new-year-decorations .lantern:nth-child(4) {
+    display: none;
+  }
+
+  .new-year-decorations .chinese-knot {
+    top: 15%;
+  }
+
+  /* 优化移动端滚动体验 */
+  .container {
+    padding: var(--spacing-sm);
+  }
+
+  /* 优化移动端按钮点击区域 */
+  .primary-btn,
+  .like-btn {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 优化移动端输入框体验 */
+  textarea {
+    min-height: 80px;
+    resize: vertical;
   }
 }
 
-/* 背景音乐控制按钮样式 */
-.music-control-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #6e48aa, #9d50bb);
-  color: white;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(110, 72, 170, 0.3);
-  transition: all 0.3s ease;
-  z-index: 1200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* 平板设备优化 */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .container {
+    max-width: 700px;
+  }
+
+  .new-year-decorations .lantern {
+    font-size: 36px;
+  }
+
+  .new-year-decorations .chinese-knot {
+    font-size: 28px;
+  }
+
+  .fortune-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.music-control-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(110, 72, 170, 0.4);
-}
-
-.music-control-btn:active {
-  transform: translateY(-1px);
+/* 大屏幕优化 */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 900px;
+  }
 }
 
 /* 触摸设备优化 */
 @media (hover: none) and (pointer: coarse) {
   /* 增加点击区域 */
   .secret-btn,
-  .share-btn,
   .game-card,
-  .fortune-content,
-  .music-control-btn {
+  .fortune-content {
     min-height: 44px;
     min-width: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  
+
   /* 移除悬停效果，添加点击效果 */
   .secret-btn:active:not(:disabled),
-  .share-btn:active,
   .game-card:active,
-  .fortune-content:active,
-  .music-control-btn:active {
+  .fortune-content:active {
     transform: scale(0.95);
     transition: transform 0.1s ease;
   }
