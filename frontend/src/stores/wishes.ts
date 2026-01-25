@@ -1,16 +1,29 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { defineStore } from 'pinia'
+// 由于 firebase 是 JavaScript 模块，添加类型声明
+// @ts-ignore
 import firebase from '../utils/firebase'
+
+// 定义愿望类型
+interface Wish {
+  id?: string
+  content: string
+  likes: number
+  created_at: string
+}
+
+// 定义订阅类型
+type Subscription = any
 
 export const useWishesStore = defineStore('wishes', () => {
   // 响应式状态
   const newWish = ref('')
-  const wishes = ref([])
+  const wishes = ref<Wish[]>([])
   const loading = ref(false)
   const error = ref('')
 
   // 实时订阅引用
-  let wishesSubscription = null
+  let wishesSubscription: Subscription | null = null
 
   // 从Firebase加载愿望
   const loadWishes = async () => {
@@ -74,7 +87,7 @@ export const useWishesStore = defineStore('wishes', () => {
   }
 
   // 点赞功能
-  const likeWish = id => {
+  const likeWish = (id: string) => {
     if (loading.value) return
 
     // 在前端更新点赞数（模拟）
@@ -98,9 +111,8 @@ export const useWishesStore = defineStore('wishes', () => {
     try {
       wishesSubscription = firebase
         .channel('wishes-channel')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'wishes' }, payload => {
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'wishes' }, (payload: any) => {
           console.log('愿望更新:', payload)
-          // 重新加载愿望以保持最新
           loadWishes()
         })
         .subscribe()
@@ -138,4 +150,6 @@ export const useWishesStore = defineStore('wishes', () => {
     subscribeToWishes,
     unsubscribeFromWishes
   }
+}, {
+  persist: true
 })

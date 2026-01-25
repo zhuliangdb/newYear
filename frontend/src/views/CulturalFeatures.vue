@@ -1,5 +1,7 @@
 <template>
   <div class="cultural-features">
+    <!-- 飘雪效果 -->
+    <Snowfall :icon-type="3" />
     <!-- 背景装饰 -->
     <div class="background-decor" />
 
@@ -328,7 +330,7 @@
     <!-- 音乐播放器 -->
     <div class="music-player">
       <meting-js
-        id="8205467723"
+        id="9515726248"
         server="tencent"
         type="playlist"
         fixed="true"
@@ -337,12 +339,12 @@
         theme="#c91f37"
         loop="all"
         order="random"
-        preload="auto"
-        volume="0.3"
+        preload="none"
+        volume="0.5"
         mutex="true"
         list-folded="true"
         list-max-height="340"
-        lrc-type="1"
+        lrc-type="0"
       />
     </div>
 
@@ -710,6 +712,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import Snowfall from '../components/Snowfall.vue'
 
 // 模态框状态
 const showModal = ref(false)
@@ -1696,11 +1699,11 @@ const startCulturalQuiz = () => {
 .music-player {
   position: fixed;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 20px;
+  transform: none;
   z-index: 1000;
-  width: 90%;
-  max-width: 600px;
+  width: 320px;
+  max-width: 90vw;
 }
 
 /* 调整APlayer样式以匹配主题 */
@@ -1737,23 +1740,41 @@ const startCulturalQuiz = () => {
 
   .section-description {
     font-size: 16px;
+    padding: 0 16px;
   }
 
   .cultural-grid,
   .interactive-grid,
   .knowledge-grid {
     grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 0 16px;
   }
 
   .cultural-card,
   .interactive-card,
   .knowledge-card {
-    margin-bottom: 24px;
+    margin-bottom: 0;
   }
 
   .footer-content {
     grid-template-columns: 1fr;
     gap: 32px;
+    padding: 0 16px;
+  }
+
+  .cultural-image {
+    height: 200px;
+  }
+
+  .interactive-icon {
+    font-size: 56px;
+  }
+
+  .music-player {
+    width: 280px;
+    bottom: 10px;
+    right: 10px;
   }
 }
 
@@ -1790,6 +1811,186 @@ const startCulturalQuiz = () => {
   .modal-content {
     padding: 24px;
     width: 95%;
+  }
+
+  .cultural-image {
+    height: 160px;
+  }
+
+  .cultural-title,
+  .interactive-title,
+  .knowledge-title {
+    font-size: 18px;
+  }
+
+  .cultural-text,
+  .interactive-description,
+  .knowledge-text {
+    font-size: 14px;
+  }
+
+  .interactive-icon {
+    font-size: 48px;
+  }
+
+  .interaction-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .primary-btn {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+}
+
+/* 桌面端大屏幕优化 */
+@media (min-width: 1400px) {
+  .cultural-grid,
+  .interactive-grid,
+  .knowledge-grid,
+  .footer-content {
+    max-width: 1400px;
+  }
+
+  .cultural-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .interactive-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .knowledge-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 64px;
+  }
+
+  .hero-content {
+    max-width: 900px;
+  }
+
+  .hero-title {
+    font-size: 56px;
+  }
+
+  .hero-subtitle {
+    font-size: 24px;
+  }
+
+  .section-title {
+    font-size: 40px;
+  }
+
+  .section-description {
+    font-size: 20px;
+    max-width: 700px;
+  }
+
+  .cultural-card {
+    padding: 32px;
+  }
+
+  .cultural-image {
+    height: 280px;
+  }
+
+  .cultural-title,
+  .interactive-title,
+  .knowledge-title {
+    font-size: 24px;
+  }
+
+  .cultural-text,
+  .interactive-description,
+  .knowledge-text {
+    font-size: 16px;
+  }
+
+  .interactive-card {
+    padding: 40px 32px;
+  }
+
+  .interactive-icon {
+    font-size: 72px;
+  }
+
+  .knowledge-card {
+    padding: 28px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .cultural-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .interactive-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .knowledge-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .cultural-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .interactive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .knowledge-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .interaction-btn,
+  .primary-btn,
+  .secondary-btn,
+  .modal-close,
+  .character-option,
+  .costume-option,
+  .face-option,
+  .color-option,
+  .pattern-option,
+  .quiz-option {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .interaction-btn:active,
+  .primary-btn:active,
+  .secondary-btn:active {
+    transform: scale(0.95);
+  }
+
+  .cultural-card:active,
+  .interactive-card:active,
+  .knowledge-card:active {
+    transform: translateY(-2px);
+  }
+
+  .character-option:active,
+  .costume-option:active,
+  .face-option:active,
+  .color-option:active,
+  .pattern-option:active,
+  .quiz-option:active {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
   }
 }
 </style>

@@ -10,7 +10,7 @@ export const useCounterStore = defineStore('counter', () => {
     seconds: 0
   })
 
-  let countdownTimer = null
+  let countdownTimer: number | null = null
 
   // 计算属性
   const formattedCountdown = computed(() => {
@@ -27,7 +27,7 @@ export const useCounterStore = defineStore('counter', () => {
     // 计算距离2026年春节（2月17日）的时间差
     const now = new Date()
     const springFestival = new Date('2026-02-17')
-    const diffTime = Math.abs(springFestival - now)
+    const diffTime = Math.abs(springFestival.getTime() - now.getTime())
 
     // 计算天、时、分、秒
     const days = Math.floor(diffTime / (1000 * 60 * 60 * 24))
@@ -47,7 +47,7 @@ export const useCounterStore = defineStore('counter', () => {
     if (countdownTimer) return
 
     calculateCountdown()
-    countdownTimer = setInterval(() => {
+    countdownTimer = window.setInterval(() => {
       calculateCountdown()
     }, 1000)
   }

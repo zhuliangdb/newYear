@@ -1,29 +1,29 @@
 <template>
   <div class="about">
-    <!-- 背景装饰 -->
-    <div class="background-decor" />
-
-    <!-- 新年装饰 -->
-    <div class="new-year-decorations">
-      <div class="lantern" style="left: 10%; top: 10%; animation-delay: 0s">🏮</div>
-      <div class="lantern" style="right: 10%; top: 15%; animation-delay: 1s">🏮</div>
-      <div class="chinese-knot" style="left: 5%; top: 40%">🧧</div>
-      <div class="chinese-knot" style="right: 5%; top: 45%">🧧</div>
-    </div>
-
+    <!-- 飘雪效果 -->
+    <Snowfall :icon-type="1" />
+    
     <!-- 英雄区域 -->
     <section class="hero">
       <div class="hero-content">
-        <h1 class="hero-title">关于我们</h1>
-        <p class="hero-subtitle">了解新年惊喜项目的背景和团队</p>
+        <h1 class="hero-title">
+          关于我们
+        </h1>
+        <p class="hero-subtitle">
+          了解新年惊喜项目的背景和团队
+        </p>
       </div>
     </section>
 
     <!-- 项目介绍 -->
     <section class="project-section">
       <div class="section-header">
-        <h2 class="section-title">项目介绍</h2>
-        <p class="section-description">了解新年惊喜项目的初衷和目标</p>
+        <h2 class="section-title">
+          项目介绍
+        </h2>
+        <p class="section-description">
+          了解新年惊喜项目
+        </p>
       </div>
 
       <div class="project-content">
@@ -31,44 +31,20 @@
           <img
             src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Modern%20Chinese%20New%20Year%20project%20with%20traditional%20cultural%20elements%2C%20festive%20atmosphere%2C%20high%20quality%20digital%20art&image_size=landscape_16_9"
             alt="项目介绍"
-          />
+          >
         </div>
         <div class="project-text">
           <p class="project-paragraph">
-            新年惊喜项目是一个融合安徽、河南地区特有新年文化元素的在线平台，旨在通过现代数字技术展示传统地域文化的魅力，为用户带来独特的新年体验。
+            新年惊喜项目是一个个人使用的在线平台，融合了安徽、河南地区的新年文化元素，通过现代数字技术展示传统地域文化的魅力，为用户带来独特的新年体验。
           </p>
-          <p class="project-paragraph">我们的目标是：</p>
+          <p class="project-paragraph">
+            我们的目标是：
+          </p>
           <ul class="project-goals">
             <li>传承和弘扬安徽、河南地区的优秀传统文化</li>
             <li>通过现代数字技术创新传统文化的展示方式</li>
             <li>为用户提供丰富多样的新年互动体验</li>
-            <li>促进地域文化的交流和传播</li>
           </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- 团队介绍 -->
-    <section class="team-section">
-      <div class="section-header">
-        <h2 class="section-title">团队介绍</h2>
-        <p class="section-description">认识我们的核心团队成员</p>
-      </div>
-
-      <div class="team-grid">
-        <div v-for="(member, index) in teamMembers" :key="index" class="team-card">
-          <div class="team-avatar">
-            <img :src="member.avatar" :alt="member.name" />
-          </div>
-          <h3 class="team-name">
-            {{ member.name }}
-          </h3>
-          <p class="team-role">
-            {{ member.role }}
-          </p>
-          <p class="team-description">
-            {{ member.description }}
-          </p>
         </div>
       </div>
     </section>
@@ -76,12 +52,20 @@
     <!-- 技术栈 -->
     <section class="tech-section">
       <div class="section-header">
-        <h2 class="section-title">技术栈</h2>
-        <p class="section-description">了解我们使用的技术和工具</p>
+        <h2 class="section-title">
+          技术栈
+        </h2>
+        <p class="section-description">
+          项目使用的技术和工具
+        </p>
       </div>
 
       <div class="tech-grid">
-        <div v-for="(tech, index) in techStack" :key="index" class="tech-card">
+        <div
+          v-for="(tech, index) in techStack"
+          :key="index"
+          class="tech-card"
+        >
           <div class="tech-icon">
             {{ tech.icon }}
           </div>
@@ -95,94 +79,6 @@
       </div>
     </section>
 
-    <!-- 联系方式 -->
-    <section class="contact-section">
-      <div class="section-header">
-        <h2 class="section-title">联系方式</h2>
-        <p class="section-description">与我们取得联系</p>
-      </div>
-
-      <div class="contact-content">
-        <div class="contact-info">
-          <div class="contact-item">
-            <div class="contact-icon">📧</div>
-            <div class="contact-details">
-              <h4 class="contact-title">邮箱</h4>
-              <p class="contact-value">contact@newyearsurprise.com</p>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-icon">📱</div>
-            <div class="contact-details">
-              <h4 class="contact-title">电话</h4>
-              <p class="contact-value">+86 123 4567 8910</p>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-icon">🌐</div>
-            <div class="contact-details">
-              <h4 class="contact-title">网站</h4>
-              <p class="contact-value">www.newyearsurprise.com</p>
-            </div>
-          </div>
-        </div>
-        <div class="contact-form">
-          <h3 class="form-title">发送消息</h3>
-          <form class="message-form">
-            <div class="form-group">
-              <label for="name">姓名</label>
-              <input id="name" type="text" placeholder="请输入您的姓名" />
-            </div>
-            <div class="form-group">
-              <label for="email">邮箱</label>
-              <input id="email" type="email" placeholder="请输入您的邮箱" />
-            </div>
-            <div class="form-group">
-              <label for="message">消息</label>
-              <textarea id="message" rows="4" placeholder="请输入您的消息" />
-            </div>
-            <button type="submit" class="primary-btn">发送消息</button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <!-- 免责声明 -->
-    <section class="disclaimer-section">
-      <div class="section-header">
-        <h2 class="section-title">免责声明</h2>
-        <p class="section-description">了解项目的法律信息</p>
-      </div>
-
-      <div class="disclaimer-content">
-        <p class="disclaimer-text">
-          本项目仅用于展示和传播安徽、河南地区的新年文化，所有内容仅供参考。如有任何问题或建议，欢迎联系我们。
-        </p>
-        <p class="disclaimer-text">© 2026 新年惊喜项目. 保留所有权利。</p>
-      </div>
-    </section>
-
-    <!-- 音乐播放器 -->
-    <div class="music-player">
-      <meting-js
-        server="tencent"
-        type="playlist"
-        id="8205467723"
-        fixed="true"
-        mini="true"
-        autoplay="false"
-        theme="#c91f37"
-        loop="all"
-        order="random"
-        preload="auto"
-        volume="0.3"
-        mutex="true"
-        listFolded="true"
-        listMaxHeight="340"
-        lrcType="1"
-      />
-    </div>
-
     <!-- 页脚 -->
     <footer class="footer">
       <div class="footer-content">
@@ -191,44 +87,15 @@
             <span class="logo-text">新年惊喜</span>
             <span class="logo-icon">🎊</span>
           </div>
-          <p class="footer-description">为您带来最美好的新年体验，让科技为传统节日增添光彩。</p>
-        </div>
-        <div class="footer-section">
-          <h4 class="footer-title">快速链接</h4>
-          <ul class="footer-links">
-            <li>
-              <router-link to="/"> 首页 </router-link>
-            </li>
-            <li>
-              <router-link to="/new-year-surprise"> 新年惊喜 </router-link>
-            </li>
-            <li>
-              <router-link to="/cultural-features"> 文化特色 </router-link>
-            </li>
-            <li>
-              <router-link to="/activities"> 活动 </router-link>
-            </li>
-            <li>
-              <router-link to="/about"> 关于我们 </router-link>
-            </li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h4 class="footer-title">联系我们</h4>
-          <div class="contact-details">
-            <div class="contact-item">
-              <span class="contact-icon">📧</span>
-              <span class="contact-value">contact@newyearsurprise.com</span>
-            </div>
-            <div class="contact-item">
-              <span class="contact-icon">📱</span>
-              <span class="contact-value">+86 123 4567 8910</span>
-            </div>
-          </div>
+          <p class="footer-description">
+            为您带来最美好的新年体验，让科技为传统节日增添光彩。
+          </p>
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="copyright">© 2026 新年惊喜. 保留所有权利.</p>
+        <p class="copyright">
+          © 2026 新年惊喜. 保留所有权利.
+        </p>
       </div>
     </footer>
   </div>
@@ -236,38 +103,7 @@
 
 <script setup>
 import { ref } from 'vue'
-
-// 团队成员数据
-const teamMembers = ref([
-  {
-    name: '张三',
-    role: '项目负责人',
-    description: '负责项目的整体规划和协调，拥有丰富的文化项目管理经验',
-    avatar:
-      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Professional%20Chinese%20male%20project%20manager%2C%20business%20attire%2C%20friendly%20smile%2C%20high%20quality%20professional%20portrait&image_size=square'
-  },
-  {
-    name: '李四',
-    role: '前端开发',
-    description: '负责项目的前端开发，精通Vue.js和现代前端技术',
-    avatar:
-      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Professional%20Chinese%20male%20frontend%20developer%2C%20casual%20attire%2C%20friendly%20smile%2C%20high%20quality%20professional%20portrait&image_size=square'
-  },
-  {
-    name: '王五',
-    role: '后端开发',
-    description: '负责项目的后端开发，精通Java和Spring Boot框架',
-    avatar:
-      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Professional%20Chinese%20male%20backend%20developer%2C%20casual%20attire%2C%20friendly%20smile%2C%20high%20quality%20professional%20portrait&image_size=square'
-  },
-  {
-    name: '赵六',
-    role: 'UI设计师',
-    description: '负责项目的UI设计，擅长将传统元素与现代设计相结合',
-    avatar:
-      'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Professional%20Chinese%20female%20UI%20designer%2C%20creative%20attire%2C%20friendly%20smile%2C%20high%20quality%20professional%20portrait&image_size=square'
-  }
-])
+import Snowfall from '../components/Snowfall.vue'
 
 // 技术栈数据
 const techStack = ref([
@@ -328,65 +164,7 @@ const techStack = ref([
   position: relative;
 }
 
-/* 背景装饰 */
-.background-decor {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image:
-    radial-gradient(circle at 20% 30%, rgba(201, 31, 55, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(212, 175, 55, 0.1) 0%, transparent 50%);
-  z-index: -1;
-  opacity: 0.4;
-}
 
-/* 新年装饰 */
-.new-year-decorations {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1100;
-}
-
-/* 灯笼 */
-.lantern {
-  position: absolute;
-  font-size: 48px;
-  animation: lanternSwing 3s ease-in-out infinite;
-  transform-origin: center top;
-}
-
-@keyframes lanternSwing {
-  0%,
-  100% {
-    transform: rotate(-5deg);
-  }
-  50% {
-    transform: rotate(5deg);
-  }
-}
-
-/* 中国结 */
-.chinese-knot {
-  position: absolute;
-  font-size: 36px;
-  animation: float 4s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-}
 
 /* 英雄区域 */
 .hero {
@@ -549,64 +327,7 @@ const techStack = ref([
   font-weight: bold;
 }
 
-/* 团队网格 */
-.team-grid {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 32px;
-}
 
-/* 团队卡片 */
-.team-card {
-  background: var(--card-bg);
-  border-radius: 24px;
-  padding: 32px;
-  text-align: center;
-  box-shadow: var(--box-shadow);
-  transition: all 0.3s ease;
-}
-
-.team-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.team-avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 0 auto 24px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.team-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.team-name {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--primary-color);
-  margin-bottom: 8px;
-}
-
-.team-role {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 16px;
-}
-
-.team-description {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.6;
-}
 
 /* 技术栈网格 */
 .tech-grid {
@@ -650,120 +371,6 @@ const techStack = ref([
   font-size: 14px;
   color: #666;
   line-height: 1.6;
-}
-
-/* 联系内容 */
-.contact-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  gap: 64px;
-  flex-wrap: wrap;
-}
-
-.contact-info {
-  flex: 1;
-  min-width: 300px;
-}
-
-.contact-form {
-  flex: 1;
-  min-width: 300px;
-  background: var(--card-bg);
-  padding: 32px;
-  border-radius: 24px;
-  box-shadow: var(--box-shadow);
-}
-
-.contact-item {
-  display: flex;
-  gap: 24px;
-  margin-bottom: 32px;
-  align-items: flex-start;
-}
-
-.contact-icon {
-  font-size: 32px;
-  color: var(--primary-color);
-}
-
-.contact-details h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--primary-color);
-  margin-bottom: 8px;
-}
-
-.contact-details p {
-  font-size: 14px;
-  color: #666;
-}
-
-.form-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--primary-color);
-  margin-bottom: 24px;
-  text-align: center;
-}
-
-.message-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.form-group label {
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--primary-color);
-}
-
-.form-group input,
-.form-group textarea {
-  padding: 12px 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 12px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(201, 31, 55, 0.1);
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-/* 免责声明内容 */
-.disclaimer-content {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 24px;
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-  padding: 32px;
-  border-radius: 24px;
-  text-align: center;
-  box-shadow: var(--box-shadow);
-}
-
-.disclaimer-text {
-  font-size: 16px;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 16px;
 }
 
 /* 按钮样式 */
@@ -935,35 +542,6 @@ const techStack = ref([
   }
 }
 
-/* 音乐播放器样式 */
-.music-player {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  width: 90%;
-  max-width: 600px;
-}
-
-/* 调整APlayer样式以匹配主题 */
-:deep(.aplayer) {
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-:deep(.aplayer-lrc-contents p.aplayer-lrc-current) {
-  color: var(--primary-color);
-}
-
-:deep(.aplayer .aplayer-list ol li.aplayer-list-light) {
-  color: var(--primary-color);
-}
-
-:deep(.aplayer .aplayer-button.aplayer-play .aplayer-icon) {
-  color: var(--primary-color);
-}
-
 /* 响应式设计 */
 @media (max-width: 768px) {
   .hero-title {
@@ -980,29 +558,35 @@ const techStack = ref([
 
   .section-description {
     font-size: 16px;
+    padding: 0 16px;
   }
 
-  .project-content,
-  .contact-content {
+  .project-content {
     flex-direction: column;
+    padding: 0 16px;
+    gap: 32px;
   }
 
   .project-image,
-  .project-text,
-  .contact-info,
-  .contact-form {
+  .project-text {
     flex: 1;
     width: 100%;
   }
 
-  .team-grid,
   .tech-grid {
     grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 0 16px;
+  }
+
+  .tech-card {
+    padding: 24px 16px;
   }
 
   .footer-content {
     grid-template-columns: 1fr;
     gap: 32px;
+    padding: 0 16px;
   }
 }
 
@@ -1020,10 +604,7 @@ const techStack = ref([
   }
 
   .project-section,
-  .team-section,
-  .tech-section,
-  .contact-section,
-  .disclaimer-section {
+  .tech-section {
     padding: 60px 0;
   }
 
@@ -1031,15 +612,113 @@ const techStack = ref([
     margin-bottom: 48px;
   }
 
-  .project-content,
-  .contact-content {
+  .project-content {
     padding: 0 16px;
   }
 
-  .team-card,
-  .tech-card,
-  .contact-form {
-    padding: 24px;
+  .tech-card {
+    padding: 24px 16px;
+  }
+
+  .tech-icon {
+    font-size: 40px;
+  }
+
+  .tech-name {
+    font-size: 18px;
+  }
+
+  .tech-description {
+    font-size: 14px;
+  }
+}
+
+/* 桌面端大屏幕优化 */
+@media (min-width: 1400px) {
+  .project-content,
+  .tech-grid,
+  .footer-content {
+    max-width: 1400px;
+  }
+
+  .project-content {
+    gap: 80px;
+  }
+
+  .tech-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 64px;
+  }
+
+  .hero-content {
+    max-width: 900px;
+  }
+
+  .hero-title {
+    font-size: 56px;
+  }
+
+  .hero-subtitle {
+    font-size: 24px;
+  }
+
+  .section-title {
+    font-size: 40px;
+  }
+
+  .section-description {
+    font-size: 20px;
+    max-width: 700px;
+  }
+
+  .tech-card {
+    padding: 40px 32px;
+  }
+
+  .tech-icon {
+    font-size: 56px;
+  }
+
+  .tech-name {
+    font-size: 24px;
+  }
+
+  .tech-description {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .tech-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .tech-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .primary-btn,
+  .tech-card {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .primary-btn:active {
+    transform: scale(0.95);
+  }
+
+  .tech-card:active {
+    transform: translateY(-2px);
   }
 }
 </style>

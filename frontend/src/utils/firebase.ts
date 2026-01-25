@@ -1,0 +1,146 @@
+// Firebase配置文件
+import { initializeApp } from 'firebase/app'
+import { getDatabase, ref, push, onValue, DatabaseReference, DataSnapshot } from 'firebase/database'
+import { getCsrfToken } from './csrf'
+
+// Firebase配置信息
+// 从环境变量中获取配置
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || '',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || '',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || ''
+}
+
+// 初始化Firebase应用
+const app = initializeApp(firebaseConfig)
+
+// 获取实时数据库引用
+const database = getDatabase(app)
+
+// 定义类型
+interface FirebaseError {
+  message: string
+  code?: string
+}
+
+interface FirebaseResult<T> {
+  data: T
+  error: FirebaseError | null
+}
+
+interface InsertResult {
+  error: FirebaseError | null
+}
+
+interface FirebaseService {
+  from(table: string): {
+    select(query?: string): {
+      order(orderBy: string, options: { ascending: boolean }): Promise<FirebaseResult<any[]>>
+    }
+    insert(data: any): Promise<InsertResult>
+  }
+  channel(channelName: string): {
+    on(_eventType: string, options: { event: string; schema: string; table: string }, callback: (payload: any) => void): any
+    subscribe(): any
+  }
+  removeChannel(channel: any): void
+}
+
+// 模拟Supabase API的Firebase封装
+const firebaseService: FirebaseService = {
+  // 加载数据
+  from(table: string) {
+    return {
+      select(_query?: string) {
+        return {
+          async order(orderBy: string, { ascending }: { ascending: boolean }): Promise<FirebaseResult<any[]>> {
+            const tableRef: DatabaseReference = ref(database, table)
+            return new Promise<FirebaseResult<any[]>>((resolve) => {
+              onValue(
+                tableRef,
+                (snapshot: DataSnapshot) => {
+                  const data = snapshot.val()
+                  const result = data
+                    ? Object.entries(data).map(([id, value]) => ({ id, ...(value as object) }))
+                    : []
+
+                  // 排序
+                  if (orderBy && result.length > 0) {
+                    result.sort((a, b) => {
+                      const aObj = a as { [key: string]: any }
+                      const bObj = b as { [key: string]: any }
+                      const aVal = aObj[orderBy]
+                      const bVal = bObj[orderBy]
+                      if (ascending) {
+                        return aVal > bVal ? 1 : -1
+                      } else {
+                        return aVal < bVal ? 1 : -1
+                      }
+                    })
+                  }
+
+                  resolve({ data: result, error: null })
+                },
+                { onlyOnce: true }
+              )
+            })
+          }
+        }
+      },
+
+      // 插入数据
+      async insert(data: any): Promise<InsertResult> {
+        try {
+          const tableRef: DatabaseReference = ref(database, table)
+          // 获取CSRF令牌并添加到数据中
+          const csrfToken = getCsrfToken()
+          await push(tableRef, {
+            ...data,
+            created_at: new Date().toISOString(),
+            csrf_token: csrfToken
+          })
+          return { error: null }
+        } catch (error: any) {
+          return { error: { message: error.message, code: error.code } }
+        }
+      }
+    }
+  },
+
+  // 频道订阅
+  channel(_channelName: string) {
+    return {
+      on(_eventType: string, { table, schema, event: _event }: { event: string; schema: string; table: string }, callback: (payload: any) => void) {
+        // 这里只处理table参数，忽略其他Supabase特定参数
+        const tableRef: DatabaseReference = ref(database, table)
+        onValue(tableRef, (_snapshot: DataSnapshot) => {
+          // 构造符合预期的payload
+          const payload = {
+            table,
+            eventType: 'INSERT',
+            schema: schema || 'public'
+          }
+          if (typeof callback === 'function') {
+            callback(payload)
+          }
+        })
+        return this
+      },
+
+      subscribe() {
+        return this
+      }
+    }
+  },
+
+  // 移除频道订阅
+  removeChannel(_channel: any) {
+    // Firebase的onValue订阅会自动管理，这里不需要额外操作
+  }
+}
+
+export default firebaseService

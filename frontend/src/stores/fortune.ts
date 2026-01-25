@@ -11,7 +11,7 @@ export const useFortuneStore = defineStore('fortune', () => {
   ])
 
   // 固定数据
-  const fortuneOptions = {
+  const fortuneOptions: Record<string, string[]> = {
     事业运: ['大吉', '中吉', '小吉', '上上签', '吉星高照'],
     财运: ['大吉', '中吉', '小吉', '财运亨通', '财源广进'],
     桃花运: ['大吉', '中吉', '小吉', '桃花运旺', '缘分到来'],

@@ -13,7 +13,7 @@ export default defineConfig({
       template: {
         compilerOptions: {
           // 配置自定义元素，解决meting-js标签警告
-          isCustomElement: (tag) => tag === 'meting-js'
+          isCustomElement: (tag: string) => tag === 'meting-js'
         }
       }
     }),
@@ -94,7 +94,7 @@ export default defineConfig({
       }
     })
   ],
-  base: '/newYear/',
+  base: process.env.NODE_ENV === 'production' ? '/newYear/' : '/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src')

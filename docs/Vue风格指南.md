@@ -2,6 +2,19 @@
 
 本文档详细描述了项目中Vue代码的风格规范和最佳实践，确保代码的一致性和可维护性。
 
+## 项目使用场景
+
+### 目标用户
+
+- 本项目主要针对1-2人在电脑或平板设备上使用
+
+### 开发考虑因素
+
+- **设备优化**：优先考虑桌面端和平板设备的体验，确保在这些设备上获得最佳效果
+- **性能平衡**：由于是1-2人使用，可适当平衡性能和功能，不必过度优化并发性能
+- **交互设计**：以鼠标和触摸板操作为主，兼顾平板设备的触摸操作
+- **代码复杂度**：考虑到是小团队开发，保持代码的简洁性和可维护性，避免过度设计
+
 ## 代码风格
 
 ### 1. 缩进
@@ -19,21 +32,25 @@
 ### 3. 命名规范
 
 #### 3.1 组件命名
+
 - 使用 PascalCase 命名组件（例如：`CulturalCard.vue`）
 - 组件文件名与组件名称保持一致
 - 对于复合单词，使用驼峰命名法
 
 #### 3.2 变量命名
+
 - 使用 camelCase 命名变量（例如：`userName`）
 - 常量使用 UPPER_CASE 命名（例如：`MAX_COUNT`）
 - 避免使用下划线和连字符
 
 #### 3.3 方法命名
+
 - 使用 camelCase 命名方法（例如：`getUserData`）
 - 方法名应清晰表达其功能
 - 使用动词开头的方法名（例如：`fetchData`、`updateUser`）
 
 #### 3.4 计算属性命名
+
 - 使用 camelCase 命名计算属性（例如：`fullName`）
 - 计算属性名应清晰表达其返回值
 - 避免使用动词开头的计算属性名
@@ -57,11 +74,11 @@
 </template>
 
 <script setup>
-  // 脚本内容
+// 脚本内容
 </script>
 
 <style scoped>
-  /* 样式内容 */
+/* 样式内容 */
 </style>
 ```
 
@@ -219,14 +236,17 @@
 ### 2. 文件命名
 
 #### 2.1 组件文件
+
 - 使用 PascalCase 命名组件文件（例如：`CulturalCard.vue`）
 - 组件文件名应清晰表达其功能
 
 #### 2.2 脚本文件
+
 - 使用 kebab-case 命名脚本文件（例如：`firebase-utils.js`）
 - 脚本文件名应清晰表达其功能
 
 #### 2.3 样式文件
+
 - 使用 kebab-case 命名样式文件（例如：`new-year-theme.css`）
 - 样式文件名应清晰表达其用途
 
@@ -252,34 +272,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
 // 组件属性
 const props = defineProps({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   description: {
     type: String,
-    default: ''
+    default: "",
   },
   buttonText: {
     type: String,
-    default: '了解更多'
-  }
-})
+    default: "了解更多",
+  },
+});
 
 // 组件事件
-const emit = defineEmits(['click'])
+const emit = defineEmits(["click"]);
 
 // 响应式数据
-const isLoading = ref(false)
+const isLoading = ref(false);
 
 // 方法
 const handleClick = () => {
-  emit('click')
-}
+  emit("click");
+};
 </script>
 
 <style scoped>
@@ -338,19 +358,19 @@ const handleClick = () => {
  * @returns {string} 格式化后的日期字符串
  */
 export const formatDate = (date) => {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
-}
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
 /**
  * 生成随机ID
  * @returns {string} 随机ID
  */
 export const generateId = () => {
-  return Math.random().toString(36).substr(2, 9)
-}
+  return Math.random().toString(36).substr(2, 9);
+};
 ```
 
 ## 结论

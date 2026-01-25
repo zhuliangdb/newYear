@@ -1,22 +1,48 @@
 <template>
-  <div v-if="showPopup" class="blessing-popup" @click="closePopup">
-    <div class="popup-content" @click.stop>
+  <div
+    v-if="showPopup"
+    class="blessing-popup"
+    @click="closePopup"
+  >
+    <div
+      class="popup-content"
+      @click.stop
+    >
       <div class="popup-header">
-        <h3 class="popup-title">🎊 新年祝福</h3>
-        <button class="close-btn" @click="closePopup">×</button>
+        <h3 class="popup-title">
+          🎊 新年祝福
+        </h3>
+        <button
+          class="close-btn"
+          @click="closePopup"
+        >
+          ×
+        </button>
       </div>
       <div class="popup-body">
         <div class="blessing-text">
           {{ currentBlessing.text }}
         </div>
-        <div class="blessing-region">{{ currentBlessing.region }}特色祝福</div>
+        <div class="blessing-region">
+          {{ currentBlessing.region }}特色祝福
+        </div>
         <div class="blessing-icon">
           {{ currentBlessing.icon }}
         </div>
       </div>
       <div class="popup-footer">
-        <button class="primary-btn" @click="closePopup">收下祝福</button>
-        <button class="secondary-btn" @click="nextBlessing">下一条</button>
+        <button
+          class="primary-btn"
+          @click="closePopup"
+        >
+          收下祝福
+        </button>
+        <button
+          class="secondary-btn"
+          @click="nextBlessing"
+        >
+          下一条
+        </button>
       </div>
     </div>
   </div>

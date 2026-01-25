@@ -1,17 +1,31 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { defineStore } from 'pinia'
+// 由于 firebase 是 JavaScript 模块，添加类型声明
+// @ts-ignore
 import firebase from '../utils/firebase'
+
+// 定义消息类型
+interface Message {
+  id?: string
+  author: string
+  content: string
+  time: string
+  created_at: string
+}
+
+// 定义订阅类型
+type Subscription = any
 
 export const useMessagesStore = defineStore('messages', () => {
   // 响应式状态
   const newMessage = ref('')
   const messageAuthor = ref('')
-  const messages = ref([])
+  const messages = ref<Message[]>([])
   const loading = ref(false)
   const error = ref('')
 
   // 实时订阅引用
-  let messagesSubscription = null
+  let messagesSubscription: Subscription | null = null
 
   // 从Firebase加载留言
   const loadMessages = async () => {
@@ -79,7 +93,7 @@ export const useMessagesStore = defineStore('messages', () => {
     try {
       messagesSubscription = firebase
         .channel('messages-channel')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, payload => {
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'messages' }, (payload: any) => {
           console.log('留言更新:', payload)
           // 重新加载留言以保持最新
           loadMessages()
@@ -119,4 +133,6 @@ export const useMessagesStore = defineStore('messages', () => {
     subscribeToMessages,
     unsubscribeFromMessages
   }
+}, {
+  persist: true
 })

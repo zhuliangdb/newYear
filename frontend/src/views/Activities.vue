@@ -1,21 +1,47 @@
 <template>
   <div class="activities">
+    <!-- 飘雪效果 -->
+    <Snowfall :icon-type="2" />
     <!-- 背景装饰 -->
     <div class="background-decor" />
 
     <!-- 新年装饰 -->
     <div class="new-year-decorations">
-      <div class="lantern" style="left: 10%; top: 10%; animation-delay: 0s">🏮</div>
-      <div class="lantern" style="right: 10%; top: 15%; animation-delay: 1s">🏮</div>
-      <div class="chinese-knot" style="left: 5%; top: 40%">🧧</div>
-      <div class="chinese-knot" style="right: 5%; top: 45%">🧧</div>
+      <div
+        class="lantern"
+        style="left: 10%; top: 10%; animation-delay: 0s"
+      >
+        🏮
+      </div>
+      <div
+        class="lantern"
+        style="right: 10%; top: 15%; animation-delay: 1s"
+      >
+        🏮
+      </div>
+      <div
+        class="chinese-knot"
+        style="left: 5%; top: 40%"
+      >
+        🧧
+      </div>
+      <div
+        class="chinese-knot"
+        style="right: 5%; top: 45%"
+      >
+        🧧
+      </div>
     </div>
 
     <!-- 英雄区域 -->
     <section class="hero">
       <div class="hero-content">
-        <h1 class="hero-title">新年活动</h1>
-        <p class="hero-subtitle">参与丰富多彩的新年活动，感受安徽、河南地区的节日氛围</p>
+        <h1 class="hero-title">
+          新年活动
+        </h1>
+        <p class="hero-subtitle">
+          参与丰富多彩的新年活动，感受安徽、河南地区的节日氛围
+        </p>
       </div>
     </section>
 
@@ -58,8 +84,12 @@
     <!-- 活动列表 -->
     <section class="activities-section">
       <div class="section-header">
-        <h2 class="section-title">活动列表</h2>
-        <p class="section-description">浏览并参与精彩的新年活动</p>
+        <h2 class="section-title">
+          活动列表
+        </h2>
+        <p class="section-description">
+          浏览并参与精彩的新年活动
+        </p>
       </div>
 
       <div class="activities-grid">
@@ -70,10 +100,16 @@
           @click="showActivityDetail(activity)"
         >
           <div class="activity-image">
-            <img :src="activity.image" :alt="activity.title" />
+            <img
+              :src="activity.image"
+              :alt="activity.title"
+            >
           </div>
           <div class="activity-content">
-            <div class="activity-tag" :class="activity.region">
+            <div
+              class="activity-tag"
+              :class="activity.region"
+            >
               {{ getRegionName(activity.region) }}
             </div>
             <h3 class="activity-title">
@@ -87,7 +123,9 @@
             </p>
             <div class="activity-footer">
               <span class="activity-location">{{ activity.location }}</span>
-              <button class="activity-btn">查看更多</button>
+              <button class="activity-btn">
+                查看更多
+              </button>
             </div>
           </div>
         </div>
@@ -97,29 +135,61 @@
     <!-- 活动日历 -->
     <section class="calendar-section">
       <div class="section-header">
-        <h2 class="section-title">活动日历</h2>
-        <p class="section-description">查看全年的活动安排</p>
+        <h2 class="section-title">
+          活动日历
+        </h2>
+        <p class="section-description">
+          查看全年的活动安排
+        </p>
       </div>
 
       <div class="calendar-container">
         <div class="calendar-header">
-          <button class="calendar-nav" @click="prevMonth">‹</button>
+          <button
+            class="calendar-nav"
+            @click="prevMonth"
+          >
+            ‹
+          </button>
           <h3 class="calendar-title">
             {{ currentMonthYear }}
           </h3>
-          <button class="calendar-nav" @click="nextMonth">›</button>
+          <button
+            class="calendar-nav"
+            @click="nextMonth"
+          >
+            ›
+          </button>
         </div>
         <div class="calendar-grid">
-          <div class="calendar-day header">日</div>
-          <div class="calendar-day header">一</div>
-          <div class="calendar-day header">二</div>
-          <div class="calendar-day header">三</div>
-          <div class="calendar-day header">四</div>
-          <div class="calendar-day header">五</div>
-          <div class="calendar-day header">六</div>
+          <div class="calendar-day header">
+            日
+          </div>
+          <div class="calendar-day header">
+            一
+          </div>
+          <div class="calendar-day header">
+            二
+          </div>
+          <div class="calendar-day header">
+            三
+          </div>
+          <div class="calendar-day header">
+            四
+          </div>
+          <div class="calendar-day header">
+            五
+          </div>
+          <div class="calendar-day header">
+            六
+          </div>
 
           <!-- 空白单元格 -->
-          <div v-for="i in startDay" :key="'empty-' + i" class="calendar-day empty" />
+          <div
+            v-for="i in startDay"
+            :key="'empty-' + i"
+            class="calendar-day empty"
+          />
 
           <!-- 日期单元格 -->
           <div
@@ -129,7 +199,10 @@
             :class="{ active: hasActivity(day) }"
           >
             {{ day }}
-            <div v-if="hasActivity(day)" class="activity-indicator" />
+            <div
+              v-if="hasActivity(day)"
+              class="activity-indicator"
+            />
           </div>
         </div>
       </div>
@@ -138,8 +211,12 @@
     <!-- 热门活动 -->
     <section class="popular-section">
       <div class="section-header">
-        <h2 class="section-title">热门活动</h2>
-        <p class="section-description">最受欢迎的新年活动</p>
+        <h2 class="section-title">
+          热门活动
+        </h2>
+        <p class="section-description">
+          最受欢迎的新年活动
+        </p>
       </div>
 
       <div class="popular-grid">
@@ -170,21 +247,21 @@
     <!-- 音乐播放器 -->
     <div class="music-player">
       <meting-js
+        id="9515726248"
         server="tencent"
         type="playlist"
-        id="8205467723"
         fixed="true"
         mini="true"
         autoplay="false"
         theme="#c91f37"
         loop="all"
         order="random"
-        preload="auto"
-        volume="0.3"
+        preload="none"
+        volume="0.5"
         mutex="true"
-        listFolded="true"
-        listMaxHeight="340"
-        lrcType="1"
+        list-folded="true"
+        list-max-height="340"
+        lrc-type="0"
       />
     </div>
 
@@ -196,30 +273,46 @@
             <span class="logo-text">新年惊喜</span>
             <span class="logo-icon">🎊</span>
           </div>
-          <p class="footer-description">为您带来最美好的新年体验，让科技为传统节日增添光彩。</p>
+          <p class="footer-description">
+            为您带来最美好的新年体验，让科技为传统节日增添光彩。
+          </p>
         </div>
         <div class="footer-section">
-          <h4 class="footer-title">快速链接</h4>
+          <h4 class="footer-title">
+            快速链接
+          </h4>
           <ul class="footer-links">
             <li>
-              <router-link to="/"> 首页 </router-link>
+              <router-link to="/">
+                首页
+              </router-link>
             </li>
             <li>
-              <router-link to="/new-year-surprise"> 新年惊喜 </router-link>
+              <router-link to="/new-year-surprise">
+                新年惊喜
+              </router-link>
             </li>
             <li>
-              <router-link to="/cultural-features"> 文化特色 </router-link>
+              <router-link to="/cultural-features">
+                文化特色
+              </router-link>
             </li>
             <li>
-              <router-link to="/activities"> 活动 </router-link>
+              <router-link to="/activities">
+                活动
+              </router-link>
             </li>
             <li>
-              <router-link to="/about"> 关于我们 </router-link>
+              <router-link to="/about">
+                关于我们
+              </router-link>
             </li>
           </ul>
         </div>
         <div class="footer-section">
-          <h4 class="footer-title">联系我们</h4>
+          <h4 class="footer-title">
+            联系我们
+          </h4>
           <div class="contact-details">
             <div class="contact-item">
               <span class="contact-icon">📧</span>
@@ -233,14 +326,25 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="copyright">© 2026 新年惊喜. 保留所有权利.</p>
+        <p class="copyright">
+          © 2026 新年惊喜. 保留所有权利.
+        </p>
       </div>
     </footer>
 
     <!-- 活动详情模态框 -->
-    <div v-if="showModal" class="modal" @click.self="closeModal">
+    <div
+      v-if="showModal"
+      class="modal"
+      @click.self="closeModal"
+    >
       <div class="modal-content">
-        <button class="modal-close" @click="closeModal">×</button>
+        <button
+          class="modal-close"
+          @click="closeModal"
+        >
+          ×
+        </button>
         <div class="modal-header">
           <h3 class="modal-title">
             {{ selectedActivity.title }}
@@ -248,11 +352,24 @@
         </div>
         <div class="modal-body">
           <div class="modal-media">
-            <div v-if="selectedActivity.video" class="modal-video">
-              <iframe :src="selectedActivity.video" frameborder="0" allowfullscreen />
+            <div
+              v-if="selectedActivity.video"
+              class="modal-video"
+            >
+              <iframe
+                :src="selectedActivity.video"
+                frameborder="0"
+                allowfullscreen
+              />
             </div>
-            <div v-else class="modal-image">
-              <img :src="selectedActivity.image" :alt="selectedActivity.title" />
+            <div
+              v-else
+              class="modal-image"
+            >
+              <img
+                :src="selectedActivity.image"
+                :alt="selectedActivity.title"
+              >
             </div>
           </div>
           <div class="modal-info">
@@ -274,6 +391,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import Snowfall from '../components/Snowfall.vue'
 
 // 活动数据
 const activities = ref([
@@ -1314,11 +1432,11 @@ const closeModal = () => {
 .music-player {
   position: fixed;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 20px;
+  transform: none;
   z-index: 1000;
-  width: 90%;
-  max-width: 600px;
+  width: 320px;
+  max-width: 90vw;
 }
 
 /* 调整APlayer样式以匹配主题 */
@@ -1355,29 +1473,49 @@ const closeModal = () => {
 
   .section-description {
     font-size: 16px;
+    padding: 0 16px;
   }
 
   .activities-grid,
   .popular-grid {
     grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 0 16px;
   }
 
   .activity-card,
   .popular-card {
-    margin-bottom: 24px;
+    margin-bottom: 0;
   }
 
   .filter-buttons {
     justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .filter-content {
+    padding: 0 16px;
   }
 
   .calendar-container {
     padding: 24px;
+    margin: 0 16px;
   }
 
   .footer-content {
     grid-template-columns: 1fr;
     gap: 32px;
+    padding: 0 16px;
+  }
+
+  .activity-image {
+    height: 160px;
+  }
+
+  .music-player {
+    width: 280px;
+    bottom: 10px;
+    right: 10px;
   }
 }
 
@@ -1421,6 +1559,141 @@ const closeModal = () => {
   .modal-image,
   .modal-video {
     height: 100%;
+  }
+
+  .activity-title {
+    font-size: 18px;
+  }
+
+  .activity-description,
+  .popular-description {
+    font-size: 14px;
+  }
+
+  .calendar-day {
+    font-size: 14px;
+  }
+
+  .popular-rank {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+}
+
+/* 桌面端大屏幕优化 */
+@media (min-width: 1400px) {
+  .filter-content,
+  .activities-grid,
+  .calendar-container,
+  .popular-grid,
+  .footer-content {
+    max-width: 1400px;
+  }
+
+  .activities-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .popular-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+
+  .footer-content {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 64px;
+  }
+
+  .hero-content {
+    max-width: 900px;
+  }
+
+  .hero-title {
+    font-size: 56px;
+  }
+
+  .hero-subtitle {
+    font-size: 24px;
+  }
+
+  .section-title {
+    font-size: 40px;
+  }
+
+  .section-description {
+    font-size: 20px;
+    max-width: 700px;
+  }
+
+  .activity-card {
+    padding: 32px;
+  }
+
+  .activity-image {
+    height: 240px;
+  }
+
+  .calendar-container {
+    padding: 40px;
+  }
+
+  .popular-card {
+    padding: 32px;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .activities-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .popular-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+  .activities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .popular-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  .filter-btn,
+  .activity-card,
+  .popular-card,
+  .calendar-day,
+  .activity-btn,
+  .modal-close,
+  .calendar-nav {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .filter-btn:active,
+  .activity-btn:active,
+  .calendar-nav:active {
+    transform: scale(0.95);
+  }
+
+  .activity-card:active,
+  .popular-card:active {
+    transform: translateY(-2px);
+  }
+
+  .calendar-day:active {
+    background: #f0f0f0;
+  }
+
+  .calendar-day.active:active {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   }
 }
 </style>
