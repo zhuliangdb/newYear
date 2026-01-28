@@ -1,71 +1,31 @@
 <template>
   <div class="container">
     <!-- 飘雪效果 -->
-    <Snowfall :icon-type="4" />
+    <AsyncSnowfall :icon-type="4" />
     <!-- 背景装饰 -->
-    <div
-      class="background-decor"
-      aria-hidden="true"
-    />
+    <div class="background-decor" aria-hidden="true" />
 
     <!-- 新年装饰 -->
     <div class="new-year-decorations">
       <!-- 灯笼 -->
-      <div
-        class="lantern lantern-1"
-        aria-label="灯笼装饰"
-      >
-        🏮
-      </div>
-      <div
-        class="lantern lantern-2"
-        aria-label="灯笼装饰"
-      >
-        🏮
-      </div>
-      <div
-        class="lantern lantern-3"
-        aria-label="灯笼装饰"
-      >
-        🏮
-      </div>
-      <div
-        class="lantern lantern-4"
-        aria-label="灯笼装饰"
-      >
-        🏮
-      </div>
+      <div class="lantern lantern-1" aria-label="灯笼装饰">🏮</div>
+      <div class="lantern lantern-2" aria-label="灯笼装饰">🏮</div>
+      <div class="lantern lantern-3" aria-label="灯笼装饰">🏮</div>
+      <div class="lantern lantern-4" aria-label="灯笼装饰">🏮</div>
 
       <!-- 中国结 -->
-      <div
-        class="chinese-knot chinese-knot-1"
-        aria-label="中国结装饰"
-      >
-        🧧
-      </div>
-      <div
-        class="chinese-knot chinese-knot-2"
-        aria-label="中国结装饰"
-      >
-        🧧
-      </div>
+      <div class="chinese-knot chinese-knot-1" aria-label="中国结装饰">🧧</div>
+      <div class="chinese-knot chinese-knot-2" aria-label="中国结装饰">🧧</div>
     </div>
 
     <!-- 烟花效果 -->
-    <div
-      class="fireworks-container"
-      aria-hidden="true"
-    />
+    <div class="fireworks-container" aria-hidden="true" />
 
     <!-- 封面 -->
     <div class="cover">
       <div class="cover-content">
-        <h1 class="cover-title">
-          致我的互联网搭子 🌟
-        </h1>
-        <p class="cover-subtitle">
-          2026 新年快乐 | 这份惊喜只属于你
-        </p>
+        <h1 class="cover-title">致我的互联网搭子 🌟</h1>
+        <p class="cover-subtitle">2026 新年快乐 | 这份惊喜只属于你</p>
         <div class="countdown">
           <span class="countdown-text">距离新年还有</span>
           <div class="countdown-time">
@@ -97,9 +57,7 @@
     <!-- 新年祝福语 -->
     <div class="greeting-card">
       <div class="greeting-content">
-        <h2 class="greeting-title">
-          🎉 新年祝福 🎉
-        </h2>
+        <h2 class="greeting-title">🎉 新年祝福 🎉</h2>
         <p class="greeting-text">
           愿你在新的一年里，所有的期待都能出现，所有的梦想都能实现，所有的希望都能如愿，所有的努力都能成功！
         </p>
@@ -108,9 +66,7 @@
 
     <!-- 时间轴回忆 -->
     <div class="timeline-section">
-      <h2 class="section-title">
-        📝 我们的回忆
-      </h2>
+      <h2 class="section-title">📝 我们的回忆</h2>
       <div class="timeline">
         <div
           v-for="(item, index) in timelineItems"
@@ -127,19 +83,10 @@
 
     <!-- 新年运势卡片 -->
     <div class="fortune-card">
-      <h2 class="section-title">
-        🔮 你的新年运势
-      </h2>
-      <div
-        class="fortune-content"
-        @click="fortuneStore.generateFortune"
-      >
+      <h2 class="section-title">🔮 你的新年运势</h2>
+      <div class="fortune-content" @click="fortuneStore.generateFortune">
         <div class="fortune-grid">
-          <div
-            v-for="(item, index) in fortuneStore.fortuneItems"
-            :key="index"
-            class="fortune-item"
-          >
+          <div v-for="(item, index) in fortuneStore.fortuneItems" :key="index" class="fortune-item">
             <div class="fortune-label">
               {{ item.label }}
             </div>
@@ -148,23 +95,16 @@
             </div>
           </div>
         </div>
-        <div class="fortune-tip">
-          点击刷新运势
-        </div>
+        <div class="fortune-tip">点击刷新运势</div>
       </div>
     </div>
 
     <!-- 新年愿望墙 -->
     <div class="wish-wall">
-      <h2 class="section-title">
-        🎯 新年愿望墙
-      </h2>
+      <h2 class="section-title">🎯 新年愿望墙</h2>
 
       <!-- 错误提示 -->
-      <div
-        v-if="wishesStore.error"
-        class="error-message"
-      >
+      <div v-if="wishesStore.error" class="error-message">
         {{ wishesStore.error }}
       </div>
 
@@ -177,6 +117,9 @@
           :class="{ 'input-focused': wishesStore.newWish.trim() }"
           :disabled="wishesStore.loading"
         />
+        <div v-if="wishesStore.error" class="error-message">
+          {{ wishesStore.error }}
+        </div>
         <button
           class="primary-btn"
           :disabled="!wishesStore.newWish.trim() || wishesStore.loading"
@@ -184,34 +127,19 @@
           tabindex="0"
           @click="wishesStore.addWish"
         >
-          <span
-            v-if="wishesStore.loading"
-            class="loading-spinner"
-          />
+          <span v-if="wishesStore.loading" class="loading-spinner" />
           {{ wishesStore.loading ? '添加中...' : '添加愿望' }}
         </button>
       </div>
 
       <!-- 加载状态 -->
-      <div
-        v-if="wishesStore.loading"
-        class="loading-state"
-      >
+      <div v-if="wishesStore.loading" class="loading-state">
         <div class="loading-spinner large" />
-        <p class="loading-text">
-          加载愿望中...
-        </p>
+        <p class="loading-text">加载愿望中...</p>
       </div>
 
-      <div
-        v-else
-        class="wish-list"
-      >
-        <div
-          v-for="wish in wishesStore.wishes"
-          :key="wish.id"
-          class="wish-item"
-        >
+      <div v-else class="wish-list">
+        <div v-for="wish in wishesStore.wishes" :key="wish.id" class="wish-item">
           <div class="wish-content">
             {{ wish.content }}
           </div>
@@ -224,27 +152,13 @@
               ❤️ {{ wish.likes || 0 }}
             </button>
           </div>
-          <div class="wish-icon">
-            ✨
-          </div>
+          <div class="wish-icon">✨</div>
         </div>
-        <div
-          v-if="wishesStore.wishes.length === 0"
-          class="wish-item empty-message"
-        >
+        <div v-if="wishesStore.wishes.length === 0" class="wish-item empty-message">
           <div class="empty-message-content">
-            <div
-              class="empty-icon"
-              aria-label="愿望图标"
-            >
-              ✨
-            </div>
-            <p class="empty-text">
-              还没有愿望，快来写下你的新年愿望吧！
-            </p>
-            <p class="empty-subtext">
-              分享你的新年目标和梦想
-            </p>
+            <div class="empty-icon" aria-label="愿望图标">✨</div>
+            <p class="empty-text">还没有愿望，快来写下你的新年愿望吧！</p>
+            <p class="empty-subtext">分享你的新年目标和梦想</p>
           </div>
         </div>
       </div>
@@ -252,27 +166,12 @@
 
     <!-- 互动小游戏 -->
     <div class="game-section">
-      <h2 class="section-title">
-        🎮 新年小游戏
-      </h2>
-      <div
-        class="game-card"
-        @click="gameStore.playGame"
-      >
+      <h2 class="section-title">🎮 新年小游戏</h2>
+      <div class="game-card" @click="gameStore.playGame">
         <div class="game-content">
-          <div
-            class="game-icon"
-            aria-label="骰子图标"
-          >
-            🎲
-          </div>
-          <div class="game-title">
-            点击抽取新年签
-          </div>
-          <div
-            v-if="gameStore.gameResult"
-            class="game-result"
-          >
+          <div class="game-icon" aria-label="骰子图标">🎲</div>
+          <div class="game-title">点击抽取新年签</div>
+          <div v-if="gameStore.gameResult" class="game-result">
             {{ gameStore.gameResult }}
           </div>
         </div>
@@ -281,58 +180,45 @@
 
     <!-- 彩蛋互动 -->
     <div class="surprise-section">
-      <h2 class="section-title">
-        🎁 新年彩蛋
-      </h2>
-      <button
-        class="primary-btn"
-        :class="{ active: showSecret }"
-        @click="showSecretText"
-      >
+      <h2 class="section-title">🎁 新年彩蛋</h2>
+      <button class="primary-btn" :class="{ active: showSecret }" @click="showSecretText">
         {{ showSecret ? '彩蛋已解锁' : '点击解锁新年彩蛋' }}
       </button>
-      <div
-        v-show="showSecret"
-        id="secret-text"
-        class="secret-content"
-      >
-        <strong>程序员专属彩蛋：</strong><br>
-        我用 Java 和一点点前端，写了这个页面给你。<br>
-        2026 年，我们要各自完成一件"有点怕但想试试"的事！<br>
+      <div v-show="showSecret" id="secret-text" class="secret-content">
+        <strong>程序员专属彩蛋：</strong><br />
+        我用 Java 和一点点前端，写了这个页面给你。<br />
+        2026 年，我们要各自完成一件"有点怕但想试试"的事！<br />
         （你先说，我听着呢～）
       </div>
     </div>
 
     <!-- 手写风信件 -->
     <div class="letter-section">
-      <h2 class="section-title">
-        💌 给你的信
-      </h2>
+      <h2 class="section-title">💌 给你的信</h2>
       <div class="handwritten">
-        虽然没见过面，但谢谢你让我觉得<br>
-        这世界还有人愿意认真听我说废话。<br>
-        2026，愿你三餐温热，梦里常笑，聊天框永远有人秒回。<br>
-        <div class="signature">
-          —— 你的网友弟弟，[完美谢幕]
-        </div>
+        虽然没见过面，但谢谢你让我觉得<br />
+        这世界还有人愿意认真听我说废话。<br />
+        2026，愿你三餐温热，梦里常笑，聊天框永远有人秒回。<br />
+        <div class="signature">—— 你的网友弟弟，[完美谢幕]</div>
       </div>
     </div>
 
     <!-- 留言板 -->
     <div class="message-board">
-      <h2 class="section-title">
-        💬 留言板
-      </h2>
+      <h2 class="section-title">💬 留言板</h2>
 
       <!-- 错误提示 -->
-      <div
-        v-if="messagesStore.error"
-        class="error-message"
-      >
+      <div v-if="messagesStore.error" class="error-message">
         {{ messagesStore.error }}
       </div>
 
       <div class="message-input-area">
+        <input
+          v-model="messagesStore.messageAuthor"
+          placeholder="你的名字"
+          class="message-author"
+          :disabled="messagesStore.loading"
+        />
         <textarea
           v-model="messagesStore.newMessage"
           placeholder="写下你的留言..."
@@ -340,41 +226,33 @@
           class="message-input"
           :disabled="messagesStore.loading"
         />
+        <div v-if="messagesStore.error" class="error-message">
+          {{ messagesStore.error }}
+        </div>
         <button
           class="primary-btn"
-          :disabled="!messagesStore.newMessage.trim() || messagesStore.loading"
+          :disabled="
+            !messagesStore.newMessage.trim() ||
+            !messagesStore.messageAuthor.trim() ||
+            messagesStore.loading
+          "
           aria-label="发送留言"
           tabindex="0"
           @click="messagesStore.addMessage"
         >
-          <span
-            v-if="messagesStore.loading"
-            class="loading-spinner"
-          />
+          <span v-if="messagesStore.loading" class="loading-spinner" />
           {{ messagesStore.loading ? '发送中...' : '发送留言' }}
         </button>
       </div>
 
       <!-- 加载状态 -->
-      <div
-        v-if="messagesStore.loading"
-        class="loading-state"
-      >
+      <div v-if="messagesStore.loading" class="loading-state">
         <div class="loading-spinner large" />
-        <p class="loading-text">
-          加载留言中...
-        </p>
+        <p class="loading-text">加载留言中...</p>
       </div>
 
-      <div
-        v-else
-        class="message-list"
-      >
-        <div
-          v-for="message in messagesStore.messages"
-          :key="message.id"
-          class="message-item"
-        >
+      <div v-else class="message-list">
+        <div v-for="message in messagesStore.messages" :key="message.id" class="message-item">
           <div class="message-header">
             <span class="message-time">{{ message.time }}</span>
           </div>
@@ -382,23 +260,11 @@
             {{ message.content }}
           </div>
         </div>
-        <div
-          v-if="messagesStore.messages.length === 0"
-          class="message-item empty-message"
-        >
+        <div v-if="messagesStore.messages.length === 0" class="message-item empty-message">
           <div class="empty-message-content">
-            <div
-              class="empty-icon"
-              aria-label="留言图标"
-            >
-              💭
-            </div>
-            <p class="empty-text">
-              还没有留言，快来写下第一条留言吧！
-            </p>
-            <p class="empty-subtext">
-              分享你的新年祝福或感想
-            </p>
+            <div class="empty-icon" aria-label="留言图标">💭</div>
+            <p class="empty-text">还没有留言，快来写下第一条留言吧！</p>
+            <p class="empty-subtext">分享你的新年祝福或感想</p>
           </div>
         </div>
       </div>
@@ -450,9 +316,7 @@ const RegionalBlessingPopup = defineAsyncComponent(
 )
 
 // 飘雪组件
-import Snowfall from '../components/Snowfall.vue'
-
-
+import AsyncSnowfall from '../components/AsyncSnowfall.vue'
 
 // Pinia stores
 import { useCounterStore } from '../stores/counter'
@@ -677,7 +541,6 @@ onBeforeUnmount(() => {
 }
 
 @keyframes lanternSwing {
-
   0%,
   100% {
     transform: rotate(-5deg);
@@ -732,7 +595,6 @@ onBeforeUnmount(() => {
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0px);
@@ -891,7 +753,6 @@ onBeforeUnmount(() => {
 }
 
 @keyframes blink {
-
   0%,
   100% {
     opacity: 1;
@@ -1356,7 +1217,6 @@ onBeforeUnmount(() => {
 }
 
 @keyframes bounce {
-
   0%,
   100% {
     transform: translateY(0);
@@ -1641,14 +1501,16 @@ onBeforeUnmount(() => {
   left: 0;
   right: 0;
   height: 100%;
-  background-image: repeating-linear-gradient(transparent,
-      transparent 28px,
-      rgba(0, 0, 0, 0.05) 28px,
-      rgba(0, 0, 0, 0.05) 29px);
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 28px,
+    rgba(0, 0, 0, 0.05) 28px,
+    rgba(0, 0, 0, 0.05) 29px
+  );
   z-index: 0;
 }
 
-.handwritten>div {
+.handwritten > div {
   position: relative;
   z-index: 1;
 }
@@ -1685,7 +1547,6 @@ onBeforeUnmount(() => {
 }
 
 @keyframes bounceIn {
-
   0%,
   20%,
   50%,
@@ -1963,7 +1824,6 @@ onBeforeUnmount(() => {
 
 /* 小屏手机适配 (480px以下) */
 @media (max-width: 480px) {
-
   /* 容器调整 */
   .container {
     padding: 15px;
@@ -2417,6 +2277,25 @@ onBeforeUnmount(() => {
   transition: all var(--transition-normal);
 }
 
+.error-message {
+  color: #ff4757;
+  font-size: 14px;
+  margin: 8px 0;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .input-focused {
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(201, 31, 55, 0.1);
@@ -2467,7 +2346,6 @@ onBeforeUnmount(() => {
 
 /* 触摸设备优化 */
 @media (hover: none) and (pointer: coarse) {
-
   /* 增加点击区域 */
   .secret-btn,
   .game-card,

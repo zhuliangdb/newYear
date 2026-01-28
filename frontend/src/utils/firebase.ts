@@ -44,7 +44,11 @@ interface FirebaseService {
     insert(data: any): Promise<InsertResult>
   }
   channel(channelName: string): {
-    on(_eventType: string, options: { event: string; schema: string; table: string }, callback: (payload: any) => void): any
+    on(
+      _eventType: string,
+      options: { event: string; schema: string; table: string },
+      callback: (payload: any) => void
+    ): any
     subscribe(): any
   }
   removeChannel(channel: any): void
@@ -57,9 +61,12 @@ const firebaseService: FirebaseService = {
     return {
       select(_query?: string) {
         return {
-          async order(orderBy: string, { ascending }: { ascending: boolean }): Promise<FirebaseResult<any[]>> {
+          async order(
+            orderBy: string,
+            { ascending }: { ascending: boolean }
+          ): Promise<FirebaseResult<any[]>> {
             const tableRef: DatabaseReference = ref(database, table)
-            return new Promise<FirebaseResult<any[]>>((resolve) => {
+            return new Promise<FirebaseResult<any[]>>(resolve => {
               onValue(
                 tableRef,
                 (snapshot: DataSnapshot) => {
@@ -114,7 +121,11 @@ const firebaseService: FirebaseService = {
   // 频道订阅
   channel(_channelName: string) {
     return {
-      on(_eventType: string, { table, schema, event: _event }: { event: string; schema: string; table: string }, callback: (payload: any) => void) {
+      on(
+        _eventType: string,
+        { table, schema, event: _event }: { event: string; schema: string; table: string },
+        callback: (payload: any) => void
+      ) {
         // 这里只处理table参数，忽略其他Supabase特定参数
         const tableRef: DatabaseReference = ref(database, table)
         onValue(tableRef, (_snapshot: DataSnapshot) => {

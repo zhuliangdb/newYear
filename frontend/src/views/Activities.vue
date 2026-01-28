@@ -1,47 +1,23 @@
 <template>
   <div class="activities">
     <!-- 飘雪效果 -->
-    <Snowfall :icon-type="2" />
+    <AsyncSnowfall :icon-type="2" />
     <!-- 背景装饰 -->
     <div class="background-decor" />
 
     <!-- 新年装饰 -->
     <div class="new-year-decorations">
-      <div
-        class="lantern"
-        style="left: 10%; top: 10%; animation-delay: 0s"
-      >
-        🏮
-      </div>
-      <div
-        class="lantern"
-        style="right: 10%; top: 15%; animation-delay: 1s"
-      >
-        🏮
-      </div>
-      <div
-        class="chinese-knot"
-        style="left: 5%; top: 40%"
-      >
-        🧧
-      </div>
-      <div
-        class="chinese-knot"
-        style="right: 5%; top: 45%"
-      >
-        🧧
-      </div>
+      <div class="lantern" style="left: 10%; top: 10%; animation-delay: 0s">🏮</div>
+      <div class="lantern" style="right: 10%; top: 15%; animation-delay: 1s">🏮</div>
+      <div class="chinese-knot" style="left: 5%; top: 40%">🧧</div>
+      <div class="chinese-knot" style="right: 5%; top: 45%">🧧</div>
     </div>
 
     <!-- 英雄区域 -->
     <section class="hero">
       <div class="hero-content">
-        <h1 class="hero-title">
-          新年活动
-        </h1>
-        <p class="hero-subtitle">
-          参与丰富多彩的新年活动，感受安徽、河南地区的节日氛围
-        </p>
+        <h1 class="hero-title">新年活动</h1>
+        <p class="hero-subtitle">参与丰富多彩的新年活动，感受安徽、河南地区的节日氛围</p>
       </div>
     </section>
 
@@ -84,12 +60,8 @@
     <!-- 活动列表 -->
     <section class="activities-section">
       <div class="section-header">
-        <h2 class="section-title">
-          活动列表
-        </h2>
-        <p class="section-description">
-          浏览并参与精彩的新年活动
-        </p>
+        <h2 class="section-title">活动列表</h2>
+        <p class="section-description">浏览并参与精彩的新年活动</p>
       </div>
 
       <div class="activities-grid">
@@ -100,16 +72,10 @@
           @click="showActivityDetail(activity)"
         >
           <div class="activity-image">
-            <img
-              :src="activity.image"
-              :alt="activity.title"
-            >
+            <img :src="activity.image" :alt="activity.title" />
           </div>
           <div class="activity-content">
-            <div
-              class="activity-tag"
-              :class="activity.region"
-            >
+            <div class="activity-tag" :class="activity.region">
               {{ getRegionName(activity.region) }}
             </div>
             <h3 class="activity-title">
@@ -123,9 +89,7 @@
             </p>
             <div class="activity-footer">
               <span class="activity-location">{{ activity.location }}</span>
-              <button class="activity-btn">
-                查看更多
-              </button>
+              <button class="activity-btn">查看更多</button>
             </div>
           </div>
         </div>
@@ -135,61 +99,29 @@
     <!-- 活动日历 -->
     <section class="calendar-section">
       <div class="section-header">
-        <h2 class="section-title">
-          活动日历
-        </h2>
-        <p class="section-description">
-          查看全年的活动安排
-        </p>
+        <h2 class="section-title">活动日历</h2>
+        <p class="section-description">查看全年的活动安排</p>
       </div>
 
       <div class="calendar-container">
         <div class="calendar-header">
-          <button
-            class="calendar-nav"
-            @click="prevMonth"
-          >
-            ‹
-          </button>
+          <button class="calendar-nav" @click="prevMonth">‹</button>
           <h3 class="calendar-title">
             {{ currentMonthYear }}
           </h3>
-          <button
-            class="calendar-nav"
-            @click="nextMonth"
-          >
-            ›
-          </button>
+          <button class="calendar-nav" @click="nextMonth">›</button>
         </div>
         <div class="calendar-grid">
-          <div class="calendar-day header">
-            日
-          </div>
-          <div class="calendar-day header">
-            一
-          </div>
-          <div class="calendar-day header">
-            二
-          </div>
-          <div class="calendar-day header">
-            三
-          </div>
-          <div class="calendar-day header">
-            四
-          </div>
-          <div class="calendar-day header">
-            五
-          </div>
-          <div class="calendar-day header">
-            六
-          </div>
+          <div class="calendar-day header">日</div>
+          <div class="calendar-day header">一</div>
+          <div class="calendar-day header">二</div>
+          <div class="calendar-day header">三</div>
+          <div class="calendar-day header">四</div>
+          <div class="calendar-day header">五</div>
+          <div class="calendar-day header">六</div>
 
           <!-- 空白单元格 -->
-          <div
-            v-for="i in startDay"
-            :key="'empty-' + i"
-            class="calendar-day empty"
-          />
+          <div v-for="i in startDay" :key="'empty-' + i" class="calendar-day empty" />
 
           <!-- 日期单元格 -->
           <div
@@ -199,10 +131,7 @@
             :class="{ active: hasActivity(day) }"
           >
             {{ day }}
-            <div
-              v-if="hasActivity(day)"
-              class="activity-indicator"
-            />
+            <div v-if="hasActivity(day)" class="activity-indicator" />
           </div>
         </div>
       </div>
@@ -211,12 +140,8 @@
     <!-- 热门活动 -->
     <section class="popular-section">
       <div class="section-header">
-        <h2 class="section-title">
-          热门活动
-        </h2>
-        <p class="section-description">
-          最受欢迎的新年活动
-        </p>
+        <h2 class="section-title">热门活动</h2>
+        <p class="section-description">最受欢迎的新年活动</p>
       </div>
 
       <div class="popular-grid">
@@ -273,46 +198,30 @@
             <span class="logo-text">新年惊喜</span>
             <span class="logo-icon">🎊</span>
           </div>
-          <p class="footer-description">
-            为您带来最美好的新年体验，让科技为传统节日增添光彩。
-          </p>
+          <p class="footer-description">为您带来最美好的新年体验，让科技为传统节日增添光彩。</p>
         </div>
         <div class="footer-section">
-          <h4 class="footer-title">
-            快速链接
-          </h4>
+          <h4 class="footer-title">快速链接</h4>
           <ul class="footer-links">
             <li>
-              <router-link to="/">
-                首页
-              </router-link>
+              <router-link to="/"> 首页 </router-link>
             </li>
             <li>
-              <router-link to="/new-year-surprise">
-                新年惊喜
-              </router-link>
+              <router-link to="/new-year-surprise"> 新年惊喜 </router-link>
             </li>
             <li>
-              <router-link to="/cultural-features">
-                文化特色
-              </router-link>
+              <router-link to="/cultural-features"> 文化特色 </router-link>
             </li>
             <li>
-              <router-link to="/activities">
-                活动
-              </router-link>
+              <router-link to="/activities"> 活动 </router-link>
             </li>
             <li>
-              <router-link to="/about">
-                关于我们
-              </router-link>
+              <router-link to="/about"> 关于我们 </router-link>
             </li>
           </ul>
         </div>
         <div class="footer-section">
-          <h4 class="footer-title">
-            联系我们
-          </h4>
+          <h4 class="footer-title">联系我们</h4>
           <div class="contact-details">
             <div class="contact-item">
               <span class="contact-icon">📧</span>
@@ -326,25 +235,14 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="copyright">
-          © 2026 新年惊喜. 保留所有权利.
-        </p>
+        <p class="copyright">© 2026 新年惊喜. 保留所有权利.</p>
       </div>
     </footer>
 
     <!-- 活动详情模态框 -->
-    <div
-      v-if="showModal"
-      class="modal"
-      @click.self="closeModal"
-    >
+    <div v-if="showModal" class="modal" @click.self="closeModal">
       <div class="modal-content">
-        <button
-          class="modal-close"
-          @click="closeModal"
-        >
-          ×
-        </button>
+        <button class="modal-close" @click="closeModal">×</button>
         <div class="modal-header">
           <h3 class="modal-title">
             {{ selectedActivity.title }}
@@ -352,24 +250,11 @@
         </div>
         <div class="modal-body">
           <div class="modal-media">
-            <div
-              v-if="selectedActivity.video"
-              class="modal-video"
-            >
-              <iframe
-                :src="selectedActivity.video"
-                frameborder="0"
-                allowfullscreen
-              />
+            <div v-if="selectedActivity.video" class="modal-video">
+              <iframe :src="selectedActivity.video" frameborder="0" allowfullscreen />
             </div>
-            <div
-              v-else
-              class="modal-image"
-            >
-              <img
-                :src="selectedActivity.image"
-                :alt="selectedActivity.title"
-              >
+            <div v-else class="modal-image">
+              <img :src="selectedActivity.image" :alt="selectedActivity.title" />
             </div>
           </div>
           <div class="modal-info">
@@ -391,7 +276,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import Snowfall from '../components/Snowfall.vue'
+import AsyncSnowfall from '../components/AsyncSnowfall.vue'
 
 // 活动数据
 const activities = ref([

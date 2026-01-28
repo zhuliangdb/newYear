@@ -1,59 +1,31 @@
 <template>
   <div class="cultural-features">
     <!-- 飘雪效果 -->
-    <Snowfall :icon-type="3" />
+    <AsyncSnowfall :icon-type="3" />
     <!-- 背景装饰 -->
     <div class="background-decor" />
 
     <!-- 新年装饰 -->
     <div class="new-year-decorations">
-      <div
-        class="lantern"
-        style="left: 10%; top: 10%; animation-delay: 0s"
-      >
-        🏮
-      </div>
-      <div
-        class="lantern"
-        style="right: 10%; top: 15%; animation-delay: 1s"
-      >
-        🏮
-      </div>
-      <div
-        class="chinese-knot"
-        style="left: 5%; top: 40%"
-      >
-        🧧
-      </div>
-      <div
-        class="chinese-knot"
-        style="right: 5%; top: 45%"
-      >
-        🧧
-      </div>
+      <div class="lantern" style="left: 10%; top: 10%; animation-delay: 0s">🏮</div>
+      <div class="lantern" style="right: 10%; top: 15%; animation-delay: 1s">🏮</div>
+      <div class="chinese-knot" style="left: 5%; top: 40%">🧧</div>
+      <div class="chinese-knot" style="right: 5%; top: 45%">🧧</div>
     </div>
 
     <!-- 英雄区域 -->
     <section class="hero">
       <div class="hero-content">
-        <h1 class="hero-title">
-          地域文化特色
-        </h1>
-        <p class="hero-subtitle">
-          探索安徽、河南地区的新年文化精髓
-        </p>
+        <h1 class="hero-title">地域文化特色</h1>
+        <p class="hero-subtitle">探索安徽、河南地区的新年文化精髓</p>
       </div>
     </section>
 
     <!-- 安徽文化区 -->
     <section class="anhui-section">
       <div class="section-header">
-        <h2 class="section-title">
-          安徽文化
-        </h2>
-        <p class="section-description">
-          感受徽州文化的独特魅力
-        </p>
+        <h2 class="section-title">安徽文化</h2>
+        <p class="section-description">感受徽州文化的独特魅力</p>
       </div>
 
       <div class="cultural-grid">
@@ -63,22 +35,15 @@
             <img
               src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Huizhou%20paper%20cutting%20art%20with%20red%20paper%20and%20traditional%20Chinese%20patterns%2C%20festive%20atmosphere%2C%20high%20quality%20photography&image_size=square"
               alt="徽州剪纸"
-            >
+            />
           </div>
           <div class="cultural-content">
-            <h3 class="cultural-title">
-              徽州剪纸
-            </h3>
+            <h3 class="cultural-title">徽州剪纸</h3>
             <p class="cultural-text">
               徽州剪纸是安徽省的传统民间艺术，以其精细的刀工和独特的艺术风格闻名。剪纸内容多以吉祥图案、花鸟鱼虫为主，象征着对美好生活的向往。
             </p>
             <div class="cultural-interaction">
-              <button
-                class="interaction-btn"
-                @click="showPaperCuttingDetail"
-              >
-                了解更多
-              </button>
+              <button class="interaction-btn" @click="showPaperCuttingDetail">了解更多</button>
             </div>
           </div>
         </div>
@@ -89,22 +54,15 @@
             <img
               src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Huangmei%20Opera%20performance%20with%20traditional%20costumes%2C%20colorful%20stage%20setting%2C%20Chinese%20traditional%20theater%2C%20high%20quality%20photography&image_size=square"
               alt="黄梅戏"
-            >
+            />
           </div>
           <div class="cultural-content">
-            <h3 class="cultural-title">
-              黄梅戏
-            </h3>
+            <h3 class="cultural-title">黄梅戏</h3>
             <p class="cultural-text">
               黄梅戏是安徽省的传统戏曲剧种，以其委婉动听的唱腔和生动活泼的表演风格深受人们喜爱。代表剧目有《天仙配》、《女驸马》等。
             </p>
             <div class="cultural-interaction">
-              <button
-                class="interaction-btn"
-                @click="showHuangmeiOperaDetail"
-              >
-                角色换装
-              </button>
+              <button class="interaction-btn" @click="showHuangmeiOperaDetail">角色换装</button>
             </div>
           </div>
         </div>
@@ -115,20 +73,15 @@
             <img
               src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Huizhou%20ancient%20architecture%20with%20white%20walls%20and%20black%20tiles%2C%20traditional%20Chinese%20courtyard%20houses%2C%20high%20quality%20photography&image_size=square"
               alt="徽州建筑"
-            >
+            />
           </div>
           <div class="cultural-content">
-            <h3 class="cultural-title">
-              徽州建筑
-            </h3>
+            <h3 class="cultural-title">徽州建筑</h3>
             <p class="cultural-text">
               徽州建筑是中国传统建筑的重要流派之一，以其独特的"白墙黑瓦"风格和精美的木雕、砖雕、石雕艺术闻名于世。
             </p>
             <div class="cultural-interaction">
-              <button
-                class="interaction-btn"
-                @click="showHuizhouArchitectureDetail"
-              >
+              <button class="interaction-btn" @click="showHuizhouArchitectureDetail">
                 欣赏建筑
               </button>
             </div>
@@ -140,12 +93,8 @@
     <!-- 河南文化区 -->
     <section class="henan-section">
       <div class="section-header">
-        <h2 class="section-title">
-          河南文化
-        </h2>
-        <p class="section-description">
-          体验中原文化的博大精深
-        </p>
+        <h2 class="section-title">河南文化</h2>
+        <p class="section-description">体验中原文化的博大精深</p>
       </div>
 
       <div class="cultural-grid">
@@ -155,22 +104,15 @@
             <img
               src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Yu%20Opera%20performance%20with%20traditional%20face%20paint%20and%20costumes%2C%20Chinese%20traditional%20theater%2C%20high%20quality%20photography&image_size=square"
               alt="豫剧"
-            >
+            />
           </div>
           <div class="cultural-content">
-            <h3 class="cultural-title">
-              豫剧
-            </h3>
+            <h3 class="cultural-title">豫剧</h3>
             <p class="cultural-text">
               豫剧是河南省的传统戏曲剧种，是中国最大的地方剧种之一。豫剧以其铿锵有力的唱腔和丰富多彩的脸谱艺术著称。
             </p>
             <div class="cultural-interaction">
-              <button
-                class="interaction-btn"
-                @click="showYuOperaDetail"
-              >
-                脸谱DIY
-              </button>
+              <button class="interaction-btn" @click="showYuOperaDetail">脸谱DIY</button>
             </div>
           </div>
         </div>
@@ -181,22 +123,15 @@
             <img
               src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Zhuxianzhen%20New%20Year%20paintings%20with%20traditional%20Chinese%20patterns%20and%20bright%20colors%2C%20festive%20atmosphere%2C%20high%20quality%20photography&image_size=square"
               alt="朱仙镇年画"
-            >
+            />
           </div>
           <div class="cultural-content">
-            <h3 class="cultural-title">
-              朱仙镇年画
-            </h3>
+            <h3 class="cultural-title">朱仙镇年画</h3>
             <p class="cultural-text">
               朱仙镇年画是中国四大年画之一，以其鲜艳的色彩、粗犷的线条和浓郁的乡土气息闻名，是河南省的传统民间艺术瑰宝。
             </p>
             <div class="cultural-interaction">
-              <button
-                class="interaction-btn"
-                @click="showNewYearPaintingDetail"
-              >
-                欣赏年画
-              </button>
+              <button class="interaction-btn" @click="showNewYearPaintingDetail">欣赏年画</button>
             </div>
           </div>
         </div>
@@ -207,22 +142,15 @@
             <img
               src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Luoyang%20peony%20flowers%20in%20full%20bloom%2C%20vibrant%20colors%2C%20traditional%20Chinese%20garden%20setting%2C%20high%20quality%20photography&image_size=square"
               alt="洛阳牡丹"
-            >
+            />
           </div>
           <div class="cultural-content">
-            <h3 class="cultural-title">
-              洛阳牡丹
-            </h3>
+            <h3 class="cultural-title">洛阳牡丹</h3>
             <p class="cultural-text">
               洛阳牡丹是河南省的特产，以其花大色艳、雍容华贵而闻名于世，被誉为"花中之王"，是中国传统名花之一。
             </p>
             <div class="cultural-interaction">
-              <button
-                class="interaction-btn"
-                @click="showPeonyDetail"
-              >
-                欣赏牡丹
-              </button>
+              <button class="interaction-btn" @click="showPeonyDetail">欣赏牡丹</button>
             </div>
           </div>
         </div>
@@ -232,70 +160,33 @@
     <!-- 互动体验区 -->
     <section class="interactive-section">
       <div class="section-header">
-        <h2 class="section-title">
-          互动体验
-        </h2>
-        <p class="section-description">
-          沉浸式感受地域文化魅力
-        </p>
+        <h2 class="section-title">互动体验</h2>
+        <p class="section-description">沉浸式感受地域文化魅力</p>
       </div>
 
       <div class="interactive-grid">
         <!-- 黄梅戏角色换装 -->
         <div class="interactive-card huangmei-dress-up">
-          <div class="interactive-icon">
-            👗
-          </div>
-          <h3 class="interactive-title">
-            黄梅戏角色换装
-          </h3>
-          <p class="interactive-description">
-            选择不同的黄梅戏角色服装，体验传统戏曲的魅力
-          </p>
-          <button
-            class="primary-btn"
-            @click="startHuangmeiDressUp"
-          >
-            开始体验
-          </button>
+          <div class="interactive-icon">👗</div>
+          <h3 class="interactive-title">黄梅戏角色换装</h3>
+          <p class="interactive-description">选择不同的黄梅戏角色服装，体验传统戏曲的魅力</p>
+          <button class="primary-btn" @click="startHuangmeiDressUp">开始体验</button>
         </div>
 
         <!-- 豫剧脸谱DIY -->
         <div class="interactive-card facial-makeup">
-          <div class="interactive-icon">
-            🎭
-          </div>
-          <h3 class="interactive-title">
-            豫剧脸谱DIY
-          </h3>
-          <p class="interactive-description">
-            亲手设计属于自己的豫剧脸谱，感受传统艺术的魅力
-          </p>
-          <button
-            class="primary-btn"
-            @click="startFacialMakeup"
-          >
-            开始体验
-          </button>
+          <div class="interactive-icon">🎭</div>
+          <h3 class="interactive-title">豫剧脸谱DIY</h3>
+          <p class="interactive-description">亲手设计属于自己的豫剧脸谱，感受传统艺术的魅力</p>
+          <button class="primary-btn" @click="startFacialMakeup">开始体验</button>
         </div>
 
         <!-- 文化知识 quiz -->
         <div class="interactive-card cultural-quiz">
-          <div class="interactive-icon">
-            🧠
-          </div>
-          <h3 class="interactive-title">
-            文化知识问答
-          </h3>
-          <p class="interactive-description">
-            测试你对安徽、河南文化的了解，赢取新年礼物
-          </p>
-          <button
-            class="primary-btn"
-            @click="startCulturalQuiz"
-          >
-            开始答题
-          </button>
+          <div class="interactive-icon">🧠</div>
+          <h3 class="interactive-title">文化知识问答</h3>
+          <p class="interactive-description">测试你对安徽、河南文化的了解，赢取新年礼物</p>
+          <button class="primary-btn" @click="startCulturalQuiz">开始答题</button>
         </div>
       </div>
     </section>
@@ -303,20 +194,12 @@
     <!-- 文化知识区 -->
     <section class="knowledge-section">
       <div class="section-header">
-        <h2 class="section-title">
-          文化知识
-        </h2>
-        <p class="section-description">
-          了解更多关于安徽、河南的文化知识
-        </p>
+        <h2 class="section-title">文化知识</h2>
+        <p class="section-description">了解更多关于安徽、河南的文化知识</p>
       </div>
 
       <div class="knowledge-grid">
-        <div
-          v-for="(item, index) in knowledgeItems"
-          :key="index"
-          class="knowledge-card"
-        >
+        <div v-for="(item, index) in knowledgeItems" :key="index" class="knowledge-card">
           <h3 class="knowledge-title">
             {{ item.title }}
           </h3>
@@ -356,46 +239,30 @@
             <span class="logo-text">新年惊喜</span>
             <span class="logo-icon">🎊</span>
           </div>
-          <p class="footer-description">
-            为您带来最美好的新年体验，让科技为传统节日增添光彩。
-          </p>
+          <p class="footer-description">为您带来最美好的新年体验，让科技为传统节日增添光彩。</p>
         </div>
         <div class="footer-section">
-          <h4 class="footer-title">
-            快速链接
-          </h4>
+          <h4 class="footer-title">快速链接</h4>
           <ul class="footer-links">
             <li>
-              <router-link to="/">
-                首页
-              </router-link>
+              <router-link to="/"> 首页 </router-link>
             </li>
             <li>
-              <router-link to="/new-year-surprise">
-                新年惊喜
-              </router-link>
+              <router-link to="/new-year-surprise"> 新年惊喜 </router-link>
             </li>
             <li>
-              <router-link to="/cultural-features">
-                文化特色
-              </router-link>
+              <router-link to="/cultural-features"> 文化特色 </router-link>
             </li>
             <li>
-              <router-link to="/activities">
-                活动
-              </router-link>
+              <router-link to="/activities"> 活动 </router-link>
             </li>
             <li>
-              <router-link to="/about">
-                关于我们
-              </router-link>
+              <router-link to="/about"> 关于我们 </router-link>
             </li>
           </ul>
         </div>
         <div class="footer-section">
-          <h4 class="footer-title">
-            联系我们
-          </h4>
+          <h4 class="footer-title">联系我们</h4>
           <div class="contact-details">
             <div class="contact-item">
               <span class="contact-icon">📧</span>
@@ -409,25 +276,14 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="copyright">
-          © 2026 新年惊喜. 保留所有权利.
-        </p>
+        <p class="copyright">© 2026 新年惊喜. 保留所有权利.</p>
       </div>
     </footer>
 
     <!-- 模态框 -->
-    <div
-      v-if="showModal"
-      class="modal"
-      @click.self="closeModal"
-    >
+    <div v-if="showModal" class="modal" @click.self="closeModal">
       <div class="modal-content">
-        <button
-          class="modal-close"
-          @click="closeModal"
-        >
-          ×
-        </button>
+        <button class="modal-close" @click="closeModal">×</button>
         <div class="modal-header">
           <h3 class="modal-title">
             {{ modalTitle }}
@@ -435,44 +291,26 @@
         </div>
         <div class="modal-body">
           <!-- 文本内容 -->
-          <div
-            v-if="modalType === 'text'"
-            class="modal-text-content"
-          >
+          <div v-if="modalType === 'text'" class="modal-text-content">
             {{ modalText }}
           </div>
 
           <!-- 黄梅戏角色换装 -->
-          <div
-            v-else-if="modalType === 'huangmei-dressup'"
-            class="huangmei-dressup-content"
-          >
+          <div v-else-if="modalType === 'huangmei-dressup'" class="huangmei-dressup-content">
             <div class="character-selection">
               <h4>选择角色</h4>
               <div class="character-options">
                 <div class="character-option">
-                  <div class="character-image">
-                    🧚‍♀️
-                  </div>
-                  <div class="character-name">
-                    七仙女
-                  </div>
+                  <div class="character-image">🧚‍♀️</div>
+                  <div class="character-name">七仙女</div>
                 </div>
                 <div class="character-option">
-                  <div class="character-image">
-                    👸
-                  </div>
-                  <div class="character-name">
-                    公主
-                  </div>
+                  <div class="character-image">👸</div>
+                  <div class="character-name">公主</div>
                 </div>
                 <div class="character-option">
-                  <div class="character-image">
-                    🤵
-                  </div>
-                  <div class="character-name">
-                    书生
-                  </div>
+                  <div class="character-image">🤵</div>
+                  <div class="character-name">书生</div>
                 </div>
               </div>
             </div>
@@ -480,212 +318,115 @@
               <h4>选择服装</h4>
               <div class="costume-options">
                 <div class="costume-option">
-                  <div class="costume-image">
-                    👗
-                  </div>
-                  <div class="costume-name">
-                    红色戏服
-                  </div>
+                  <div class="costume-image">👗</div>
+                  <div class="costume-name">红色戏服</div>
                 </div>
                 <div class="costume-option">
-                  <div class="costume-image">
-                    👗
-                  </div>
-                  <div class="costume-name">
-                    蓝色戏服
-                  </div>
+                  <div class="costume-image">👗</div>
+                  <div class="costume-name">蓝色戏服</div>
                 </div>
                 <div class="costume-option">
-                  <div class="costume-image">
-                    👗
-                  </div>
-                  <div class="costume-name">
-                    绿色戏服
-                  </div>
+                  <div class="costume-image">👗</div>
+                  <div class="costume-name">绿色戏服</div>
                 </div>
               </div>
             </div>
             <div class="preview-section">
               <h4>预览效果</h4>
               <div class="preview-container">
-                <div class="preview-character">
-                  🧚‍♀️
-                </div>
-                <div class="preview-costume">
-                  👗
-                </div>
-                <div class="preview-text">
-                  七仙女 - 红色戏服
-                </div>
+                <div class="preview-character">🧚‍♀️</div>
+                <div class="preview-costume">👗</div>
+                <div class="preview-text">七仙女 - 红色戏服</div>
               </div>
             </div>
           </div>
 
           <!-- 豫剧脸谱DIY -->
-          <div
-            v-else-if="modalType === 'facial-makeup'"
-            class="facial-makeup-content"
-          >
+          <div v-else-if="modalType === 'facial-makeup'" class="facial-makeup-content">
             <div class="face-shape-selection">
               <h4>选择脸型</h4>
               <div class="face-options">
                 <div class="face-option">
-                  <div class="face-image">
-                    😀
-                  </div>
-                  <div class="face-name">
-                    圆形脸
-                  </div>
+                  <div class="face-image">😀</div>
+                  <div class="face-name">圆形脸</div>
                 </div>
                 <div class="face-option">
-                  <div class="face-image">
-                    😐
-                  </div>
-                  <div class="face-name">
-                    方形脸
-                  </div>
+                  <div class="face-image">😐</div>
+                  <div class="face-name">方形脸</div>
                 </div>
                 <div class="face-option">
-                  <div class="face-image">
-                    😊
-                  </div>
-                  <div class="face-name">
-                    瓜子脸
-                  </div>
+                  <div class="face-image">😊</div>
+                  <div class="face-name">瓜子脸</div>
                 </div>
               </div>
             </div>
             <div class="color-selection">
               <h4>选择颜色</h4>
               <div class="color-options">
-                <div
-                  class="color-option"
-                  style="background-color: #e63946"
-                >
-                  红色
-                </div>
-                <div
-                  class="color-option"
-                  style="background-color: #1d3557"
-                >
-                  蓝色
-                </div>
-                <div
-                  class="color-option"
-                  style="background-color: #2a9d8f"
-                >
-                  绿色
-                </div>
-                <div
-                  class="color-option"
-                  style="background-color: #ffd700"
-                >
-                  黄色
-                </div>
+                <div class="color-option" style="background-color: #e63946">红色</div>
+                <div class="color-option" style="background-color: #1d3557">蓝色</div>
+                <div class="color-option" style="background-color: #2a9d8f">绿色</div>
+                <div class="color-option" style="background-color: #ffd700">黄色</div>
               </div>
             </div>
             <div class="pattern-selection">
               <h4>选择图案</h4>
               <div class="pattern-options">
                 <div class="pattern-option">
-                  <div class="pattern-image">
-                    ⚡
-                  </div>
-                  <div class="pattern-name">
-                    闪电纹
-                  </div>
+                  <div class="pattern-image">⚡</div>
+                  <div class="pattern-name">闪电纹</div>
                 </div>
                 <div class="pattern-option">
-                  <div class="pattern-image">
-                    🔥
-                  </div>
-                  <div class="pattern-name">
-                    火焰纹
-                  </div>
+                  <div class="pattern-image">🔥</div>
+                  <div class="pattern-name">火焰纹</div>
                 </div>
                 <div class="pattern-option">
-                  <div class="pattern-image">
-                    🌊
-                  </div>
-                  <div class="pattern-name">
-                    波浪纹
-                  </div>
+                  <div class="pattern-image">🌊</div>
+                  <div class="pattern-name">波浪纹</div>
                 </div>
               </div>
             </div>
             <div class="preview-section">
               <h4>预览效果</h4>
               <div class="preview-container">
-                <div class="preview-face">
-                  😀
-                </div>
-                <div class="preview-text">
-                  圆形脸 - 红色 - 闪电纹
-                </div>
+                <div class="preview-face">😀</div>
+                <div class="preview-text">圆形脸 - 红色 - 闪电纹</div>
               </div>
             </div>
           </div>
 
           <!-- 文化知识问答 -->
-          <div
-            v-else-if="modalType === 'cultural-quiz'"
-            class="cultural-quiz-content"
-          >
+          <div v-else-if="modalType === 'cultural-quiz'" class="cultural-quiz-content">
             <div class="quiz-progress">
               <div class="progress-bar">
-                <div
-                  class="progress-fill"
-                  style="width: 25%"
-                />
+                <div class="progress-fill" style="width: 25%" />
               </div>
-              <div class="progress-text">
-                问题 1/4
-              </div>
+              <div class="progress-text">问题 1/4</div>
             </div>
             <div class="quiz-question">
               <h4>1. 徽州剪纸是哪个省份的传统民间艺术？</h4>
               <div class="quiz-options">
                 <div class="quiz-option">
-                  <input
-                    id="q1-a"
-                    type="radio"
-                    name="q1"
-                  >
+                  <input id="q1-a" type="radio" name="q1" />
                   <label for="q1-a">安徽省</label>
                 </div>
                 <div class="quiz-option">
-                  <input
-                    id="q1-b"
-                    type="radio"
-                    name="q1"
-                  >
+                  <input id="q1-b" type="radio" name="q1" />
                   <label for="q1-b">河南省</label>
                 </div>
                 <div class="quiz-option">
-                  <input
-                    id="q1-c"
-                    type="radio"
-                    name="q1"
-                  >
+                  <input id="q1-c" type="radio" name="q1" />
                   <label for="q1-c">江苏省</label>
                 </div>
                 <div class="quiz-option">
-                  <input
-                    id="q1-d"
-                    type="radio"
-                    name="q1"
-                  >
+                  <input id="q1-d" type="radio" name="q1" />
                   <label for="q1-d">浙江省</label>
                 </div>
               </div>
             </div>
             <div class="quiz-navigation">
-              <button class="secondary-btn">
-                上一题
-              </button>
-              <button class="primary-btn">
-                下一题
-              </button>
+              <button class="secondary-btn">上一题</button>
+              <button class="primary-btn">下一题</button>
             </div>
             <div class="quiz-rules">
               <h5>游戏规则</h5>
@@ -698,12 +439,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button
-            class="primary-btn"
-            @click="closeModal"
-          >
-            关闭
-          </button>
+          <button class="primary-btn" @click="closeModal">关闭</button>
         </div>
       </div>
     </div>
@@ -712,7 +448,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import Snowfall from '../components/Snowfall.vue'
+import AsyncSnowfall from '../components/AsyncSnowfall.vue'
 
 // 模态框状态
 const showModal = ref(false)

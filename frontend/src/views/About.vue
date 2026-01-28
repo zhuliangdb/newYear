@@ -1,29 +1,21 @@
 <template>
   <div class="about">
     <!-- 飘雪效果 -->
-    <Snowfall :icon-type="1" />
-    
+    <AsyncSnowfall :icon-type="1" />
+
     <!-- 英雄区域 -->
     <section class="hero">
       <div class="hero-content">
-        <h1 class="hero-title">
-          关于我们
-        </h1>
-        <p class="hero-subtitle">
-          了解新年惊喜项目的背景和团队
-        </p>
+        <h1 class="hero-title">关于我们</h1>
+        <p class="hero-subtitle">了解新年惊喜项目的背景和团队</p>
       </div>
     </section>
 
     <!-- 项目介绍 -->
     <section class="project-section">
       <div class="section-header">
-        <h2 class="section-title">
-          项目介绍
-        </h2>
-        <p class="section-description">
-          了解新年惊喜项目
-        </p>
+        <h2 class="section-title">项目介绍</h2>
+        <p class="section-description">了解新年惊喜项目</p>
       </div>
 
       <div class="project-content">
@@ -31,15 +23,13 @@
           <img
             src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Modern%20Chinese%20New%20Year%20project%20with%20traditional%20cultural%20elements%2C%20festive%20atmosphere%2C%20high%20quality%20digital%20art&image_size=landscape_16_9"
             alt="项目介绍"
-          >
+          />
         </div>
         <div class="project-text">
           <p class="project-paragraph">
             新年惊喜项目是一个个人使用的在线平台，融合了安徽、河南地区的新年文化元素，通过现代数字技术展示传统地域文化的魅力，为用户带来独特的新年体验。
           </p>
-          <p class="project-paragraph">
-            我们的目标是：
-          </p>
+          <p class="project-paragraph">我们的目标是：</p>
           <ul class="project-goals">
             <li>传承和弘扬安徽、河南地区的优秀传统文化</li>
             <li>通过现代数字技术创新传统文化的展示方式</li>
@@ -52,20 +42,12 @@
     <!-- 技术栈 -->
     <section class="tech-section">
       <div class="section-header">
-        <h2 class="section-title">
-          技术栈
-        </h2>
-        <p class="section-description">
-          项目使用的技术和工具
-        </p>
+        <h2 class="section-title">技术栈</h2>
+        <p class="section-description">项目使用的技术和工具</p>
       </div>
 
       <div class="tech-grid">
-        <div
-          v-for="(tech, index) in techStack"
-          :key="index"
-          class="tech-card"
-        >
+        <div v-for="(tech, index) in techStack" :key="index" class="tech-card">
           <div class="tech-icon">
             {{ tech.icon }}
           </div>
@@ -87,15 +69,11 @@
             <span class="logo-text">新年惊喜</span>
             <span class="logo-icon">🎊</span>
           </div>
-          <p class="footer-description">
-            为您带来最美好的新年体验，让科技为传统节日增添光彩。
-          </p>
+          <p class="footer-description">为您带来最美好的新年体验，让科技为传统节日增添光彩。</p>
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="copyright">
-          © 2026 新年惊喜. 保留所有权利.
-        </p>
+        <p class="copyright">© 2026 新年惊喜. 保留所有权利.</p>
       </div>
     </footer>
   </div>
@@ -103,7 +81,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import Snowfall from '../components/Snowfall.vue'
+import AsyncSnowfall from '../components/AsyncSnowfall.vue'
 
 // 技术栈数据
 const techStack = ref([
@@ -163,8 +141,6 @@ const techStack = ref([
   background: var(--bg-color);
   position: relative;
 }
-
-
 
 /* 英雄区域 */
 .hero {
@@ -326,8 +302,6 @@ const techStack = ref([
   color: var(--primary-color);
   font-weight: bold;
 }
-
-
 
 /* 技术栈网格 */
 .tech-grid {

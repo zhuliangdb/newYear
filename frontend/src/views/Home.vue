@@ -1,27 +1,19 @@
 <template>
   <div class="home-container">
     <!-- 飘雪效果 -->
-    <Snowfall :icon-type="5" />
+    <AsyncSnowfall :icon-type="5" />
     <!-- 英雄区域 -->
     <section class="hero">
       <div class="hero-gradient" />
       <div class="hero-content">
-        <div class="hero-badge">
-          2026 新年特别版
-        </div>
-        <h1 class="hero-title">
-          安徽·河南<br>新年文化盛宴
-        </h1>
+        <div class="hero-badge">2026 新年特别版</div>
+        <h1 class="hero-title">安徽·河南<br />新年文化盛宴</h1>
         <p class="hero-subtitle">
-          融合安徽、河南地域文化特色的新年祝福与惊喜体验，<br>让传统与现代碰撞出不一样的火花
+          融合安徽、河南地域文化特色的新年祝福与惊喜体验，<br />让传统与现代碰撞出不一样的火花
         </p>
         <div class="hero-buttons">
-          <button class="primary-btn large" @click="navigateToNewYear">
-            开始探索
-          </button>
-          <button class="secondary-btn large" @click="navigateToCulturalFeatures">
-            文化之旅
-          </button>
+          <button class="primary-btn large" @click="navigateToNewYear">开始探索</button>
+          <button class="secondary-btn large" @click="navigateToCulturalFeatures">文化之旅</button>
         </div>
         <div class="hero-stats">
           <div class="stat-item">
@@ -43,15 +35,11 @@
         <div class="hero-decorations">
           <div class="lantern lantern-1">
             <div class="lantern-string" />
-            <div class="lantern-body">
-              🏮
-            </div>
+            <div class="lantern-body">🏮</div>
           </div>
           <div class="lantern lantern-2">
             <div class="lantern-string" />
-            <div class="lantern-body">
-              🏮
-            </div>
+            <div class="lantern-body">🏮</div>
           </div>
           <div class="paper-cut paper-cut-1" />
           <div class="paper-cut paper-cut-2" />
@@ -62,7 +50,8 @@
         <div class="hero-background">
           <img
             src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20new%20year%20festival%20with%20anhui%20paper%20cutting%20and%20henan%20opera%20masks%2C%20festive%20atmosphere%2C%20vibrant%20colors%2C%20modern%20digital%20art&image_size=landscape_16_9"
-            alt="新年文化背景">
+            alt="新年文化背景"
+          />
         </div>
       </div>
     </section>
@@ -70,148 +59,80 @@
     <!-- 文化特色预览 -->
     <section class="cultural-preview">
       <div class="cultural-preview-content">
-        <h2 class="section-title">
-          地域文化特色
-        </h2>
+        <h2 class="section-title">地域文化特色</h2>
         <p class="section-description">
           深入了解安徽、河南地区的传统新年文化，感受不一样的地域风情
         </p>
         <div class="cultural-grid">
           <div class="cultural-card anhui">
-            <div class="cultural-icon">
-              🎭
-            </div>
-            <h3 class="cultural-title">
-              安徽黄梅戏
-            </h3>
-            <p class="cultural-description">
-              体验黄梅戏角色换装，感受传统戏曲的魅力
-            </p>
+            <div class="cultural-icon">🎭</div>
+            <h3 class="cultural-title">安徽黄梅戏</h3>
+            <p class="cultural-description">体验黄梅戏角色换装，感受传统戏曲的魅力</p>
             <div class="cultural-bg" />
           </div>
           <div class="cultural-card henan">
-            <div class="cultural-icon">
-              🎨
-            </div>
-            <h3 class="cultural-title">
-              河南豫剧脸谱
-            </h3>
-            <p class="cultural-description">
-              DIY属于你的豫剧脸谱，体验传统工艺
-            </p>
+            <div class="cultural-icon">🎨</div>
+            <h3 class="cultural-title">河南豫剧脸谱</h3>
+            <p class="cultural-description">DIY属于你的豫剧脸谱，体验传统工艺</p>
             <div class="cultural-bg" />
           </div>
           <div class="cultural-card anhui">
-            <div class="cultural-icon">
-              ✂️
-            </div>
-            <h3 class="cultural-title">
-              徽州剪纸
-            </h3>
-            <p class="cultural-description">
-              欣赏精美的徽州剪纸艺术，感受传统文化的精髓
-            </p>
+            <div class="cultural-icon">✂️</div>
+            <h3 class="cultural-title">徽州剪纸</h3>
+            <p class="cultural-description">欣赏精美的徽州剪纸艺术，感受传统文化的精髓</p>
             <div class="cultural-bg" />
           </div>
           <div class="cultural-card henan">
-            <div class="cultural-icon">
-              🖼️
-            </div>
-            <h3 class="cultural-title">
-              朱仙镇年画
-            </h3>
-            <p class="cultural-description">
-              了解朱仙镇年画的历史，欣赏传统年画的魅力
-            </p>
+            <div class="cultural-icon">🖼️</div>
+            <h3 class="cultural-title">朱仙镇年画</h3>
+            <p class="cultural-description">了解朱仙镇年画的历史，欣赏传统年画的魅力</p>
             <div class="cultural-bg" />
           </div>
         </div>
-        <button class="primary-btn" @click="navigateToCulturalFeatures">
-          探索更多文化特色
-        </button>
+        <button class="primary-btn" @click="navigateToCulturalFeatures">探索更多文化特色</button>
       </div>
     </section>
 
     <!-- 特色功能 -->
     <section class="features">
       <div class="features-content">
-        <h2 class="section-title">
-          核心功能
-        </h2>
-        <p class="section-description">
-          我们为您打造了一系列精彩的功能，让您的新年更加难忘
-        </p>
+        <h2 class="section-title">核心功能</h2>
+        <p class="section-description">我们为您打造了一系列精彩的功能，让您的新年更加难忘</p>
         <div class="features-grid">
           <div class="feature-card">
-            <div class="feature-icon">
-              ⏰
-            </div>
-            <h3 class="feature-title">
-              新年倒计时
-            </h3>
-            <p class="feature-description">
-              实时倒计时，迎接新年的到来，不错过每一刻的惊喜
-            </p>
+            <div class="feature-icon">⏰</div>
+            <h3 class="feature-title">新年倒计时</h3>
+            <p class="feature-description">实时倒计时，迎接新年的到来，不错过每一刻的惊喜</p>
             <div class="feature-glow" />
           </div>
           <div class="feature-card">
-            <div class="feature-icon">
-              🔮
-            </div>
-            <h3 class="feature-title">
-              新年运势
-            </h3>
-            <p class="feature-description">
-              智能生成个性化新年运势，为新的一年带来好运
-            </p>
+            <div class="feature-icon">🔮</div>
+            <h3 class="feature-title">新年运势</h3>
+            <p class="feature-description">智能生成个性化新年运势，为新的一年带来好运</p>
             <div class="feature-glow" />
           </div>
           <div class="feature-card">
-            <div class="feature-icon">
-              🎯
-            </div>
-            <h3 class="feature-title">
-              愿望墙
-            </h3>
-            <p class="feature-description">
-              写下你的新年愿望，与朋友分享，一起实现梦想
-            </p>
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title">愿望墙</h3>
+            <p class="feature-description">写下你的新年愿望，与朋友分享，一起实现梦想</p>
             <div class="feature-glow" />
           </div>
           <div class="feature-card">
-            <div class="feature-icon">
-              🎮
-            </div>
-            <h3 class="feature-title">
-              互动游戏
-            </h3>
-            <p class="feature-description">
-              有趣的新年主题小游戏，增添节日氛围
-            </p>
+            <div class="feature-icon">🎮</div>
+            <h3 class="feature-title">互动游戏</h3>
+            <p class="feature-description">有趣的新年主题小游戏，增添节日氛围</p>
             <div class="feature-glow" />
           </div>
           <div class="feature-card">
-            <div class="feature-icon">
-              💬
-            </div>
-            <h3 class="feature-title">
-              留言板
-            </h3>
-            <p class="feature-description">
-              与朋友交流，分享新年的喜悦和祝福
-            </p>
+            <div class="feature-icon">💬</div>
+            <h3 class="feature-title">留言板</h3>
+            <p class="feature-description">与朋友交流，分享新年的喜悦和祝福</p>
             <div class="feature-glow" />
           </div>
           <div class="feature-card">
-            <div class="feature-icon">
-              📤
-            </div>
-            <h3 class="feature-title">
-              分享功能
-            </h3>
-            <p class="feature-description">
-              一键分享你的新年惊喜，传递快乐给更多人
-            </p>
+            <div class="feature-icon">📤</div>
+            <h3 class="feature-title">分享功能</h3>
+            <p class="feature-description">一键分享你的新年惊喜，传递快乐给更多人</p>
             <div class="feature-glow" />
           </div>
         </div>
@@ -221,103 +142,71 @@
     <!-- 活动预览 -->
     <section class="activities-preview">
       <div class="activities-preview-content">
-        <h2 class="section-title">
-          新年活动
-        </h2>
-        <p class="section-description">
-          参与丰富多彩的新年活动，感受浓厚的节日氛围
-        </p>
+        <h2 class="section-title">新年活动</h2>
+        <p class="section-description">参与丰富多彩的新年活动，感受浓厚的节日氛围</p>
         <div class="activities-grid">
           <div class="activity-card">
             <div class="activity-image">
               <img
                 src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20chinese%20new%20year%20activity%20with%20dragon%20dance%2C%20festive%20atmosphere%2C%20vibrant%20colors&image_size=landscape_4_3"
-                alt="舞龙表演">
+                alt="舞龙表演"
+              />
             </div>
             <div class="activity-info">
-              <div class="activity-date">
-                2026.01.20
-              </div>
-              <h3 class="activity-title">
-                传统舞龙表演
-              </h3>
-              <p class="activity-description">
-                欣赏精彩的传统舞龙表演，感受浓厚的节日氛围
-              </p>
-              <div class="activity-location">
-                📍 安徽合肥
-              </div>
+              <div class="activity-date">2026.01.20</div>
+              <h3 class="activity-title">传统舞龙表演</h3>
+              <p class="activity-description">欣赏精彩的传统舞龙表演，感受浓厚的节日氛围</p>
+              <div class="activity-location">📍 安徽合肥</div>
             </div>
           </div>
           <div class="activity-card">
             <div class="activity-image">
               <img
                 src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chinese%20opera%20performance%20with%20traditional%20costumes%2C%20festive%20atmosphere%2C%20vibrant%20colors&image_size=landscape_4_3"
-                alt="戏曲表演">
+                alt="戏曲表演"
+              />
             </div>
             <div class="activity-info">
-              <div class="activity-date">
-                2026.01.25
-              </div>
-              <h3 class="activity-title">
-                黄梅戏专场演出
-              </h3>
-              <p class="activity-description">
-                欣赏正宗的黄梅戏表演，感受传统戏曲的魅力
-              </p>
-              <div class="activity-location">
-                📍 安徽安庆
-              </div>
+              <div class="activity-date">2026.01.25</div>
+              <h3 class="activity-title">黄梅戏专场演出</h3>
+              <p class="activity-description">欣赏正宗的黄梅戏表演，感受传统戏曲的魅力</p>
+              <div class="activity-location">📍 安徽安庆</div>
             </div>
           </div>
           <div class="activity-card">
             <div class="activity-image">
               <img
                 src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chinese%20paper%20cutting%20workshop%2C%20traditional%20craft%2C%20festive%20atmosphere&image_size=landscape_4_3"
-                alt="剪纸 workshop">
+                alt="剪纸 workshop"
+              />
             </div>
             <div class="activity-info">
-              <div class="activity-date">
-                2026.02.01
-              </div>
-              <h3 class="activity-title">
-                剪纸艺术 workshop
-              </h3>
-              <p class="activity-description">
-                学习传统剪纸技艺，制作属于自己的新年装饰品
-              </p>
-              <div class="activity-location">
-                📍 河南郑州
-              </div>
+              <div class="activity-date">2026.02.01</div>
+              <h3 class="activity-title">剪纸艺术 workshop</h3>
+              <p class="activity-description">学习传统剪纸技艺，制作属于自己的新年装饰品</p>
+              <div class="activity-location">📍 河南郑州</div>
             </div>
           </div>
         </div>
-        <button class="primary-btn" @click="navigateToActivities">
-          查看全部活动
-        </button>
+        <button class="primary-btn" @click="navigateToActivities">查看全部活动</button>
       </div>
     </section>
 
     <!-- 用户评价 -->
     <section class="testimonials">
       <div class="testimonials-content">
-        <h2 class="section-title">
-          用户评价
-        </h2>
-        <p class="section-description">
-          听听我们的用户怎么说
-        </p>
+        <h2 class="section-title">用户评价</h2>
+        <p class="section-description">听听我们的用户怎么说</p>
         <div class="testimonials-grid">
           <div class="testimonial-card">
             <div class="testimonial-avatar">
               <img
                 src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=friendly%20asian%20woman%20portrait%2C%20natural%20smile%2C%20professional%20photo&image_size=square"
-                alt="用户头像">
+                alt="用户头像"
+              />
             </div>
             <div class="testimonial-content">
-              <div class="testimonial-rating">
-                ⭐⭐⭐⭐⭐
-              </div>
+              <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
               <p class="testimonial-text">
                 "这个新年惊喜平台真的很棒！不仅界面设计美观，还融入了很多安徽、河南的文化元素，让我感受到了不一样的新年氛围。特别是黄梅戏角色换装功能，非常有趣！"
               </p>
@@ -331,12 +220,11 @@
             <div class="testimonial-avatar">
               <img
                 src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=friendly%20asian%20man%20portrait%2C%20natural%20smile%2C%20professional%20photo&image_size=square"
-                alt="用户头像">
+                alt="用户头像"
+              />
             </div>
             <div class="testimonial-content">
-              <div class="testimonial-rating">
-                ⭐⭐⭐⭐⭐
-              </div>
+              <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
               <p class="testimonial-text">
                 "我很喜欢豫剧脸谱DIY功能，可以根据自己的喜好创建独特的脸谱。平台的整体设计很现代化，同时又保留了传统文化的精髓，给人一种很舒服的感觉。"
               </p>
@@ -350,12 +238,11 @@
             <div class="testimonial-avatar">
               <img
                 src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=friendly%20asian%20young%20woman%20portrait%2C%20natural%20smile%2C%20professional%20photo&image_size=square"
-                alt="用户头像">
+                alt="用户头像"
+              />
             </div>
             <div class="testimonial-content">
-              <div class="testimonial-rating">
-                ⭐⭐⭐⭐⭐
-              </div>
+              <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
               <p class="testimonial-text">
                 "愿望墙功能很温馨，可以看到全国各地用户的新年愿望，感觉很有意义。平台的动效设计也很流畅，给人一种很高级的感觉。强烈推荐给大家！"
               </p>
@@ -371,9 +258,23 @@
 
     <!-- 音乐播放器 -->
     <div class="music-player">
-      <meting-js id="9515726248" server="tencent" type="playlist" fixed="true" mini="true" autoplay="false"
-        theme="#c91f37" loop="all" order="random" preload="none" volume="0.5" mutex="true" list-folded="true"
-        list-max-height="340" lrc-type="0" />
+      <meting-js
+        id="9515726248"
+        server="tencent"
+        type="playlist"
+        fixed="true"
+        mini="true"
+        autoplay="false"
+        theme="#c91f37"
+        loop="all"
+        order="random"
+        preload="none"
+        volume="0.5"
+        mutex="true"
+        list-folded="true"
+        list-max-height="340"
+        lrc-type="0"
+      />
     </div>
 
     <!-- 页脚 -->
@@ -394,41 +295,27 @@
           </div>
         </div>
         <div class="footer-section">
-          <h4 class="footer-title">
-            快速链接
-          </h4>
+          <h4 class="footer-title">快速链接</h4>
           <ul class="footer-links">
             <li>
-              <router-link to="/">
-                首页
-              </router-link>
+              <router-link to="/"> 首页 </router-link>
             </li>
             <li>
-              <router-link to="/cultural-features">
-                文化特色
-              </router-link>
+              <router-link to="/cultural-features"> 文化特色 </router-link>
             </li>
             <li>
-              <router-link to="/activities">
-                活动
-              </router-link>
+              <router-link to="/activities"> 活动 </router-link>
             </li>
             <li>
-              <router-link to="/new-year-surprise">
-                新年惊喜
-              </router-link>
+              <router-link to="/new-year-surprise"> 新年惊喜 </router-link>
             </li>
             <li>
-              <router-link to="/about">
-                关于我们
-              </router-link>
+              <router-link to="/about"> 关于我们 </router-link>
             </li>
           </ul>
         </div>
         <div class="footer-section">
-          <h4 class="footer-title">
-            联系我们
-          </h4>
+          <h4 class="footer-title">联系我们</h4>
           <ul class="footer-links">
             <li class="footer-link-item">
               <span class="link-icon">📧</span>
@@ -445,9 +332,7 @@
           </ul>
         </div>
         <div class="footer-section">
-          <h4 class="footer-title">
-            法律信息
-          </h4>
+          <h4 class="footer-title">法律信息</h4>
           <ul class="footer-links">
             <li><a href="#">隐私政策</a></li>
             <li><a href="#">服务条款</a></li>
@@ -457,9 +342,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p class="copyright">
-          © 2026 新年惊喜. 保留所有权利. 融合安徽、河南地域文化特色
-        </p>
+        <p class="copyright">© 2026 新年惊喜. 保留所有权利. 融合安徽、河南地域文化特色</p>
       </div>
     </footer>
   </div>
@@ -468,8 +351,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useRouter, RouterLink } from 'vue-router'
-import Snowfall from '../components/Snowfall.vue'
-
+import AsyncSnowfall from '../components/AsyncSnowfall.vue'
 
 const router = useRouter()
 
@@ -787,12 +669,14 @@ onMounted(() => {
 }
 
 .cultural-card.anhui .cultural-bg {
-  background: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anhui%20huangmei%20opera%20pattern%2C%20traditional%20chinese%20design%2C%20red%20and%20gold%20colors&image_size=square') no-repeat center center;
+  background: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=anhui%20huangmei%20opera%20pattern%2C%20traditional%20chinese%20design%2C%20red%20and%20gold%20colors&image_size=square')
+    no-repeat center center;
   background-size: cover;
 }
 
 .cultural-card.henan .cultural-bg {
-  background: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=henan%20yu%20opera%20mask%20pattern%2C%20traditional%20chinese%20design%2C%20red%20and%20gold%20colors&image_size=square') no-repeat center center;
+  background: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=henan%20yu%20opera%20mask%20pattern%2C%20traditional%20chinese%20design%2C%20red%20and%20gold%20colors&image_size=square')
+    no-repeat center center;
   background-size: cover;
 }
 
@@ -1216,17 +1100,21 @@ onMounted(() => {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(to right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.3) 50%,
-      rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
   transform: rotate(30deg);
   animation: shine 3s infinite;
 }
 
 .primary-btn:hover {
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(201, 31, 55, 0.5), 0 0 20px rgba(201, 31, 55, 0.3);
+  box-shadow:
+    0 8px 25px rgba(201, 31, 55, 0.5),
+    0 0 20px rgba(201, 31, 55, 0.3);
   background: linear-gradient(135deg, #8a0707, #c91f37);
 }
 
@@ -1290,10 +1178,12 @@ onMounted(() => {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(to right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.2) 50%,
-      rgba(255, 255, 255, 0) 100%);
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
   transform: rotate(30deg);
   animation: shine 3s infinite;
 }
@@ -1301,7 +1191,9 @@ onMounted(() => {
 .secondary-btn:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3), 0 0 20px rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 8px 25px rgba(255, 255, 255, 0.3),
+    0 0 20px rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -1342,7 +1234,6 @@ onMounted(() => {
 }
 
 @keyframes bounceIn {
-
   0%,
   20%,
   50%,
@@ -1361,7 +1252,6 @@ onMounted(() => {
 }
 
 @keyframes bounce {
-
   0%,
   20%,
   50%,
@@ -1380,7 +1270,6 @@ onMounted(() => {
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0px) rotate(0deg);
@@ -1392,7 +1281,6 @@ onMounted(() => {
 }
 
 @keyframes lanternSwing {
-
   0%,
   100% {
     transform: rotate(-5deg);
@@ -1404,7 +1292,6 @@ onMounted(() => {
 }
 
 @keyframes lanternGlow {
-
   0%,
   100% {
     filter: brightness(1);
@@ -1625,7 +1512,6 @@ onMounted(() => {
 
 /* 触摸设备优化 */
 @media (hover: none) and (pointer: coarse) {
-
   .navbar-link,
   .mobile-nav-link,
   .primary-btn,
@@ -1653,7 +1539,6 @@ onMounted(() => {
 
 /* 桌面端大屏幕优化 */
 @media (min-width: 1400px) {
-
   .cultural-preview-content,
   .features-content,
   .activities-preview-content,

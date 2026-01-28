@@ -1,18 +1,14 @@
 <template>
   <div class="snowfall-container">
-    <div
-      ref="snowContainer"
-      class="snow-container"
-    />
+    <div ref="snowContainer" class="snow-container" />
   </div>
 </template>
 
 <script setup lang="ts">
-
-import { ref, onMounted, onUnmounted } from 'vue';
-import { Snow } from 'jparticles';
-let snowInstance: any = null;
-const snowContainer = ref<HTMLElement | null>(null);
+import { ref, onMounted, onUnmounted } from 'vue'
+import { Snow } from 'jparticles'
+let snowInstance: any = null
+const snowContainer = ref<HTMLElement | null>(null)
 
 // 定义 props，支持指定雪花图标类型
 const props = defineProps({
@@ -27,12 +23,15 @@ const props = defineProps({
     type: Boolean,
     default: true
   }
-});
+})
 
 // 检查是否为移动设备
 const isMobile = () => {
-  return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-};
+  return (
+    window.innerWidth <= 768 ||
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  )
+}
 
 // 预加载雪花图片
 const preloadSnowImages = () => {
@@ -42,35 +41,35 @@ const preloadSnowImages = () => {
     3: new URL('@/assets/images/snow2.png', import.meta.url).href,
     4: new URL('@/assets/images/snow4.png', import.meta.url).href,
     5: new URL('@/assets/images/snow5.png', import.meta.url).href
-  };
+  }
 
   // 预加载图片
   Object.values(snowIcons).forEach(src => {
-    const img = new Image();
-    img.src = src;
-  });
+    const img = new Image()
+    img.src = src
+  })
 
-  return snowIcons;
-};
+  return snowIcons
+}
 
 onMounted(() => {
   // 在移动设备上禁用雪花效果以提高性能
   if (props.disableOnMobile && isMobile()) {
-    return;
+    return
   }
 
   if (snowContainer.value) {
     // 预加载雪花图片
-    const snowIcons = preloadSnowImages();
+    const snowIcons = preloadSnowImages()
 
     // 根据 iconType 选择雪花图标
-    let shape: string | string[];
+    let shape: string | string[]
     if (props.iconType === 0) {
       // 随机使用所有图标
-      shape = Object.values(snowIcons);
+      shape = Object.values(snowIcons)
     } else {
       // 使用指定类型的图标
-      shape = snowIcons[props.iconType as keyof typeof snowIcons];
+      shape = snowIcons[props.iconType as keyof typeof snowIcons]
     }
 
     try {
@@ -93,12 +92,12 @@ onMounted(() => {
         spinMinSpeed: 0.1,
         // 调整雪花透明度，使其更融合页面
         opacity: 0.5
-      } as any);
+      } as any)
     } catch (error) {
-      console.error('Error creating snow instance:', error);
+      console.error('Error creating snow instance:', error)
     }
   }
-});
+})
 
 onUnmounted(() => {
   // 销毁雪花实例
@@ -106,17 +105,17 @@ onUnmounted(() => {
     try {
       // 尝试停止雪花效果
       if (typeof snowInstance.stop === 'function') {
-        snowInstance.stop();
+        snowInstance.stop()
       }
       // 清理实例引用
-      snowInstance = null;
+      snowInstance = null
     } catch (error) {
-      console.warn('销毁雪花实例时出错:', error);
+      console.warn('销毁雪花实例时出错:', error)
       // 即使出错也要清理引用
-      snowInstance = null;
+      snowInstance = null
     }
   }
-});
+})
 </script>
 
 <style scoped>

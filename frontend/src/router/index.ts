@@ -67,11 +67,11 @@ const router = createRouter({
 router.beforeEach((to, _from, next) => {
   // 设置页面标题
   document.title = `${to.meta.title || '安徽春节文化展'} - 安徽春节文化展`
-  
+
   // 权限控制示例
   // 这里可以根据实际需求添加权限检查逻辑
   // 例如：检查用户是否登录，是否有权限访问特定路由等
-  
+
   // 继续导航
   next()
 })

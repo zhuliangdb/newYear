@@ -1,55 +1,26 @@
 <template>
-  <div
-    v-if="showPopup"
-    class="blessing-popup"
-    @click="closePopup"
-  >
-    <div
-      class="popup-content"
-      @click.stop
-    >
-      <div class="popup-header">
-        <h3 class="popup-title">
-          🎊 新年祝福
-        </h3>
-        <button
-          class="close-btn"
-          @click="closePopup"
-        >
-          ×
-        </button>
-      </div>
-      <div class="popup-body">
+  <Popup v-model="showPopup" title="🎊 新年祝福">
+    <template #default>
+      <div class="blessing-content">
         <div class="blessing-text">
           {{ currentBlessing.text }}
         </div>
-        <div class="blessing-region">
-          {{ currentBlessing.region }}特色祝福
-        </div>
+        <div class="blessing-region">{{ currentBlessing.region }}特色祝福</div>
         <div class="blessing-icon">
           {{ currentBlessing.icon }}
         </div>
       </div>
-      <div class="popup-footer">
-        <button
-          class="primary-btn"
-          @click="closePopup"
-        >
-          收下祝福
-        </button>
-        <button
-          class="secondary-btn"
-          @click="nextBlessing"
-        >
-          下一条
-        </button>
-      </div>
-    </div>
-  </div>
+    </template>
+    <template #footer>
+      <button class="primary-btn" @click="closePopup">收下祝福</button>
+      <button class="secondary-btn" @click="nextBlessing">下一条</button>
+    </template>
+  </Popup>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import Popup from '../Popup.vue'
 
 // 弹窗状态
 const showPopup = ref(false)
@@ -220,70 +191,8 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.blessing-popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  animation: fadeIn 0.3s ease;
-}
-
-.popup-content {
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-  border-radius: 20px;
-  padding: 30px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  position: relative;
-  animation: slideInUp 0.3s ease;
-  border: 3px solid #ffd700;
-}
-
-.popup-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.popup-title {
-  color: #856404;
-  font-size: 24px;
-  font-weight: bold;
-  margin: 0;
-}
-
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 28px;
-  cursor: pointer;
-  color: #856404;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-}
-
-.close-btn:hover {
-  background: rgba(133, 100, 4, 0.1);
-  transform: rotate(90deg);
-}
-
-.popup-body {
+.blessing-content {
   text-align: center;
-  margin-bottom: 30px;
 }
 
 .blessing-text {
@@ -305,12 +214,6 @@ onBeforeUnmount(() => {
   font-size: 64px;
   margin: 20px 0;
   animation: bounceIn 1s ease infinite alternate;
-}
-
-.popup-footer {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
 }
 
 .primary-btn {
@@ -352,26 +255,6 @@ onBeforeUnmount(() => {
 }
 
 /* 动画效果 */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes bounceIn {
   0%,
   20%,
@@ -390,26 +273,12 @@ onBeforeUnmount(() => {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .popup-content {
-    padding: 20px;
-    width: 95%;
-  }
-
-  .popup-title {
-    font-size: 20px;
-  }
-
   .blessing-text {
     font-size: 16px;
   }
 
   .blessing-icon {
     font-size: 48px;
-  }
-
-  .popup-footer {
-    flex-direction: column;
-    align-items: center;
   }
 
   .primary-btn,

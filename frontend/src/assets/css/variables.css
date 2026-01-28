@@ -923,7 +923,9 @@
 
 /* 微交互动画 */
 .hover-lift {
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  transition:
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal);
 }
 
 .hover-lift:hover {
@@ -974,7 +976,9 @@
 .scroll-reveal {
   opacity: 0;
   transform: translateY(30px);
-  transition: opacity var(--transition-slow), transform var(--transition-slow);
+  transition:
+    opacity var(--transition-slow),
+    transform var(--transition-slow);
 }
 
 .scroll-reveal.active {
@@ -1230,5 +1234,3 @@ h6,
   opacity: 0.6;
   cursor: not-allowed;
 }
-
-
