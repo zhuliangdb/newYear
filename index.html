@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:;base64,=">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no, email=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="theme-color" content="#6e48aa" />
+    <!-- 内容安全策略（CSP） -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.gstatic.com;
+      style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+      img-src 'self' data: https://*.firebaseusercontent.com;
+      connect-src 'self' https://*.firebaseio.com https://*.firebaseapp.com https://api.tencentmusic.com;
+      font-src 'self' https://cdn.jsdelivr.net;
+      frame-src 'self';
+      object-src 'none';
+      upgrade-insecure-requests;
+    ">
+
+    <title>2026新年惊喜</title>
+    
+    <!-- APlayer CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+    <!-- APlayer JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+    <!-- Meting JS -->
+    <script src="https://cdn.jsdelivr.net/npm/meting@2.0.1/dist/Meting.min.js"></script>
+    
+    <!-- 全局错误处理 -->
+    <script>
+      // 捕获并忽略 APlayer 的 classList 错误
+      window.addEventListener('error', function(e) {
+        if (e.message && e.message.includes('Cannot read properties of undefined (reading \'classList\')')) {
+          console.warn('忽略 APlayer 的 classList 错误');
+          e.preventDefault();
+        }
+      });
+    </script>
+    <script type="module" crossorigin src="/newYear/assets/index-DkfXGPCh.js"></script>
+    <link rel="modulepreload" crossorigin href="/newYear/assets/vendor-NtoKCVxG.js">
+    <link rel="modulepreload" crossorigin href="/newYear/assets/pinia-CEss1QEW.js">
+    <link rel="stylesheet" crossorigin href="/newYear/assets/index-BpdR7Fgi.css">
+  <link rel="manifest" href="/newYear/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/newYear/registerSW.js"></script></head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>
